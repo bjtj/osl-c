@@ -11,7 +11,6 @@
 * datetime
 * file
 * socket
-* linked list
 * string
 * url
 * library

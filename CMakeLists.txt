@@ -5,6 +5,8 @@ project(osl LANGUAGES C VERSION "1.0.0")
 enable_testing()
 
 add_library(osl SHARED
+  src/list.c
+  src/list.h
   src/mutex.c
   src/mutex.h
   src/osl.c
@@ -25,6 +27,7 @@ target_include_directories(osl PRIVATE .)
 include(GNUInstallDirs)
 set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
+  src/list.h
   src/mutex.h
   src/osl.h
   src/platform.h
