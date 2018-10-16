@@ -35,7 +35,7 @@ typedef struct _osl_thread_t {
     void * arg;
 } osl_thread_t;
 
-osl_thread_t * osl_thread_new(void);
+osl_thread_t * osl_thread_new(void * (*func)(void*), void * arg);
 int osl_thread_start(osl_thread_t * thread);
 void osl_thread_join(osl_thread_t * thread);
 void osl_thread_free(osl_thread_t * thread);

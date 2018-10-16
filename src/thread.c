@@ -80,11 +80,13 @@ static int s_native_start_thread(osl_thread_t * thread) {
 
 static uint32_t __idx = 0;
 
-osl_thread_t * osl_thread_new(void)
+osl_thread_t * osl_thread_new(void * (*func)(void*), void * arg)
 {
     osl_thread_t * thread = (osl_thread_t *)malloc(sizeof(osl_thread_t));
     memset(thread, 0, sizeof(osl_thread_t));
     thread->id = ++__idx;
+    thread->func = func;
+    thread->arg = arg;
     return thread;
 }
 
