@@ -3,29 +3,6 @@
 
 #include "osl.h"
 
-/*
- * Thread
- */
-#if defined(USE_PTHREAD)
-
-#	include <pthread.h>
-
-#if defined(USE_PRCTL)
-#	include <sys/prctl.h>
-#endif
-
-typedef pthread_t THREAD_HANDLE;
-
-#elif defined(USE_WIN_THREAD)
-
-#	define WIN32_LEAN_AND_MEAN
-#	define _WINSOCKAPI_
-#	include <Windows.h>
-#	include <process.h>
-typedef HANDLE THREAD_HANDLE;
-
-#endif
-
 typedef struct _osl_thread_t {
     uint32_t id;
     uint8_t running;
