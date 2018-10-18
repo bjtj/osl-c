@@ -7,6 +7,8 @@ enable_testing()
 add_library(osl SHARED
   src/date.c
   src/date.h
+  src/file.c
+  src/file.h
   src/list.c
   src/list.h
   src/mutex.c
@@ -32,6 +34,7 @@ include(GNUInstallDirs)
 set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
   src/date.h
+  src/file.h
   src/list.h
   src/mutex.h
   src/osl.h
