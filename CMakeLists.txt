@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 
 project(osl LANGUAGES C VERSION "1.0.0")
 
+add_subdirectory(test)
 enable_testing()
+add_test(NAME mytest COMMAND Test)
 
 add_library(osl SHARED
   src/date.c
