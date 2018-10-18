@@ -3,22 +3,6 @@
 
 #include "osl.h"
 
-#if defined(USE_APPLE_SEMAPHORE)
-
-#	include <dispatch/dispatch.h>
-typedef dispatch_semaphore_t SEM_HANDLE;
-
-#elif defined(USE_POSIX_SEMAPHORE)
-
-#	include <semaphore.h>
-typedef sem_t SEM_HANDLE;
-
-#elif defined(USE_WIN_SEMAPHORE)
-
-#	define SEM_HANDLE HANDLE
-
-#endif
-
 typedef struct _osl_semaphore_t
 {
     SEM_HANDLE handle;

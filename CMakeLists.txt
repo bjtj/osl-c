@@ -9,17 +9,21 @@ add_library(osl SHARED
   src/date.h
   src/file.c
   src/file.h
+  src/inet_address.c
+  src/inet_address.h
   src/list.c
   src/list.h
   src/mutex.c
   src/mutex.h
+  src/network.c
+  src/network.h
   src/osl.c
   src/osl.h
   src/string_buffer.c
   src/string_buffer.h
   src/platform.h
-  src/semaphore.c
-  src/semaphore.h
+  src/sem.c
+  src/sem.h
   src/thread.c
   src/thread.h)
 
@@ -35,12 +39,14 @@ set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
   src/date.h
   src/file.h
+  src/inet_address.h
   src/list.h
   src/mutex.h
+  src/network.h
   src/osl.h
   src/string_buffer.h
   src/platform.h
-  src/semaphore.h
+  src/sem.h
   src/thread.h
   )
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")

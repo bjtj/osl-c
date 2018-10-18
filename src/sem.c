@@ -1,4 +1,4 @@
-#include "semaphore.h"
+#include "sem.h"
 
 
 #if defined(USE_APPLE_SEMAPHORE)
