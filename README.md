@@ -8,9 +8,7 @@
 
 ## TODO
 
-* file
 * socket
-* string -- string buffer
 * url
 * library
 * xml
