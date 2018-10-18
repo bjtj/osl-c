@@ -13,6 +13,8 @@ add_library(osl SHARED
   src/mutex.h
   src/osl.c
   src/osl.h
+  src/string_buffer.c
+  src/string_buffer.h
   src/platform.h
   src/semaphore.c
   src/semaphore.h
@@ -33,6 +35,7 @@ list(APPEND DIR_HEADERS
   src/list.h
   src/mutex.h
   src/osl.h
+  src/string_buffer.h
   src/platform.h
   src/semaphore.h
   src/thread.h

@@ -10,7 +10,7 @@
 
 * file
 * socket
-* string
+* string -- string buffer
 * url
 * library
 * xml
