@@ -99,7 +99,7 @@ static osl_date_t s_get_localtime(void)
     date.day = info.tm_mday;
     date.wday = info.tm_wday;
     date.hour = info.tm_hour;
-    date.minut = info.tm_min;
+    date.minute = info.tm_min;
     date.second = info.tm_sec;
     date.millisecond = mts.tv_nsec / 1000000;
     date.gmtoffset = s_get_gmt_offset();
