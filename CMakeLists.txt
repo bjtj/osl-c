@@ -23,6 +23,7 @@ add_library(osl SHARED
   src/osl.h
   src/string_buffer.c
   src/string_buffer.h
+  src/platform.c
   src/platform.h
   src/sem.c
   src/sem.h
