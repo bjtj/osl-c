@@ -27,6 +27,8 @@ add_library(osl SHARED
   src/platform.h
   src/sem.c
   src/sem.h
+  src/socket.c
+  src/socket.h
   src/thread.c
   src/thread.h)
 
@@ -50,6 +52,7 @@ list(APPEND DIR_HEADERS
   src/string_buffer.h
   src/platform.h
   src/sem.h
+  src/socket.h
   src/thread.h
   )
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")

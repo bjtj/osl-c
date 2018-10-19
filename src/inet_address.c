@@ -24,6 +24,12 @@ static int s_get_port(struct sockaddr * addr)
 		  ((struct sockaddr_in*)addr)->sin_port: ((struct sockaddr_in6 *)addr)->sin6_port));
 }
 
+
+void osl_ip_string(struct sockaddr * addr, char * host, size_t size)
+{
+    s_get_ip_address(addr, host, size);
+}
+
 osl_inet_address_t * osl_inet_address_new_with_sockaddr(struct sockaddr * addr)
 {
     osl_inet_address_t * ret = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
@@ -57,4 +63,17 @@ void osl_inet_address_free(osl_inet_address_t * addr)
     if (addr) {
 	free(addr);	
     }
+}
+
+int osl_inet_address_get_family(osl_inet_address_t * addr)
+{
+    if (addr->inet_version == osl_inet4)
+    {
+	return AF_INET;
+    }
+    if (addr->inet_version == osl_inet6)
+    {
+	return AF_INET6;
+    }
+    return AF_UNSPEC;
 }
