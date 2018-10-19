@@ -9,6 +9,12 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+/**
+ * @brief common feature
+ * unused : http://stackoverflow.com/questions/3599160/unused-parameter-warnings-in-c-code
+ */
+#define SUPPRESS_UNUSED(x) (void)(x)
+
 /*
  * Semaphore
  */
