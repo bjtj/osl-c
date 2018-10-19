@@ -96,6 +96,11 @@
 
 #	define __func__ __FUNCTION__
 
-#endif 
+#endif
+
+void osl_platform_once(void);
+void osl_platform_ignore_sigpipe(void);
+int osl_platform_use_socket(void);
+void osl_platform_finish(void);
 
 #endif

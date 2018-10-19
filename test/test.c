@@ -1,11 +1,11 @@
-#include <osl/osl.h>
-#include <osl/thread.h>
-#include <osl/list.h>
-#include <osl/string_buffer.h>
-#include <osl/file.h>
-#include <osl/network.h>
-#include <osl/date.h>
-#include <osl/sem.h>
+#include "../src/osl.h"
+#include "../src/thread.h"
+#include "../src/list.h"
+#include "../src/string_buffer.h"
+#include "../src/file.h"
+#include "../src/network.h"
+#include "../src/date.h"
+#include "../src/sem.h"
 
 void * worker(void * arg)
 {
@@ -132,14 +132,21 @@ void test_network(void)
     osl_list_free(ifaces, (void (*)(void*))osl_network_interface_free);
 }
 
+
 int main(int argc, char *argv[])
 {
+    osl_platform_once();
+    osl_platform_ignore_sigpipe();
+    osl_platform_use_socket();
+    
     test_thread();
     test_list();
     test_string_buffer();
     test_file();
     test_network();
     test_date();
+    
+    osl_platform_finish();
     
     return 0;
 }
