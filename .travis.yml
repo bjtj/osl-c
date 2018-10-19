@@ -4,9 +4,6 @@ os:
   - linux
 
 
-before_install:
-  - sudo apt install -y cmake
-
 before_script:
   - mkdir build
   - cd build
