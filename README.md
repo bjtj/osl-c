@@ -1,5 +1,7 @@
 # OS Layer in C
 
+[![Build Status](https://travis-ci.org/bjtj/osl-c.svg?branch=master)](https://travis-ci.org/bjtj/osl-c)
+
 ## Target platforms
 
 * Linux
