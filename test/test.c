@@ -151,6 +151,7 @@ void test_echo_server()
     test_echo_client(port);
 
     osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
 
     /*  */
     port = 0;
@@ -163,6 +164,7 @@ void test_echo_server()
     test_echo_client(port);
 
     osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
 }
 
 int main(int argc, char *argv[])
