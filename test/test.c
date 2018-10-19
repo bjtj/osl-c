@@ -12,6 +12,8 @@
 static void * echo_server_thread(void * arg);
 static void * echo_server2_thread(void * arg);
 static void test_echo_client(int port);
+static void test_echo_client2(int port);
+static void test_echo_client3(int port);
 
 void * worker(void * arg)
 {
@@ -90,7 +92,7 @@ void test_date(void)
 	osl_date_t now = osl_date_now();
 	printf("%04d-%02d-%02d %02d:%02d:%02d.%03d\n",
 	       now.year, now.month+1, now.day, now.hour, now.minute, now.second, now.millisecond);
-	idle(1000*2);
+	idle(200);
     }
 }
 
@@ -153,7 +155,7 @@ void test_echo_server()
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
 
-    /*  */
+    /* using osl server socket  */
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -162,6 +164,32 @@ void test_echo_server()
 
     printf("port %d\n", port);
     test_echo_client(port);
+
+    osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
+
+    /* using osl server socket and socket connect with timeout*/
+    port = 0;
+    server_thread = osl_thread_new(echo_server2_thread, &port);
+    osl_thread_start(server_thread);
+
+    idle(100);
+
+    printf("port %d\n", port);
+    test_echo_client2(port);
+
+    osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
+
+    /* using osl server socket and socket connect without timeout */
+    port = 0;
+    server_thread = osl_thread_new(echo_server2_thread, &port);
+    osl_thread_start(server_thread);
+
+    idle(100);
+
+    printf("port %d\n", port);
+    test_echo_client3(port);
 
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
@@ -320,6 +348,41 @@ void test_echo_client(int port)
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     addr.sin_port = htons(port);
     if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) != 0)
+    {
+	perror("connect() error");
+	exit(1);
+    }
+    send(sock, "hello", 5, 0);
+    recv(sock, buffer, sizeof(buffer), 0);
+    assert(strcmp(buffer, "hello") == 0);
+    close(sock);
+}
+
+void test_echo_client2(int port)
+{
+    char buffer[10] = {0,};
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
+    int sock = osl_socket_connect_with_timeout(addr, 1000);
+    osl_inet_address_free(addr);
+    if (sock < 0)
+    {
+	perror("connect() error");
+	exit(1);
+    }
+    send(sock, "hello", 5, 0);
+    recv(sock, buffer, sizeof(buffer), 0);
+    assert(strcmp(buffer, "hello") == 0);
+    close(sock);
+}
+
+
+void test_echo_client3(int port)
+{
+    char buffer[10] = {0,};
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
+    int sock = osl_socket_connect(addr);
+    osl_inet_address_free(addr);
+    if (sock < 0)
     {
 	perror("connect() error");
 	exit(1);
