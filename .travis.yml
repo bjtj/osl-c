@@ -3,7 +3,7 @@ language: c
 os:
   - linux
   - osx
-  - windows
+  # - windows -- not support 'c' yet
 
 
 before_script:
