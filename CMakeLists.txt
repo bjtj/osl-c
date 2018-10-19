@@ -25,6 +25,8 @@ add_library(osl SHARED
   src/string_buffer.h
   src/platform.c
   src/platform.h
+  src/selector.c
+  src/selector.h
   src/sem.c
   src/sem.h
   src/socket.c
@@ -51,6 +53,7 @@ list(APPEND DIR_HEADERS
   src/osl.h
   src/string_buffer.h
   src/platform.h
+  src/selector.h
   src/sem.h
   src/socket.h
   src/thread.h
