@@ -30,6 +30,7 @@
 #	include <dirent.h>
 #	include <fcntl.h>
 #	include <signal.h>
+#	include <errno.h>
 #	include <mach/clock.h>
 #	include <mach/mach.h>
 #	include <dlfcn.h>
