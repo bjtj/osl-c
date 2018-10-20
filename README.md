@@ -12,7 +12,6 @@
 
 * socket -- datagram, mutlicast
 * url
-* library
 * xml
 
 ## APIs
@@ -26,3 +25,4 @@
 * list
 * network
 * socket -- server socket, socket, select
+* library

@@ -7,6 +7,7 @@
 #include "../src/date.h"
 #include "../src/sem.h"
 #include "../src/socket.h"
+#include "../src/library.h"
 #include <assert.h>
 
 static void * echo_server_thread(void * arg);
@@ -99,16 +100,16 @@ void test_date(void)
 void test_string_buffer(void)
 {
     printf(" == test string buffer ==\n");
-    osl_string_buffer_t sb = {0,};
-    osl_string_buffer_append(&sb, "hello");
-    osl_string_buffer_append(&sb, " ");
-    osl_string_buffer_append(&sb, "world");
+    osl_string_buffer_t * sb = osl_string_buffer_new();
+    osl_string_buffer_append(sb, "hello");
+    osl_string_buffer_append(sb, " ");
+    osl_string_buffer_append(sb, "world");
 
-    char * str = osl_string_buffer_to_string(&sb);
+    char * str = osl_string_buffer_to_string(sb);
     printf("str is '%s'\n", str);
     free(str);
 
-    osl_string_buffer_clear(&sb);
+    osl_string_buffer_free(sb);
 }
 
 void test_file(void)
@@ -195,6 +196,14 @@ void test_echo_server()
     osl_thread_free(server_thread);
 }
 
+void test_library(void)
+{
+    printf(" == test library ==\n");
+    osl_lib_handle lib = osl_library_load("./test", "hello");
+    ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
+    osl_library_close(lib);
+}
+
 int main(int argc, char *argv[])
 {
     osl_platform_once();
@@ -207,6 +216,7 @@ int main(int argc, char *argv[])
     test_file();
     test_network();
     test_echo_server();
+    test_library();
     test_date();
     
     osl_platform_finish();

@@ -13,6 +13,8 @@ add_library(osl SHARED
   src/file.h
   src/inet_address.c
   src/inet_address.h
+  src/library.c
+  src/library.h
   src/list.c
   src/list.h
   src/mutex.c
@@ -34,6 +36,8 @@ add_library(osl SHARED
   src/thread.c
   src/thread.h)
 
+target_link_libraries(osl ${CMAKE_DL_LIBS})
+
 # properties
 set_target_properties(osl PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(osl PROPERTIES SOVERSION 1)
@@ -47,6 +51,7 @@ list(APPEND DIR_HEADERS
   src/date.h
   src/file.h
   src/inet_address.h
+  src/library.h
   src/list.h
   src/mutex.h
   src/network.h

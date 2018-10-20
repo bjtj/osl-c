@@ -14,6 +14,6 @@ typedef unsigned long osl_filesize_t;
 
 osl_filesize_t osl_file_size(const char * path);
 char * osl_file_dump(FILE * fp);
-
+char * osl_file_path_merge(const char * a, const char * b);
 
 #endif
