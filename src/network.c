@@ -156,7 +156,7 @@ void osl_network_interface_free(osl_network_interface_t * iface)
     free(iface);
 }
 
-void osl_network_interface_set_mac_address(osl_network_interface_t * iface, const char * addr, size_t size)
+void osl_network_interface_set_mac_address(osl_network_interface_t * iface, const unsigned char * addr, size_t size)
 {
     if (iface->mac_address)
     {
