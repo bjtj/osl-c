@@ -10,11 +10,20 @@
 #include "../src/library.h"
 #include <assert.h>
 
+/* socket */
 static void * echo_server_thread(void * arg);
 static void * echo_server2_thread(void * arg);
 static void test_echo_client(int port);
 static void test_echo_client2(int port);
 static void test_echo_client3(int port);
+
+/* datagram socket */
+static void * datagram_server_thread(void * arg);
+static void test_datagram_client(int port);
+
+/* multicast socket */
+static void * multicast_server_thread(void * arg);
+static void test_multicast_client(void);
 
 void * worker(void * arg)
 {
@@ -196,6 +205,42 @@ void test_echo_server()
     osl_thread_free(server_thread);
 }
 
+void test_datagram_socket(void)
+{
+
+    printf(" == test datagram socket ==\n");
+    
+    /*  */
+    int port = 0;
+    osl_thread_t * server_thread = osl_thread_new(datagram_server_thread, &port);
+    osl_thread_start(server_thread);
+
+    idle(100);
+
+    printf("port %d\n", port);
+    test_datagram_client(port);
+
+    osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
+}
+
+void test_multicast_socket(void)
+{
+
+    printf(" == test multicast socket ==\n");
+    
+    /*  */
+    osl_thread_t * server_thread = osl_thread_new(multicast_server_thread, NULL);
+    osl_thread_start(server_thread);
+
+    idle(100);
+
+    test_multicast_client();
+
+    osl_thread_join(server_thread);
+    osl_thread_free(server_thread);
+}
+
 void test_library(void)
 {
     printf(" == test library ==\n");
@@ -216,6 +261,8 @@ int main(int argc, char *argv[])
     test_file();
     test_network();
     test_echo_server();
+    test_datagram_socket();
+    test_multicast_socket();
     test_library();
     test_date();
     
@@ -401,4 +448,150 @@ void test_echo_client3(int port)
     recv(sock, buffer, sizeof(buffer), 0);
     assert(strcmp(buffer, "hello") == 0);
     close(sock);
+}
+
+
+void * datagram_server_thread(void * arg)
+{
+    int * port = (int*)arg;
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *port);
+    int sock = osl_datagram_socket_bind(addr, 1);
+    osl_inet_address_free(addr);
+    if (sock < 0)
+    {
+	return 0;
+    }
+    
+    addr = osl_socket_get_inet_address(sock);
+    *port = addr->port;
+    osl_inet_address_free(addr);
+
+    char buffer[1024] = {0,};
+    struct sockaddr_in remote_addr;
+    socklen_t remote_addr_len = sizeof(remote_addr);
+    memset(&remote_addr, 0, sizeof(remote_addr));
+    int ret = (int)recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len);
+    if (ret <= 0)
+    {
+	perror("recvfrom() failed");
+	return 0;
+    }
+
+    char ip_buffer[INET6_ADDRSTRLEN] = {0,};
+    printf("recvfrom -- %s\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)));
+
+    ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
+    if (ret <= 0)
+    {
+	perror("sento() failed");
+	return 0;
+    }
+
+    osl_socket_close(sock);
+    
+    return 0;
+}
+
+void test_datagram_client(int port)
+{
+    struct sockaddr_in remote_addr;
+    socklen_t remote_addr_len = sizeof(remote_addr);
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock < 0)
+    {
+	perror("socket() failed");
+	return;
+    }
+
+    memset(&remote_addr, 0, remote_addr_len);
+    remote_addr.sin_family = AF_INET;
+    remote_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    remote_addr.sin_port = htons(port);
+    if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
+    {
+	perror("sendto() failed");
+	return;
+    }
+
+    char buffer[1024] = {0,};
+    if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
+    {
+	perror("recvfrom() failed");
+	return;
+    }
+
+    assert(strcmp(buffer, "hello") == 0);
+
+    osl_socket_close(sock);
+}
+
+
+void * multicast_server_thread(void * arg)
+{
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
+    int sock = osl_datagram_socket_bind(addr, 1);
+    osl_inet_address_free(addr);
+    if (osl_datagram_socket_join_group(sock, "239.255.255.250") != 0)
+    {
+	fprintf(stderr, "join group failed\n");
+	return 0;
+    }
+
+    char buffer[1024] = {0,};
+    struct sockaddr_in remote_addr;
+    socklen_t remote_addr_len;
+    int ret = (int)recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len);
+    if (ret <= 0)
+    {
+	perror("recvfrom() failed");
+	return 0;
+    }
+
+    char ip_buffer[INET6_ADDRSTRLEN] = {0,};
+    printf("recvfrom -- %s:%d\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)), ntohs(remote_addr.sin_port));
+    printf("data -- %s\n", buffer);
+
+    ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
+    if (ret <= 0)
+    {
+	perror("sento() failed");
+	return 0;
+    }
+
+    osl_socket_close(sock);
+    
+    return 0;
+}
+
+void test_multicast_client(void)
+{
+    struct sockaddr_in remote_addr;
+    socklen_t remote_addr_len = sizeof(remote_addr);
+    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if (sock < 0)
+    {
+	perror("socket() failed");
+	return;
+    }
+
+    memset(&remote_addr, 0, remote_addr_len);
+    remote_addr.sin_family = AF_INET;
+    remote_addr.sin_addr.s_addr = inet_addr("239.255.255.250");
+    remote_addr.sin_port = htons(1900);
+    if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
+    {
+	perror("sendto() failed");
+	return;
+    }
+
+    char buffer[1024] = {0,};
+    if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
+    {
+	perror("recvfrom() failed");
+	return;
+    }
+
+    assert(strcmp(buffer, "hello") == 0);
+
+    osl_socket_close(sock);
 }

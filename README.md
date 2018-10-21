@@ -10,7 +10,6 @@
 
 ## TODO
 
-* socket -- datagram, mutlicast
 * url
 * xml
 
@@ -24,5 +23,5 @@
 * date
 * list
 * network
-* socket -- server socket, socket, select
+* socket -- server socket, socket, select, datagram, multicast
 * library
