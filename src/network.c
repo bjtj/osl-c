@@ -111,7 +111,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
 	    {
 		iface->addr_list = osl_list_append(iface->addr_list,
 						   osl_inet_address_new(
-						       InetAddress::InetVersion::INET4,
+						       osl_inet4,
 						       pAdapterInfo->IpAddressList.IpAddress.String,
 						       0));
 		pIpAddress = pIpAddress->Next;

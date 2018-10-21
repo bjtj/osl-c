@@ -14,6 +14,9 @@ static osl_filesize_t s_get_file_size(const char * path) {
 
 #elif defined(USE_MS_WIN)
 
+#define STAT_STRUCT struct _stat64
+#define STAT_FUNC __stat64
+
 static osl_filesize_t s_get_file_size(const char * path) {
 
     STAT_STRUCT st;

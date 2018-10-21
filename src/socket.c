@@ -114,7 +114,7 @@ int osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 	perror("socket() failed");
 	goto done;
     }
-    if (reuseaddr && setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(reuseaddr)) != 0)
+    if (reuseaddr && setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&reuseaddr, sizeof(reuseaddr)) != 0)
     {
 	perror("setsockopt() failed");
 	goto done;

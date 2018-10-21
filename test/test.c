@@ -338,7 +338,7 @@ static void * echo_server_thread(void * arg)
 	}
 
 	send(remote_sock, buffer, len, 0);
-	close(remote_sock);
+	osl_socket_close(remote_sock);
     }
 
     osl_socket_close(sock);

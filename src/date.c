@@ -156,7 +156,7 @@ osl_date_t osl_date_from_time(osl_time_t * time, int gmtoffset)
 {
     /* todo */
 #if defined(USE_MS_WIN)
-    osl_date_t date = s_systemtime_to_date(s_filetime_to_systemtime(s_osl_time_to_filetime(&time)));
+    osl_date_t date = s_systemtime_to_date(s_filetime_to_systemtime(s_osl_time_to_filetime(time)));
     date.gmtoffset = gmtoffset;
     return date;
 #else
