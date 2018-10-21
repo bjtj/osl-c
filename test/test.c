@@ -496,6 +496,7 @@ void test_datagram_client(int port)
 {
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
     struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_DGRAM);
+    osl_inet_address_free(addr);
     if (res == NULL)
     {
 	return;
@@ -512,6 +513,8 @@ void test_datagram_client(int port)
 	perror("sendto() failed");
 	return;
     }
+
+    freeaddrinfo(res);
 
     char buffer[1024] = {0,};
     if (recvfrom(sock, buffer, sizeof(buffer), 0, NULL, NULL) <= 0)
