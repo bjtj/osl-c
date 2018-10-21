@@ -341,7 +341,7 @@ static void * echo_server_thread(void * arg)
 	close(remote_sock);
     }
 
-    close(sock);
+    osl_socket_close(sock);
     return 0;
 }
 
@@ -391,7 +391,7 @@ static void * echo_server2_thread(void * arg)
 	close(remote_sock);
     }
 
-    close(sock);
+    osl_socket_close(sock);
     return 0;
 }
 
@@ -412,7 +412,7 @@ void test_echo_client(int port)
     send(sock, "hello", 5, 0);
     recv(sock, buffer, sizeof(buffer), 0);
     assert(strcmp(buffer, "hello") == 0);
-    close(sock);
+    osl_socket_close(sock);
 }
 
 void test_echo_client2(int port)
@@ -429,7 +429,7 @@ void test_echo_client2(int port)
     send(sock, "hello", 5, 0);
     recv(sock, buffer, sizeof(buffer), 0);
     assert(strcmp(buffer, "hello") == 0);
-    close(sock);
+    osl_socket_close(sock);
 }
 
 
@@ -447,7 +447,7 @@ void test_echo_client3(int port)
     send(sock, "hello", 5, 0);
     recv(sock, buffer, sizeof(buffer), 0);
     assert(strcmp(buffer, "hello") == 0);
-    close(sock);
+    osl_socket_close(sock);
 }
 
 
