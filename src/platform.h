@@ -37,6 +37,8 @@
 
 #	define osl_vsnprintf vsnprintf
 
+#	define SHARED_EXPORT
+
 #elif defined(unix) || defined(__unix__) || defined(__unix) /* unix or linux */
 
 #	define PLATFORM_UNIX
@@ -65,6 +67,8 @@
 #	include <dlfcn.h>
 
 #	define osl_vsnprintf vsnprintf
+
+#	define SHARED_EXPORT
 
 #elif defined(_WIN32) || defined(_WIN64) /* windows */
 
@@ -97,11 +101,12 @@
 
 #	define __func__ __FUNCTION__
 
+#	ifdef osl_EXPORTS
+#		define SHARED_EXPORT __declspec(dllexport)
+#	else
+#		define SHARED_EXPORT __declspec(dllimport)
 #endif
 
-void osl_platform_once(void);
-void osl_platform_ignore_sigpipe(void);
-int osl_platform_use_socket(void);
-void osl_platform_finish(void);
+#endif
 
 #endif

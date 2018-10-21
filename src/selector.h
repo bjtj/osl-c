@@ -19,12 +19,12 @@ typedef struct _osl_selector_t
 #define osl_write 0x0010
 #define osl_except 0x0100
 
-void osl_selector_clear(osl_selector_t * selector);
-void osl_selector_register(osl_selector_t * selector, int fd, int flag);
-void osl_selector_unregister(osl_selector_t * selector, int fd, int flag);
-int osl_selector_select(osl_selector_t * selector, int timeout_milli);
-int osl_selector_is_readable(osl_selector_t * selector, int fd);
-int osl_selector_is_writable(osl_selector_t * selector, int fd);
-int osl_selector_is_except(osl_selector_t * selector, int fd);
+void SHARED_EXPORT osl_selector_clear(osl_selector_t * selector);
+void SHARED_EXPORT osl_selector_register(osl_selector_t * selector, int fd, int flag);
+void SHARED_EXPORT osl_selector_unregister(osl_selector_t * selector, int fd, int flag);
+int SHARED_EXPORT osl_selector_select(osl_selector_t * selector, int timeout_milli);
+int SHARED_EXPORT osl_selector_is_readable(osl_selector_t * selector, int fd);
+int SHARED_EXPORT osl_selector_is_writable(osl_selector_t * selector, int fd);
+int SHARED_EXPORT osl_selector_is_except(osl_selector_t * selector, int fd);
 
 #endif

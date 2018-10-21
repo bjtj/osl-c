@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(osl LANGUAGES C VERSION "1.0.0")
 
+include(CTest)
+
 add_subdirectory(test)
 enable_testing()
 add_test(NAME mytest COMMAND Test)
@@ -65,6 +67,8 @@ list(APPEND DIR_HEADERS
   )
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")
 install(TARGETS osl
+  EXPORT osltargets
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/osl)
 

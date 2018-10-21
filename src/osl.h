@@ -106,7 +106,11 @@ typedef SOCKET SOCK_HANDLE;
 #endif
 
 
-void idle(unsigned long timeout);
-unsigned long tick_milli(void);
+void SHARED_EXPORT osl_platform_once(void);
+void SHARED_EXPORT osl_platform_ignore_sigpipe(void);
+int SHARED_EXPORT osl_platform_use_socket(void);
+void SHARED_EXPORT osl_platform_finish(void);
+void SHARED_EXPORT idle(unsigned long timeout);
+unsigned long SHARED_EXPORT tick_milli(void);
 
 #endif

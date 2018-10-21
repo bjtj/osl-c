@@ -10,10 +10,10 @@ typedef struct _osl_string_buffer_t
 } osl_string_buffer_t;
 
 
-osl_string_buffer_t * osl_string_buffer_new(void);
-void osl_string_buffer_free(osl_string_buffer_t * sb);
-void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str);
-char * osl_string_buffer_to_string(osl_string_buffer_t * sb);
-char * osl_string_buffer_to_string_and_free(osl_string_buffer_t * sb);
+osl_string_buffer_t SHARED_EXPORT * osl_string_buffer_new(void);
+void SHARED_EXPORT osl_string_buffer_free(osl_string_buffer_t * sb);
+void SHARED_EXPORT osl_string_buffer_append(osl_string_buffer_t * sb, const char * str);
+char SHARED_EXPORT * osl_string_buffer_to_string(osl_string_buffer_t * sb);
+char SHARED_EXPORT * osl_string_buffer_to_string_and_free(osl_string_buffer_t * sb);
 
 #endif
