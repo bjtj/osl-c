@@ -12,9 +12,17 @@ typedef struct _osl_thread_t {
     void * arg;
 } osl_thread_t;
 
-osl_thread_t OSL_EXPORT * osl_thread_new(void * (*func)(void*), void * arg);
-int OSL_EXPORT osl_thread_start(osl_thread_t * thread);
-void OSL_EXPORT osl_thread_join(osl_thread_t * thread);
-void OSL_EXPORT osl_thread_free(osl_thread_t * thread);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    osl_thread_t OSL_EXPORT * osl_thread_new(void * (*func)(void*), void * arg);
+    int OSL_EXPORT osl_thread_start(osl_thread_t * thread);
+    void OSL_EXPORT osl_thread_join(osl_thread_t * thread);
+    void OSL_EXPORT osl_thread_free(osl_thread_t * thread);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
