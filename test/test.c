@@ -153,6 +153,7 @@ void test_network(void)
 void test_echo_server()
 {
     /*  */
+	printf(" == test echo server==\n");
     int port = 0;
     osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &port);
     osl_thread_start(server_thread);
@@ -166,6 +167,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket  */
+	printf(" -- using osl server socket -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -179,6 +181,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect with timeout*/
+	printf(" -- using osl server socket and socket connect with timeout -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -192,6 +195,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect without timeout */
+	printf(" -- using osl server socket and socket connect with timeout -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -244,7 +248,7 @@ void test_multicast_socket(void)
 void test_library(void)
 {
     printf(" == test library ==\n");
-    osl_lib_handle lib = osl_library_load("./test", "hello");
+    osl_lib_handle lib = osl_library_load("./", "hello");
     ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
     osl_library_close(lib);
 }
@@ -384,11 +388,12 @@ static void * echo_server2_thread(void * arg)
 	int len = recv(remote_sock, buffer, sizeof(buffer), 0);
 	if (len <= 0)
 	{
+		perror("recv() failed");
 	    return 0;
 	}
 
 	send(remote_sock, buffer, len, 0);
-	close(remote_sock);
+	osl_socket_close(remote_sock);
     }
 
     osl_socket_close(sock);
