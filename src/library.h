@@ -16,8 +16,8 @@ typedef FARPROC osl_lib_symbol;
 #endif
 
 
-osl_lib_handle SHARED_EXPORT osl_library_load(const char * path, const char * name);
-void SHARED_EXPORT osl_library_close(osl_lib_handle handle);
-osl_lib_symbol SHARED_EXPORT osl_library_get_symbol(osl_lib_handle handle, const char * name);
+osl_lib_handle OSL_EXPORT osl_library_load(const char * path, const char * name);
+void OSL_EXPORT osl_library_close(osl_lib_handle handle);
+osl_lib_symbol OSL_EXPORT osl_library_get_symbol(osl_lib_handle handle, const char * name);
 
 #endif

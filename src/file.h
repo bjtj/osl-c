@@ -12,8 +12,8 @@ typedef unsigned long long osl_filesize_t;
 typedef unsigned long osl_filesize_t;
 #endif
 
-osl_filesize_t SHARED_EXPORT osl_file_size(const char * path);
-char SHARED_EXPORT * osl_file_dump(FILE * fp);
-char SHARED_EXPORT * osl_file_path_merge(const char * a, const char * b);
+osl_filesize_t OSL_EXPORT osl_file_size(const char * path);
+char OSL_EXPORT * osl_file_dump(FILE * fp);
+char OSL_EXPORT * osl_file_path_merge(const char * a, const char * b);
 
 #endif

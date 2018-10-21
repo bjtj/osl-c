@@ -18,9 +18,9 @@ typedef struct _osl_mutex_t
 
 
 
-osl_mutex_t SHARED_EXPORT * osl_mutex_new(void);
-void SHARED_EXPORT osl_mutex_lock(osl_mutex_t * mutex);
-void SHARED_EXPORT osl_mutex_unlock(osl_mutex_t * mutex);
-void SHARED_EXPORT osl_mutex_free(osl_mutex_t * mutex);
+osl_mutex_t OSL_EXPORT * osl_mutex_new(void);
+void OSL_EXPORT osl_mutex_lock(osl_mutex_t * mutex);
+void OSL_EXPORT osl_mutex_unlock(osl_mutex_t * mutex);
+void OSL_EXPORT osl_mutex_free(osl_mutex_t * mutex);
 
 #endif

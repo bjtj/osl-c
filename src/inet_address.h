@@ -17,14 +17,14 @@ typedef struct _osl_inet_address_t
 } osl_inet_address_t;
 
 
-char SHARED_EXPORT * osl_ip_string(struct sockaddr * addr, char * ip_buffer, size_t size);
-osl_inet_address_t SHARED_EXPORT * osl_inet_address_new_with_sockaddr(struct sockaddr * addr);
-osl_inet_address_t SHARED_EXPORT * osl_inet_address_new(osl_inet_version_e version, const char * host, int port);
-void SHARED_EXPORT osl_inet_address_free(osl_inet_address_t * addr);
-int SHARED_EXPORT osl_inet_address_get_family(osl_inet_address_t * addr);
-struct addrinfo SHARED_EXPORT * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_type);
-struct addrinfo SHARED_EXPORT * osl_inet_address_resolve_numeric(osl_inet_address_t * addr, int sock_type);
-struct addrinfo SHARED_EXPORT * osl_inet_address_resolve_passive(osl_inet_address_t * addr, int family, int sock_type);
+char OSL_EXPORT * osl_ip_string(struct sockaddr * addr, char * ip_buffer, size_t size);
+osl_inet_address_t OSL_EXPORT * osl_inet_address_new_with_sockaddr(struct sockaddr * addr);
+osl_inet_address_t OSL_EXPORT * osl_inet_address_new(osl_inet_version_e version, const char * host, int port);
+void OSL_EXPORT osl_inet_address_free(osl_inet_address_t * addr);
+int OSL_EXPORT osl_inet_address_get_family(osl_inet_address_t * addr);
+struct addrinfo OSL_EXPORT * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_type);
+struct addrinfo OSL_EXPORT * osl_inet_address_resolve_numeric(osl_inet_address_t * addr, int sock_type);
+struct addrinfo OSL_EXPORT * osl_inet_address_resolve_passive(osl_inet_address_t * addr, int family, int sock_type);
 
 
 #endif
