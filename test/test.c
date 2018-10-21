@@ -134,7 +134,7 @@ void test_file(void)
     free(dump);
     fclose(fp);
 
-    printf("file size: %lu\n", osl_file_size("hello"));
+    printf("file size: %d\n", (int)osl_file_size("hello"));
 }
 
 void test_network(void)
@@ -494,27 +494,27 @@ void * datagram_server_thread(void * arg)
 
 void test_datagram_client(int port)
 {
-    struct sockaddr_in remote_addr;
-    socklen_t remote_addr_len = sizeof(remote_addr);
-    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
+    struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_DGRAM);
+    if (res == NULL)
+    {
+	return;
+    }
+    int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sock < 0)
     {
 	perror("socket() failed");
 	return;
     }
 
-    memset(&remote_addr, 0, remote_addr_len);
-    remote_addr.sin_family = AF_INET;
-    remote_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    remote_addr.sin_port = htons(port);
-    if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
+    if (sendto(sock, "hello", 5, 0, res->ai_addr, res->ai_addrlen) <= 0)
     {
 	perror("sendto() failed");
 	return;
     }
 
     char buffer[1024] = {0,};
-    if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
+    if (recvfrom(sock, buffer, sizeof(buffer), 0, NULL, NULL) <= 0)
     {
 	perror("recvfrom() failed");
 	return;
@@ -539,7 +539,8 @@ void * multicast_server_thread(void * arg)
 
     char buffer[1024] = {0,};
     struct sockaddr_in remote_addr;
-    socklen_t remote_addr_len;
+    socklen_t remote_addr_len = sizeof(remote_addr);
+    memset(&remote_addr, 0, sizeof(remote_addr));
     int ret = (int)recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len);
     if (ret <= 0)
     {
