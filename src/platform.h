@@ -37,7 +37,7 @@
 
 #	define osl_vsnprintf vsnprintf
 
-#	define SHARED_EXPORT
+#	define OSL_EXPORT
 
 #elif defined(unix) || defined(__unix__) || defined(__unix) /* unix or linux */
 
@@ -68,7 +68,7 @@
 
 #	define osl_vsnprintf vsnprintf
 
-#	define SHARED_EXPORT
+#	define OSL_EXPORT
 
 #elif defined(_WIN32) || defined(_WIN64) /* windows */
 
@@ -102,10 +102,10 @@
 #	define __func__ __FUNCTION__
 
 #	ifdef osl_EXPORTS
-#		define SHARED_EXPORT __declspec(dllexport)
+#		define OSL_EXPORT __declspec(dllexport)
 #	else
-#		define SHARED_EXPORT __declspec(dllimport)
-#endif
+#		define OSL_EXPORT __declspec(dllimport)
+#	endif
 
 #endif
 
