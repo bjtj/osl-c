@@ -248,7 +248,7 @@ void test_multicast_socket(void)
 void test_library(void)
 {
     printf(" == test library ==\n");
-    osl_lib_handle lib = osl_library_load("./", "hello");
+    osl_lib_handle lib = osl_library_load("./test", "hello");
     ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
     osl_library_close(lib);
 }
