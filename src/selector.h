@@ -19,12 +19,20 @@ typedef struct _osl_selector_t
 #define osl_write 0x0010
 #define osl_except 0x0100
 
-void OSL_EXPORT osl_selector_clear(osl_selector_t * selector);
-void OSL_EXPORT osl_selector_register(osl_selector_t * selector, int fd, int flag);
-void OSL_EXPORT osl_selector_unregister(osl_selector_t * selector, int fd, int flag);
-int OSL_EXPORT osl_selector_select(osl_selector_t * selector, int timeout_milli);
-int OSL_EXPORT osl_selector_is_readable(osl_selector_t * selector, int fd);
-int OSL_EXPORT osl_selector_is_writable(osl_selector_t * selector, int fd);
-int OSL_EXPORT osl_selector_is_except(osl_selector_t * selector, int fd);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    void OSL_EXPORT osl_selector_clear(osl_selector_t * selector);
+    void OSL_EXPORT osl_selector_register(osl_selector_t * selector, int fd, int flag);
+    void OSL_EXPORT osl_selector_unregister(osl_selector_t * selector, int fd, int flag);
+    int OSL_EXPORT osl_selector_select(osl_selector_t * selector, int timeout_milli);
+    int OSL_EXPORT osl_selector_is_readable(osl_selector_t * selector, int fd);
+    int OSL_EXPORT osl_selector_is_writable(osl_selector_t * selector, int fd);
+    int OSL_EXPORT osl_selector_is_except(osl_selector_t * selector, int fd);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
