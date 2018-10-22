@@ -13,6 +13,8 @@ add_library(osl SHARED
   src/date.h
   src/file.c
   src/file.h
+  src/file_stream.c
+  src/file_stream.h
   src/inet_address.c
   src/inet_address.h
   src/library.c
@@ -30,6 +32,8 @@ add_library(osl SHARED
   src/pathname.c
   src/pathname.h
   src/platform.h
+  src/process.c
+  src/process.h
   src/selector.c
   src/selector.h
   src/sem.c
@@ -57,6 +61,7 @@ set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
   src/date.h
   src/file.h
+  src/file_stream.h
   src/inet_address.h
   src/library.h
   src/list.h
@@ -66,6 +71,7 @@ list(APPEND DIR_HEADERS
   src/osl.h
   src/pathname.h
   src/platform.h
+  src/process.h
   src/selector.h
   src/sem.h
   src/socket.h

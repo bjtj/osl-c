@@ -12,6 +12,7 @@
 #include "../src/library.h"
 #include "../src/log.h"
 #include "../src/pathname.h"
+#include "../src/process.h"
 #include <assert.h>
 
 
@@ -300,6 +301,27 @@ void test_log(void)
     osl_log_fatal("hello");
 }
 
+void test_process(void)
+{
+    puts("== test process==");
+    osl_process_t * process = osl_process_new("echo \"hello\"");
+    osl_process_start(process);
+
+    osl_file_stream_t out = osl_process_out_stream(process);
+    int ch;
+    while ((ch = out.read(&out)) > 0)
+    {
+	putchar(ch);
+    }
+    putchar('\n');
+
+    osl_process_wait(process);
+    printf("exit code: %d\n", process->exit_code);
+    
+    osl_process_close(process);
+    osl_process_free(process);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -319,6 +341,7 @@ int main(int argc, char *argv[])
     test_multicast_socket();
     test_library();
     test_log();
+    test_process();
     
     osl_finish();
     
