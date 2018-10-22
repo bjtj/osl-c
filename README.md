@@ -10,6 +10,10 @@
 
 ## TODO
 
+* environment
+* properties file
+* argument parser
+* logger
 * url
 * xml
 
