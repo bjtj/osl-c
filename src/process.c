@@ -1,4 +1,5 @@
 #include "process.h"
+#include "string_buffer.h"
 
 osl_process_t * osl_process_new(const char * cmd)
 {
@@ -121,7 +122,7 @@ int osl_process_start(osl_process_t * process)
 	fprintf(stderr, "CreatePipe() failed - stdin read\n");
 	return -1;
     }
-    if (!SetHandleInformation(in_write, HANDLE_FLAG_INHERIT, 0)) {
+    if (!SetHandleInformation(process->in_write, HANDLE_FLAG_INHERIT, 0)) {
 	fprintf(stderr, "SetHandleInformation() failed - stdin\n");
 	return -1;
     }
@@ -234,7 +235,7 @@ int osl_process_exited(osl_process_t * process)
     return ret;
 #elif defined(USE_MS_WIN)
     DWORD code;
-    if (!GetExitCodeProcess(piProcInfo.hProcess, &code)) {
+    if (!GetExitCodeProcess(process->pi_proc_info.hProcess, &code)) {
 	fprintf(stderr, "GetExitCodeProcess() failed\n");
 	return -1;
     }
@@ -257,7 +258,7 @@ osl_file_stream_t osl_process_in_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdin);
 #elif defined(USE_MS_WIN)
-    return osl_file_stream_init_with_handle(process->in_write)
+	return osl_file_stream_init_with_handle(process->in_write);
 #endif
 }
 
@@ -266,7 +267,7 @@ osl_file_stream_t osl_process_out_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdout);
 #elif defined(USE_MS_WIN)
-    return osl_file_stream_init_with_handle(process->out_read)
+	return osl_file_stream_init_with_handle(process->out_read);
 #endif
 }
 
@@ -275,6 +276,6 @@ osl_file_stream_t osl_process_err_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fderr);
 #elif defined(USE_MS_WIN)
-    return osl_file_stream_init_with_handle(process->err_read)
+	return osl_file_stream_init_with_handle(process->err_read);
 #endif
 }
