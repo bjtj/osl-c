@@ -50,7 +50,7 @@ void osl_platform_finish(void)
 	}
 }
 
-void idle(unsigned long timeout)
+void osl_idle(unsigned long timeout)
 {
 #if defined(USE_UNIX_STD)
     struct timespec ts;
@@ -64,7 +64,7 @@ void idle(unsigned long timeout)
 #endif
 }
 
-unsigned long tick_milli()
+unsigned long osl_tick_milli()
 {
 #if defined(USE_APPLE_STD)
     // @ref http://stackoverflow.com/a/11681069
@@ -82,5 +82,22 @@ unsigned long tick_milli()
     return GetTickCount();
 #else
     /* no implementation */
+#endif
+}
+
+char * osl_getcwd(void)
+{
+#elif defined(USE_MS_WIN)
+    char buffer[2048] = {0,};
+    if (_getcwd(buffer, sizeof(buffer)) == NULL) {
+	return NULL;
+    }
+    return strdup(buffer);
+#else
+    char buffer[2048] = {0,};
+    if (getcwd(buffer, sizeof(buffer)) == NULL) {
+	return NULL;
+    }
+    return strdup(buffer);
 #endif
 }

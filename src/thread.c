@@ -99,7 +99,7 @@ int osl_thread_start(osl_thread_t * thread)
 void osl_thread_join(osl_thread_t * thread)
 {
     while (thread->running) {
-	idle(10);
+	osl_idle(10);
     }
 }
 
