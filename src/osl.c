@@ -87,7 +87,7 @@ unsigned long osl_tick_milli()
 
 char * osl_getcwd(void)
 {
-#elif defined(USE_MS_WIN)
+#if defined(USE_MS_WIN)
     char buffer[2048] = {0,};
     if (_getcwd(buffer, sizeof(buffer)) == NULL) {
 	return NULL;
