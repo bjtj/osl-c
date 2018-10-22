@@ -31,7 +31,7 @@ void * worker(void * arg)
     int i = 0;
     for (; i < 10; i++) {
 	printf("[%d] idx -- %d\n", id, i);
-	idle(50);
+	osl_idle(50);
     }
     return 0;
 }
@@ -102,7 +102,7 @@ void test_date(void)
 	osl_date_t now = osl_date_now();
 	printf("%04d-%02d-%02d %02d:%02d:%02d.%03d\n",
 	       now.year, now.month+1, now.day, now.hour, now.minute, now.second, now.millisecond);
-	idle(200);
+	osl_idle(200);
     }
 }
 
@@ -158,7 +158,7 @@ void test_echo_server()
     osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &port);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     printf("port %d\n", port);
     test_echo_client(port);
@@ -172,7 +172,7 @@ void test_echo_server()
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     printf("port %d\n", port);
     test_echo_client(port);
@@ -186,7 +186,7 @@ void test_echo_server()
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     printf("port %d\n", port);
     test_echo_client2(port);
@@ -200,7 +200,7 @@ void test_echo_server()
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     printf("port %d\n", port);
     test_echo_client3(port);
@@ -219,7 +219,7 @@ void test_datagram_socket(void)
     osl_thread_t * server_thread = osl_thread_new(datagram_server_thread, &port);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     printf("port %d\n", port);
     test_datagram_client(port);
@@ -237,7 +237,7 @@ void test_multicast_socket(void)
     osl_thread_t * server_thread = osl_thread_new(multicast_server_thread, NULL);
     osl_thread_start(server_thread);
 
-    idle(100);
+    osl_idle(100);
 
     test_multicast_client();
 
