@@ -36,6 +36,13 @@ void * worker(void * arg)
     return 0;
 }
 
+void test_osl(void)
+{
+	char * cwd = osl_getcwd();
+	printf("cwd: %s\n", cwd);
+	free(cwd);
+}
+
 void test_thread(void)
 {
     int id1 = 1;
@@ -258,7 +265,8 @@ int main(int argc, char *argv[])
     osl_platform_once();
     osl_platform_ignore_sigpipe();
     osl_platform_use_socket();
-    
+
+	test_osl();
     test_thread();
     test_list();
     test_string_buffer();
