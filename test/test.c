@@ -8,6 +8,8 @@
 #include "../src/sem.h"
 #include "../src/socket.h"
 #include "../src/library.h"
+#include "../src/log.h"
+#include "../src/pathname.h"
 #include <assert.h>
 
 /* socket */
@@ -38,9 +40,9 @@ void * worker(void * arg)
 
 void test_osl(void)
 {
-	char * cwd = osl_getcwd();
-	printf("cwd: %s\n", cwd);
-	free(cwd);
+    char * cwd = osl_getcwd();
+    printf("cwd: %s\n", cwd);
+    free(cwd);
 }
 
 void test_thread(void)
@@ -135,6 +137,10 @@ void test_file(void)
     fwrite("hello", 1, 5, fp);
     osl_file_close(fp);
 
+    assert(osl_pathname_exists("hello"));
+    assert(osl_pathname_is_file("hello"));
+    assert(osl_pathname_is_dir("hello") == 0);
+
     fp = osl_file_open("hello", "r");
     dump = osl_file_dump(fp);
     printf("dump: '%s'\n", dump);
@@ -144,8 +150,25 @@ void test_file(void)
     printf("file size: %d\n", (int)osl_file_size("hello"));
 }
 
+void test_pathname(void)
+{
+    printf("== test pathname ==\n");
+    char * name = osl_pathname_basename("/abc/d");
+    assert(strcmp(name, "d") == 0);
+    free(name);
+
+    name = osl_pathname_dirname("/abc/d");
+    assert(strcmp(name, "/abc/") == 0);
+    free(name);
+
+    name = osl_pathname_dirname("abc/d");
+    assert(strcmp(name, "abc/") == 0);
+    free(name);
+}
+
 void test_network(void)
 {
+    printf("== test network == \n");
     osl_list_t * ifaces = osl_network_all_interfaces();
     osl_list_t * ptr = ifaces;
     for (; ptr; ptr = ptr->next)
@@ -260,25 +283,37 @@ void test_library(void)
     osl_library_close(lib);
 }
 
+void test_log(void)
+{
+    osl_log_trace("hello");
+    osl_log_debug("hello");
+    osl_log_info("hello");
+    osl_log_warn("hello");
+    osl_log_error("hello");
+    osl_log_fatal("hello");
+}
+
 int main(int argc, char *argv[])
 {
-    osl_platform_once();
-    osl_platform_ignore_sigpipe();
-    osl_platform_use_socket();
+    osl_init_once();
+    osl_ignore_sigpipe();
+    osl_use_socket();
 
-	test_osl();
+    test_osl();
     test_thread();
     test_list();
+    test_date();
     test_string_buffer();
     test_file();
+    test_pathname();
     test_network();
     test_echo_server();
     test_datagram_socket();
     test_multicast_socket();
     test_library();
-    test_date();
+    test_log();
     
-    osl_platform_finish();
+    osl_finish();
     
     return 0;
 }
@@ -287,7 +322,7 @@ static void * echo_server_thread(void * arg)
 {
     int * server_port = (int*)arg;
 
-    osl_platform_use_socket();
+    osl_use_socket();
     
     int yes = 1;
     struct sockaddr_in addr;
@@ -360,7 +395,7 @@ static void * echo_server2_thread(void * arg)
 {
     int * server_port = (int*)arg;
 
-    osl_platform_use_socket();
+    osl_use_socket();
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *server_port);
     int sock = osl_server_socket_bind(addr, 1);
