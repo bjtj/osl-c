@@ -35,6 +35,26 @@ void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str)
     sb->ptr = new_ptr;
 }
 
+void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buffer, int size)
+{
+    if (sb->size == 0)
+    {
+	sb->ptr = (char*)malloc(size + 1);
+	memcpy(sb->ptr, buffer, size);
+	sb->ptr[size] = '\0';
+	sb->size = size;
+	return;
+    }
+
+    char * new_ptr = malloc(sb->size + size + 1);
+    memcpy(new_ptr, sb->ptr, sb->size);
+    memcpy(new_ptr + sb->size, buffer, size);
+    new_ptr[sb->size + size] = '\0';
+    sb->size = sb->size + size;
+    free(sb->ptr);
+    sb->ptr = new_ptr;
+}
+
 char * osl_string_buffer_to_string(osl_string_buffer_t * sb)
 {
     char * str = (char*)malloc(sb->size + 1);

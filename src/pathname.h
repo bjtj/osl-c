@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+    osl_filesize_t OSL_EXPORT osl_pathname_filesize(const char * path);
     int OSL_EXPORT osl_pathname_exists(const char * path);
     int OSL_EXPORT osl_pathname_is_dir(const char * path);
     int OSL_EXPORT osl_pathname_is_file(const char * path);

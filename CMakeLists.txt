@@ -11,8 +11,6 @@ add_test(NAME mytest COMMAND Test)
 add_library(osl SHARED
   src/date.c
   src/date.h
-  src/file.c
-  src/file.h
   src/file_stream.c
   src/file_stream.h
   src/inet_address.c
@@ -60,7 +58,6 @@ include(GNUInstallDirs)
 set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
   src/date.h
-  src/file.h
   src/file_stream.h
   src/inet_address.h
   src/library.h

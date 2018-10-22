@@ -1,4 +1,5 @@
 #include "file_stream.h"
+#include "string_buffer.h"
 
 static int s_read_cb(osl_file_stream_t * stream);
 static int s_write_cb(osl_file_stream_t * stream, int ch);
@@ -8,7 +9,25 @@ static int s_win32_read_cb(osl_file_stream_t * stream);
 static int s_win32_write_cb(osl_file_stream_t * stream, int ch);
 static void s_win32_close_cb(osl_file_stream_t * stream);
 
-osl_file_stream_t OSL_EXPORT osl_file_stream_init(FILE * fp)
+static FILE * s_fopen(const char * path, const char * flags)
+{
+#if defined(USE_MS_WIN)
+    FILE * fp = NULL;
+    if (fopen_s(&fp, path, flags) != 0) {
+	return NULL;
+    }
+    return fp;
+#else
+    return fopen(path, flags);
+#endif
+}
+
+osl_file_stream_t osl_file_stream_open(const char * path, const char * flags)
+{
+    return osl_file_stream_init(s_fopen(path, flags));
+}
+
+osl_file_stream_t osl_file_stream_init(FILE * fp)
 {
     osl_file_stream_t stream = {
 	.handle = fp,
@@ -19,6 +38,19 @@ osl_file_stream_t OSL_EXPORT osl_file_stream_init(FILE * fp)
     };
     return stream;
 }
+
+
+char * osl_file_stream_dump(osl_file_stream_t * stream)
+{
+    osl_string_buffer_t * sb = osl_string_buffer_new();
+    int ch;
+    while ((ch = stream->read(stream)) > 0)
+    {
+	osl_string_buffer_append_buffer(sb, (char*)&ch, 1);
+    }
+    return osl_string_buffer_to_string_and_free(sb);
+}
+
 
 static int s_read_cb(osl_file_stream_t * stream)
 {
@@ -46,7 +78,7 @@ static void s_close_cb(osl_file_stream_t * stream)
 
 #if defined(USE_MS_WIN)
 
-osl_file_stream_t OSL_EXPORT osl_file_stream_init_with_handle(HANDLE handle)
+osl_file_stream_t osl_file_stream_init_win32(HANDLE handle)
 {
     osl_file_stream_t stream = {
 	.handle = handle,
