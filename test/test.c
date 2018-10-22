@@ -4,7 +4,6 @@
 #include "../src/thread.h"
 #include "../src/list.h"
 #include "../src/string_buffer.h"
-#include "../src/file.h"
 #include "../src/network.h"
 #include "../src/date.h"
 #include "../src/sem.h"
@@ -137,21 +136,26 @@ void test_string_buffer(void)
 void test_file(void)
 {
     char * dump;
-    FILE * fp = osl_file_open("hello", "w");
-    fwrite("hello", 1, 5, fp);
-    osl_file_close(fp);
+    osl_file_stream_t stream = osl_file_stream_open("hello", "w");
+    osl_file_stream_write(stream, 'h');
+    osl_file_stream_write(stream, 'e');
+    osl_file_stream_write(stream, 'l');
+    osl_file_stream_write(stream, 'l');
+    osl_file_stream_write(stream, 'o');
+    osl_file_stream_close(stream);
 
     assert(osl_pathname_exists("hello"));
     assert(osl_pathname_is_file("hello"));
     assert(osl_pathname_is_dir("hello") == 0);
 
-    fp = osl_file_open("hello", "r");
-    dump = osl_file_dump(fp);
+    stream = osl_file_stream_open("hello", "r");
+    dump = osl_file_stream_dump(&stream);
     printf("dump: '%s'\n", dump);
+    assert(strcmp(dump, "hello") == 0);
     free(dump);
-    osl_file_close(fp);
+    osl_file_stream_close(stream);
 
-    printf("file size: %d\n", (int)osl_file_size("hello"));
+    printf("file size: %d\n", (int)osl_pathname_filesize("hello"));
 }
 
 void test_pathname(void)

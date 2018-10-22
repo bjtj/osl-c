@@ -12,18 +12,22 @@ typedef struct _osl_file_stream_t
     void (*close)(struct _osl_file_stream_t * stream);
 } osl_file_stream_t;
 
+#define osl_file_stream_read(stream) (stream).read(&stream)
+#define osl_file_stream_write(stream, ch) (stream).write(&stream, ch)
+#define osl_file_stream_close(stream) (stream).close(&stream)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+    osl_file_stream_t OSL_EXPORT osl_file_stream_open(const char * path, const char * flags);
     osl_file_stream_t OSL_EXPORT osl_file_stream_init(FILE * fp);
 #if defined(USE_MS_WIN)
-    osl_file_stream_t OSL_EXPORT osl_file_stream_init_with_handle(HANDLE handle);
+    osl_file_stream_t OSL_EXPORT osl_file_stream_init_win32(HANDLE handle);
 #endif
-    int osl_file_stream_read(osl_file_stream_t * stream);
-    void osl_file_stream_write(osl_file_stream_t * stream, int ch);
-    void osl_file_stream_close(osl_file_stream_t * stream);
+
+    char OSL_EXPORT * osl_file_stream_dump(osl_file_stream_t * stream);
+
 
 #ifdef __cplusplus
 }

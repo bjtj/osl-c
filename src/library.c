@@ -1,5 +1,4 @@
 #include "library.h"
-#include "file.h"
 #include "string_buffer.h"
 #include "pathname.h"
 

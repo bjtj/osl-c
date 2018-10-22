@@ -95,6 +95,14 @@ static char * s_get_ext(const char * path)
     return osl_string_substr(name, f - name + 1, strlen(name));
 }
 
+static osl_filesize_t s_get_file_size(const char * path)
+{
+    struct stat st;
+    memset(&st, 0, sizeof(struct stat));
+    lstat(path, &st);
+    return st.st_size;
+}
+
 #elif defined(USE_MS_WIN)
 
 #define STAT_STRUCT struct _stat64
@@ -200,7 +208,26 @@ static char * s_get_ext(const char * path) {
 	free(name);
 	return osl_string_substr(name, f - name + 1, strlen(path));
 }
+
+static osl_filesize_t s_get_file_size(const char * path) {
+
+    STAT_STRUCT st;
+    memset(&st, 0, sizeof(STAT_STRUCT));
+    int ret = STAT_FUNC(path, &st);
+    if (ret != 0) {
+	return 0;
+    }
+
+    return (osl_filesize_t)st.st_size;
+}
+
 #endif
+
+
+osl_filesize_t osl_pathname_filesize(const char * path)
+{
+    return s_get_file_size(path);
+}
 
 int osl_pathname_exists(const char * path)
 {
@@ -242,3 +269,4 @@ char * osl_pathname_dirname(const char * path)
 {
     return s_dirname(path);
 }
+
