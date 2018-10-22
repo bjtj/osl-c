@@ -89,6 +89,8 @@
 #	define strncpy strncpy_s
 #endif
 
+#	define strdup _strdup
+
 #	define strcasecmp(x,y) _stricmp((x),(y))
 #	define strncasecmp(x,y,z) _strnicmp((x),(y),(z))
 #	define osl_vsnprintf(b,bs,f,v) vsnprintf_s((b),(bs),_TRUNCATE,(f),(v))
