@@ -36,6 +36,27 @@ static osl_filesize_t s_get_file_size(const char * path) {
 #endif
 
 
+FILE * osl_file_open(const char * path, const char * flags)
+{
+#if defined(USE_MS_WIN)
+    FILE * fp = NULL;
+    if (fopen_s(&fp, path, flags) != 0) {
+	return NULL;
+    }
+    return fp;
+#else
+    return fopen(path, flags);
+#endif
+}
+
+void osl_file_close(FILE * fp)
+{
+    if (fp)
+    {
+	fclose(fp);
+    }
+}
+
 osl_filesize_t osl_file_size(const char * path)
 {
     return s_get_file_size(path);

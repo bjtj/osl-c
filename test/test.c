@@ -124,15 +124,15 @@ void test_string_buffer(void)
 void test_file(void)
 {
     char * dump;
-    FILE * fp = fopen("hello", "w");
+    FILE * fp = osl_file_open("hello", "w");
     fwrite("hello", 1, 5, fp);
-    fclose(fp);
+    osl_file_close(fp);
 
-    fp = fopen("hello", "r");
+    fp = osl_file_open("hello", "r");
     dump = osl_file_dump(fp);
     printf("dump: '%s'\n", dump);
     free(dump);
-    fclose(fp);
+    osl_file_close(fp);
 
     printf("file size: %d\n", (int)osl_file_size("hello"));
 }
@@ -153,7 +153,7 @@ void test_network(void)
 void test_echo_server()
 {
     /*  */
-	printf(" == test echo server==\n");
+    printf(" == test echo server==\n");
     int port = 0;
     osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &port);
     osl_thread_start(server_thread);
@@ -167,7 +167,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket  */
-	printf(" -- using osl server socket -- \n");
+    printf(" -- using osl server socket -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -181,7 +181,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect with timeout*/
-	printf(" -- using osl server socket and socket connect with timeout -- \n");
+    printf(" -- using osl server socket and socket connect with timeout -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -195,7 +195,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect without timeout */
-	printf(" -- using osl server socket and socket connect with timeout -- \n");
+    printf(" -- using osl server socket and socket connect with timeout -- \n");
     port = 0;
     server_thread = osl_thread_new(echo_server2_thread, &port);
     osl_thread_start(server_thread);
@@ -275,8 +275,6 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-
-
 static void * echo_server_thread(void * arg)
 {
     int * server_port = (int*)arg;
@@ -328,7 +326,7 @@ static void * echo_server_thread(void * arg)
 	memset(&remote_addr, 0, sizeof(remote_addr));
 	int remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
-	if (remote_sock < 0)
+	if (!osl_socket_is_valid(remote_sock))
 	{
 	    perror("accept() failed");
 	    return 0;
@@ -378,7 +376,7 @@ static void * echo_server2_thread(void * arg)
 	memset(&remote_addr, 0, sizeof(remote_addr));
 	int remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
-	if (remote_sock < 0)
+	if (!osl_socket_is_valid(remote_sock))
 	{
 	    perror("accept() failed");
 	    return 0;
@@ -388,7 +386,7 @@ static void * echo_server2_thread(void * arg)
 	int len = recv(remote_sock, buffer, sizeof(buffer), 0);
 	if (len <= 0)
 	{
-		perror("recv() failed");
+	    perror("recv() failed");
 	    return 0;
 	}
 
@@ -426,7 +424,7 @@ void test_echo_client2(int port)
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
     int sock = osl_socket_connect_with_timeout(addr, 1000);
     osl_inet_address_free(addr);
-    if (sock < 0)
+    if (!osl_socket_is_valid(sock))
     {
 	perror("connect() error");
 	exit(1);
@@ -444,7 +442,7 @@ void test_echo_client3(int port)
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
     int sock = osl_socket_connect(addr);
     osl_inet_address_free(addr);
-    if (sock < 0)
+    if (!osl_socket_is_valid(sock))
     {
 	perror("connect() error");
 	exit(1);
@@ -462,7 +460,7 @@ void * datagram_server_thread(void * arg)
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *port);
     int sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
-    if (sock < 0)
+    if (!osl_socket_is_valid(sock))
     {
 	return 0;
     }
@@ -507,7 +505,7 @@ void test_datagram_client(int port)
 	return;
     }
     int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    if (sock < 0)
+    if (!osl_socket_is_valid(sock))
     {
 	perror("socket() failed");
 	return;
@@ -577,7 +575,7 @@ void test_multicast_client(void)
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
     int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
-    if (sock < 0)
+    if (!osl_socket_is_valid(sock))
     {
 	perror("socket() failed");
 	return;
