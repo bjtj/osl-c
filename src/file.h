@@ -16,6 +16,8 @@ typedef unsigned long osl_filesize_t;
 extern "C" {
 #endif
 
+    FILE OSL_EXPORT * osl_file_open(const char * path, const char * flags);
+    void OSL_EXPORT osl_file_close(FILE * fp);
     osl_filesize_t OSL_EXPORT osl_file_size(const char * path);
     char OSL_EXPORT * osl_file_dump(FILE * fp);
     char OSL_EXPORT * osl_file_path_merge(const char * a, const char * b);

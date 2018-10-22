@@ -80,7 +80,7 @@ typedef HANDLE THREAD_HANDLE;
 #		include <net/ethernet.h>
 #	endif
 
-typedef int SOCK_HANDLE;
+typedef int osl_socket;
 
 #define INVALID_SOCKET -1
 
@@ -101,7 +101,7 @@ typedef int SOCK_HANDLE;
 #	define MALLOC(x) HeapAlloc(GetProcessHeap(), 0, (x)) 
 #	define FREE(x) HeapFree(GetProcessHeap(), 0, (x))
 
-typedef SOCKET SOCK_HANDLE;
+typedef SOCKET osl_socket;
 
 #endif
 

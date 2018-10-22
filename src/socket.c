@@ -28,19 +28,34 @@ static int s_err_continue()
 #endif
 }
 
-int osl_socket_connect(osl_inet_address_t * addr)
+int OSL_EXPORT osl_socket_is_valid(osl_socket sock)
+{
+#if defined(USE_BSD_SOCKET)
+    if (sock < 0) {
+	return 0;
+    }
+
+#elif defined(USE_WINSOCK2)
+    if (sock == INVALID_SOCKET) {
+	return 0;
+    }
+#endif
+    return 1;    
+}
+
+osl_socket osl_socket_connect(osl_inet_address_t * addr)
 {
     return osl_socket_connect_with_timeout(addr, 0);
 }
 
-int osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli)
+osl_socket osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli)
 {
-    int ret = -1;
-    int sock;
+    osl_socket ret = INVALID_SOCKET;
+    osl_socket sock;
     struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_STREAM);
     if (res == NULL)
     {
-	return -1;
+	return INVALID_SOCKET;
     }
 
     sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
@@ -100,9 +115,9 @@ done:
     return ret;
 }
 
-int osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
+osl_socket osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 {
-    int ret = -1;
+    osl_socket ret = INVALID_SOCKET;
     struct addrinfo * res = osl_inet_address_resolve_passive(addr, osl_inet_address_get_family(addr), SOCK_STREAM);
     if (res == NULL)
     {
@@ -142,19 +157,19 @@ osl_inet_address_t * osl_socket_get_inet_address(int fd)
     return osl_inet_address_new_with_sockaddr((struct sockaddr*)&_addr);
 }
 
-int osl_datagram_socket_connect(osl_inet_address_t * addr)
+osl_socket osl_datagram_socket_connect(osl_inet_address_t * addr)
 {
     return osl_datagram_socket_connect_with_timeout(addr, 0);
 }
 
-int osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli)
+osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli)
 {
-    int ret = -1;
-    int sock;
+    osl_socket ret = INVALID_SOCKET;
+    osl_socket sock;
     struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_DGRAM);
     if (res == NULL)
     {
-	return -1;
+	return INVALID_SOCKET;
     }
 
     sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
@@ -214,13 +229,13 @@ done:
     return ret;
 }
 
-int osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr)
+osl_socket osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 {
-    int ret = -1;
+    osl_socket ret = INVALID_SOCKET;
     struct addrinfo * res = osl_inet_address_resolve_passive(addr, osl_inet_address_get_family(addr), SOCK_DGRAM);
     if (res == NULL)
     {
-	return -1;
+	return INVALID_SOCKET;
     }
 
     int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
@@ -258,7 +273,7 @@ done:
     return ret;
 }
 
-int osl_datagram_socket_join_group(int sock, const char * group)
+int osl_datagram_socket_join_group(osl_socket sock, const char * group)
 {
     int ret = -1;
     osl_inet_address_t * group_addr = osl_inet_address_new(osl_inet_unspec, group, -1);
@@ -299,7 +314,7 @@ done:
     return ret;
 }
 
-void osl_socket_close(int sock)
+void osl_socket_close(osl_socket sock)
 {
 #if defined(USE_BSD_SOCKET)
     close(sock);
