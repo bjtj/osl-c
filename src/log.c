@@ -2,8 +2,8 @@
 #include "date.h"
 
 static osl_logger_t s_default_logger = {
-prefix: {0,},
-level: OSL_LOG_DEBUG,
+.prefix = {0,},
+.level = OSL_LOG_DEBUG,
 };
 
 static char s_get_level_char(int level)

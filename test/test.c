@@ -1,3 +1,5 @@
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include "../src/osl.h"
 #include "../src/thread.h"
 #include "../src/list.h"
@@ -11,6 +13,7 @@
 #include "../src/log.h"
 #include "../src/pathname.h"
 #include <assert.h>
+
 
 /* socket */
 static void * echo_server_thread(void * arg);
@@ -278,7 +281,11 @@ void test_multicast_socket(void)
 void test_library(void)
 {
     printf(" == test library ==\n");
-    osl_lib_handle lib = osl_library_load("./test", "hello");
+#if defined(PLATFORM_WINDOWS)
+    osl_lib_handle lib = osl_library_load("./", "hello");
+#else
+	osl_lib_handle lib = osl_library_load("./test", "hello");
+#endif
     ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
     osl_library_close(lib);
 }

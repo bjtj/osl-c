@@ -97,6 +97,109 @@ static char * s_get_ext(const char * path)
 
 #elif defined(USE_MS_WIN)
 
+#define STAT_STRUCT struct _stat64
+#define STAT_FUNC __stat64
+#define SEPARATORS "\\/"
+
+static int s_is_file(const char * path);
+static int s_is_directory(const char * path);
+
+static int s_is_separator(char c) {
+	return c == '/' || c == '\\';
+}
+
+static int s_is_root_path(const char * path) 
+{
+	return (osl_string_is_empty(path) == 0 && strlen(path) == 1 && s_is_separator(path[0]));
+}
+static int s_exists(const char * path) 
+{
+	if (osl_string_is_empty(path)) 
+	{
+		return 0;
+	}
+
+	if (s_is_directory(path) || s_is_file(path))
+	{
+		return 1;
+	}
+
+	return 0;
+}
+static int s_is_file(const char * path)
+{
+	if (osl_string_is_empty(path)) {
+		return 0;
+	}
+
+	STAT_STRUCT s;
+	memset(&s, 0, sizeof(STAT_STRUCT));
+	if (STAT_FUNC(path, &s) != 0) {
+		// error
+		return 0;
+	}
+
+	return (s.st_mode & S_IFREG ? 1 : 0);
+}
+static int s_is_directory(const char * path) {
+
+	if (osl_string_is_empty(path)) {
+		return 0;
+	}
+
+	STAT_STRUCT s;
+	memset(&s, 0, sizeof(STAT_STRUCT));
+	if (STAT_FUNC(path, &s) != 0) {
+		// error
+		return 0;
+	}
+
+	return (s.st_mode & S_IFDIR ? 1 : 0);
+}
+
+static char * s_remove_last_separator(const char * path) {
+	if (!osl_string_is_empty(path) && strlen(path) > 1 && s_is_separator(path[strlen(path) - 1])) {
+		return osl_string_substr(path, 0, strlen(path) - 1); // trailing last / character
+	}
+	return strdup(path);
+}
+
+static char * s_dirname(const char * path) {
+
+	if (osl_string_is_empty(path) || s_is_directory(path) || s_is_root_path(path)) {
+		return s_remove_last_separator(path);
+	}
+
+	const char * f = osl_string_find_last_of(path, SEPARATORS);
+	if (f == NULL) {
+		return NULL;
+	}
+
+	return osl_string_substr(path, 0, f - path + 1);
+}
+static char * s_basename(const char * path) {
+
+	if (osl_string_is_empty(path)) {
+		return NULL;
+	}
+
+	const char * f = osl_string_find_last_of(path, SEPARATORS);
+	if (f == NULL) {
+		return strdup(path);
+	}
+
+	return osl_string_substr(path, f - path + 1, strlen(path));
+}
+static char * s_get_ext(const char * path) {
+	char * name = s_basename(path);
+	const char * f = osl_string_find_last_of(name, ".");
+	if (f == NULL || f == name) {
+		free(name);
+		return NULL;
+	}
+	free(name);
+	return osl_string_substr(name, f - name + 1, strlen(path));
+}
 #endif
 
 int osl_pathname_exists(const char * path)
