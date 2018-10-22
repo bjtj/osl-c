@@ -95,9 +95,10 @@ static int s_win32_read_cb(osl_file_stream_t * stream)
 {
     HANDLE handle = (HANDLE)stream->handle;
     DWORD dwRead = 0;
-    BOOL bSuccess = ReadFile(handle, buffer, size, &dwRead, NULL);
+	int ch;
+    BOOL bSuccess = ReadFile(handle, &ch, 1, &dwRead, NULL);
     stream->eof = (!bSuccess || dwRead == 0);
-    return (stream->eof ? 0 : dwRead);
+    return (stream->eof ? -1 : ch);
 }
 
 static int s_win32_write_cb(osl_file_stream_t * stream, int ch)
