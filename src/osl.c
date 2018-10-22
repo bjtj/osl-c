@@ -7,7 +7,7 @@ static int __use_socket = 0;
 static WSADATA wsaData;
 #endif
 
-void osl_platform_once(void)
+void osl_init_once(void)
 {
 	if (__platform_initilized)
 	{
@@ -16,14 +16,14 @@ void osl_platform_once(void)
 	__platform_initilized = 1;
 }
 
-void osl_platform_ignore_sigpipe(void)
+void osl_ignore_sigpipe(void)
 {
 #if defined(USE_SIGNAL)
 	signal(SIGPIPE, SIG_IGN);
 #endif
 }
 
-int osl_platform_use_socket(void)
+int osl_use_socket(void)
 {
 	if (__use_socket)
 	{
@@ -40,7 +40,7 @@ int osl_platform_use_socket(void)
 	return 0;
 }
 
-void osl_platform_finish(void)
+void osl_finish(void)
 {
 	if (__use_socket)
 	{
@@ -101,3 +101,4 @@ char * osl_getcwd(void)
     return strdup(buffer);
 #endif
 }
+

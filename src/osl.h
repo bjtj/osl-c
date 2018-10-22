@@ -109,10 +109,10 @@ typedef SOCKET osl_socket;
 extern "C" {
 #endif
 
-    void OSL_EXPORT osl_platform_once(void);
-    void OSL_EXPORT osl_platform_ignore_sigpipe(void);
-    int OSL_EXPORT osl_platform_use_socket(void);
-    void OSL_EXPORT osl_platform_finish(void);
+    void OSL_EXPORT osl_init_once(void);
+    void OSL_EXPORT osl_ignore_sigpipe(void);
+    int OSL_EXPORT osl_use_socket(void);
+    void OSL_EXPORT osl_finish(void);
     void OSL_EXPORT osl_idle(unsigned long timeout);
     unsigned long OSL_EXPORT osl_tick_milli(void);
     char OSL_EXPORT * osl_getcwd(void);

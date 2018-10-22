@@ -19,14 +19,16 @@ add_library(osl SHARED
   src/library.h
   src/list.c
   src/list.h
+  src/log.c
+  src/log.h
   src/mutex.c
   src/mutex.h
   src/network.c
   src/network.h
   src/osl.c
   src/osl.h
-  src/string_buffer.c
-  src/string_buffer.h
+  src/pathname.c
+  src/pathname.h
   src/platform.h
   src/selector.c
   src/selector.h
@@ -34,6 +36,10 @@ add_library(osl SHARED
   src/sem.h
   src/socket.c
   src/socket.h
+  src/str.c
+  src/str.h
+  src/string_buffer.c
+  src/string_buffer.h
   src/thread.c
   src/thread.h)
 
@@ -54,14 +60,17 @@ list(APPEND DIR_HEADERS
   src/inet_address.h
   src/library.h
   src/list.h
+  src/log.h
   src/mutex.h
   src/network.h
   src/osl.h
-  src/string_buffer.h
+  src/pathname.h
   src/platform.h
   src/selector.h
   src/sem.h
   src/socket.h
+  src/str.h
+  src/string_buffer.h
   src/thread.h
   )
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")

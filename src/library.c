@@ -1,6 +1,8 @@
 #include "library.h"
 #include "file.h"
 #include "string_buffer.h"
+#include "pathname.h"
+
 
 static char * s_get_lib_filename(const char * name)
 {
@@ -29,7 +31,7 @@ static char * s_get_lib_filename(const char * name)
 osl_lib_handle osl_library_load(const char * path, const char * name)
 {
     char * filename = s_get_lib_filename(name);
-    char * fullpath = osl_file_path_merge(path, filename);
+    char * fullpath = osl_pathname_merge(path, filename);
     free(filename);
 #if defined(USE_UNIX_STD)
     osl_lib_handle handle = dlopen(fullpath, RTLD_LAZY);
