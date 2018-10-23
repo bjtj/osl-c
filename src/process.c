@@ -258,7 +258,7 @@ osl_file_stream_t osl_process_in_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdin);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_with_handle(process->in_write);
+	return osl_file_stream_init_win32(process->in_write);
 #endif
 }
 
@@ -267,7 +267,7 @@ osl_file_stream_t osl_process_out_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdout);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_with_handle(process->out_read);
+	return osl_file_stream_init_win32(process->out_read);
 #endif
 }
 
@@ -276,6 +276,6 @@ osl_file_stream_t osl_process_err_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fderr);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_with_handle(process->err_read);
+	return osl_file_stream_init_win32(process->err_read);
 #endif
 }
