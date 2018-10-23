@@ -13,8 +13,6 @@
 * environment
 * properties file
 * argument parser
-* logger
-* url
 * xml
 
 ## APIs
@@ -30,3 +28,5 @@
 * socket -- server socket, socket, select, datagram, multicast
 * library
 * process
+* logger
+* url

@@ -102,3 +102,11 @@ char * osl_getcwd(void)
 #endif
 }
 
+
+void osl_free(void * ptr)
+{
+    if (ptr)
+    {
+	free(ptr);
+    }
+}

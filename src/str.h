@@ -10,6 +10,9 @@ extern "C" {
     int OSL_EXPORT osl_string_is_empty(const char * str);
     char OSL_EXPORT * osl_string_substr(const char * str, int start, int end);
     const char OSL_EXPORT * osl_string_find_last_of(const char * str, const char * tokens);
+    char OSL_EXPORT * osl_strdup(const char * str);
+    char OSL_EXPORT * osl_strndup(const char * str, size_t size);
+    char OSL_EXPORT * osl_strdup_for(const char * str, const char * end_ptr);
 
 #ifdef __cplusplus
 }
