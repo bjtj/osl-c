@@ -128,6 +128,7 @@ extern "C" {
     void OSL_EXPORT osl_idle(unsigned long timeout);
     unsigned long OSL_EXPORT osl_tick_milli(void);
     char OSL_EXPORT * osl_getcwd(void);
+    void OSL_EXPORT osl_free(void * ptr);
 
 #ifdef __cplusplus
 }

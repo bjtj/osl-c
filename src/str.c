@@ -39,3 +39,32 @@ const char * osl_string_find_last_of(const char * str, const char * tokens)
     }
     return NULL;
 }
+
+char * osl_strdup(const char * str)
+{
+    if (str == NULL)
+    {
+	return NULL;
+    }
+    return strdup(str);
+}
+
+char * osl_strndup(const char * str, size_t size)
+{
+    char * ret = (char*)malloc(size + 1);
+    memcpy(ret, str, size);
+    ret[size] = '\0';
+    return ret;
+}
+
+char * osl_strdup_for(const char * str, const char * end_ptr)
+{
+    if (end_ptr)
+    {
+	return osl_strndup(str, end_ptr - str);
+    }
+    else
+    {
+	return osl_strdup(str);
+    }
+}

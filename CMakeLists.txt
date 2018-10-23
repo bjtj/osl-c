@@ -43,7 +43,9 @@ add_library(osl SHARED
   src/string_buffer.c
   src/string_buffer.h
   src/thread.c
-  src/thread.h)
+  src/thread.h
+  src/url.c
+  src/url.h)
 
 target_link_libraries(osl ${CMAKE_DL_LIBS})
 
@@ -75,7 +77,7 @@ list(APPEND DIR_HEADERS
   src/str.h
   src/string_buffer.h
   src/thread.h
-  )
+  src/url.h)
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")
 install(TARGETS osl
   EXPORT osltargets
