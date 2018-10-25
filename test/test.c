@@ -13,6 +13,8 @@
 #include "../src/pathname.h"
 #include "../src/process.h"
 #include "../src/url.h"
+#include "../src/argparse.h"
+#include "../src/str.h"
 #include <assert.h>
 
 
@@ -87,7 +89,7 @@ void test_list(void)
 
     printf("count -- %lu\n", osl_list_count(list));
 
-    list = osl_list_remove(list, 2, free);
+    list = osl_list_remove_idx(list, 2, free);
     ptr = list;
     for (; ptr; ptr = ptr->next)
     {
@@ -96,7 +98,7 @@ void test_list(void)
 
     printf("====\n");
 
-    list = osl_list_remove(list, 0, free);
+    list = osl_list_remove_idx(list, 0, free);
     ptr = list;
     for (; ptr; ptr = ptr->next)
     {
@@ -117,6 +119,12 @@ void test_date(void)
 	       now.year, now.month+1, now.day, now.hour, now.minute, now.second, now.millisecond);
 	osl_idle(200);
     }
+}
+
+void test_string(void)
+{
+    assert(osl_string_starts_with("--hello", "--") == 1);
+    assert(osl_string_ends_with("img.jpg", ".jpg") == 1);
 }
 
 void test_string_buffer(void)
@@ -290,7 +298,7 @@ void test_library(void)
 #if defined(PLATFORM_WINDOWS)
     osl_lib_handle lib = osl_library_load("./", "hello");
 #else
-	osl_lib_handle lib = osl_library_load("./test", "hello");
+    osl_lib_handle lib = osl_library_load("./test", "hello");
 #endif
     ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
     osl_library_close(lib);
@@ -443,6 +451,68 @@ void test_url(void)
     }
 }
 
+static void print_arguments(osl_arguments_t * args)
+{
+    printf(" -- print arguments --\n");
+    printf("NAME -- %s\n", args->name);
+    osl_list_t * ptr = args->arg_list;
+    for (; ptr; ptr = ptr->next)
+    {
+	osl_argument_t * arg = (osl_argument_t*)ptr->data;
+	printf("  ARGUMENT -- %s = %s\n", arg->name, arg->value);
+    }
+    ptr = args->text_list;
+    for (; ptr; ptr = ptr->next)
+    {
+	char * str = (char*)ptr->data;
+	printf("  TEXT -- %s\n", str);
+    }
+}
+
+void test_arguments(void)
+{
+    printf("== test arguments ==\n");
+    osl_arguments_usage_t usage = {0,};
+    {
+	char * argv[] = {
+	    "hello",
+	};
+	int argc = 1;
+	osl_arguments_t * args = osl_arguments_parse(&usage, argc, argv);
+	print_arguments(args);
+	osl_arguments_free(args);
+    }
+
+    {
+	char * argv[] = {
+	    "hello",
+	    "--debug", "yes",
+	    "--single",
+	};
+	int argc = 4;
+	osl_arguments_t * args = osl_arguments_parse(&usage, argc, argv);
+	print_arguments(args);
+	osl_arguments_free(args);
+    }
+
+    {
+	char * argv[] = {
+	    "hello",
+	    "text1",
+	    "--debug", "yes",
+	    "--single",
+	    "text2"
+	};
+	usage.flag_list = osl_list_append(usage.flag_list, osl_argument_flag_new("--single", NULL, 1, NULL));
+	int argc = 6;
+	osl_arguments_t * args = osl_arguments_parse(&usage, argc, argv);
+	print_arguments(args);
+	osl_arguments_free(args);
+    }
+
+    osl_list_free(usage.flag_list, (osl_free_cb)osl_argument_flag_free);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -453,6 +523,7 @@ int main(int argc, char *argv[])
     test_thread();
     test_list();
     test_date();
+    test_string();
     test_string_buffer();
     test_file();
     test_pathname();
@@ -464,6 +535,7 @@ int main(int argc, char *argv[])
     test_log();
     test_process();
     test_url();
+    test_arguments();
     
     osl_finish();
     
