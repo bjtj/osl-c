@@ -23,6 +23,8 @@ add_library(osl SHARED
   src/list.h
   src/log.c
   src/log.h
+  src/looper.c
+  src/looper.h
   src/mutex.c
   src/mutex.h
   src/network.c
@@ -68,6 +70,7 @@ list(APPEND DIR_HEADERS
   src/library.h
   src/list.h
   src/log.h
+  src/looper.h
   src/mutex.h
   src/network.h
   src/osl.h
