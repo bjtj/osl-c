@@ -27,6 +27,20 @@ static int s_contains_char(int ch, const char * tokens)
     return 0;
 }
 
+int osl_string_starts_with(const char * str, const char * query)
+{
+    return (strstr(str, query) == str);
+}
+
+int osl_string_ends_with(const char * str, const char * query)
+{
+    if (strlen(str) < strlen(query))
+    {
+	return 0;
+    }
+    return (strcmp(str + strlen(str) - strlen(query), query) == 0);
+}
+
 const char * osl_string_find_last_of(const char * str, const char * tokens)
 {
     const char * ptr = str + strlen(str) - 1;
