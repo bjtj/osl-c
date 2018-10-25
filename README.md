@@ -10,7 +10,6 @@
 
 ## TODO
 
-* environment
 * properties file
 * xml
 
@@ -31,3 +30,4 @@
 * url
 * argument parser
 * looper
+* environment
