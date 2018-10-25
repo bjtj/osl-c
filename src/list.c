@@ -111,6 +111,18 @@ osl_list_t * osl_list_find(osl_list_t * list, osl_compare_cb compare_cb, void * 
     return NULL;
 }
 
+osl_list_t * osl_list_find_basic(osl_list_t * list, void * data)
+{
+    for (; list; list = list->next)
+    {
+	if (list->data == data)
+	{
+	    return list;
+	}
+    }
+    return NULL;
+}
+
 osl_list_t * osl_list_remove(osl_list_t * list, osl_list_t * ptr, osl_free_cb free_cb)
 {
     osl_list_t * node = list;
@@ -182,6 +194,12 @@ osl_list_t * osl_list_prepend_list(osl_list_t * list, osl_list_t * other)
     return osl_list_append_list(other, list);
 }
 
+osl_list_t * osl_list_first(osl_list_t * list)
+{
+    for (; list && list->prev; list = list->prev) {}
+    return list;
+}
+
 osl_list_t * osl_list_last(osl_list_t * list)
 {
     for (; list && list->next; list = list->next) {}
@@ -193,7 +211,8 @@ osl_list_t * osl_list_offset(osl_list_t * list, int idx)
     if (idx > 0)
     {
 	for (; list && idx--; list = list->next) {}
-    } else
+    }
+    else
     {
 	for (; list && idx++; list = list->next) {}
     }

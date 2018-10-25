@@ -18,6 +18,7 @@
 #include "../src/looper.h"
 #include "../src/data.h"
 #include "../src/environ.h"
+#include "../src/heap.h"
 #include <assert.h>
 
 
@@ -571,6 +572,18 @@ void test_environ(void)
     osl_free(full);
 }
 
+void test_heap(void)
+{
+    printf("== test heap ==\n");
+    osl_heap_t * heap = osl_heap_new();
+    osl_heap_alloc(heap, sizeof(int));
+    osl_heap_alloc(heap, sizeof(int));
+    osl_heap_alloc(heap, sizeof(int));
+    osl_heap_alloc(heap, sizeof(int));
+    osl_heap_alloc(heap, sizeof(int));
+    osl_heap_free(heap);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -596,6 +609,7 @@ int main(int argc, char *argv[])
     test_arguments();
     test_looper();
     test_environ();
+    test_heap();
     
     osl_finish();
     
