@@ -15,6 +15,7 @@
 #include "../src/url.h"
 #include "../src/argparse.h"
 #include "../src/str.h"
+#include "../src/looper.h"
 #include <assert.h>
 
 
@@ -513,6 +514,32 @@ void test_arguments(void)
     osl_list_free(usage.flag_list, (osl_free_cb)osl_argument_flag_free);
 }
 
+void _looper_print_task_cb(osl_looper_t * looper, void * user)
+{
+    printf("MSG -- %s\n", (char*)user);
+}
+
+void _looper_hello_and_bye_task_cb(osl_looper_t * looper, void * user)
+{
+    printf("hello and bye!\n");
+    osl_looper_finish(looper);
+}
+
+void test_looper(void)
+{
+    printf("== test looper ==\n");
+    osl_looper_t * looper = osl_looper_new("looper-1", NULL);
+
+    osl_looper_add_task(looper, _looper_print_task_cb, "a");
+    osl_looper_add_task(looper, _looper_print_task_cb, "b");
+    osl_looper_add_task(looper, _looper_print_task_cb, "c");
+    osl_looper_add_task(looper, _looper_hello_and_bye_task_cb, NULL);
+    osl_looper_add_task(looper, _looper_hello_and_bye_task_cb, NULL);
+    osl_looper_run(looper);
+
+    osl_looper_free(looper);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -536,6 +563,7 @@ int main(int argc, char *argv[])
     test_process();
     test_url();
     test_arguments();
+    test_looper();
     
     osl_finish();
     
