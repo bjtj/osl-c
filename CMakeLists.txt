@@ -11,6 +11,7 @@ add_test(NAME mytest COMMAND Test)
 add_library(osl SHARED
   src/argparse.c
   src/argparse.h
+  src/data.h
   src/date.c
   src/date.h
   src/file_stream.c
@@ -64,6 +65,7 @@ include(GNUInstallDirs)
 set(DIR_HEADERS)
 list(APPEND DIR_HEADERS
   src/argparse.h
+  src/data.h
   src/date.h
   src/file_stream.h
   src/inet_address.h

@@ -16,6 +16,7 @@
 #include "../src/argparse.h"
 #include "../src/str.h"
 #include "../src/looper.h"
+#include "../src/data.h"
 #include <assert.h>
 
 
