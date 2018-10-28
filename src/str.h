@@ -15,6 +15,10 @@ extern "C" {
     int OSL_EXPORT osl_string_ends_with(const char * str, const char * query);
     const char OSL_EXPORT * osl_string_find_last_of(const char * str, const char * tokens);
     const char OSL_EXPORT * osl_string_find_first_not_of(const char * str, const char * tokens);
+    char OSL_EXPORT * osl_string_replace_all(const char * str, const char * mat, const char * sub);
+    char OSL_EXPORT * osl_string_uppercase(const char * str);
+    char OSL_EXPORT * osl_string_lowercase(const char * str);
+    char OSL_EXPORT * osl_string_capital(const char * str);
     char OSL_EXPORT * osl_strdup(const char * str);
     char OSL_EXPORT * osl_strndup(const char * str, size_t size);
     char OSL_EXPORT * osl_strdup_for(const char * str, const char * end_ptr);

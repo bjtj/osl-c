@@ -1,5 +1,5 @@
 #include "str.h"
-
+#include "string_buffer.h"
 
 int osl_string_is_empty(const char * str)
 {
@@ -64,6 +64,79 @@ const char * osl_string_find_first_not_of(const char * str, const char * tokens)
 	}
     }
     return NULL;
+}
+
+char * osl_string_replace_all(const char * str, const char * mat, const char * sub)
+{
+    osl_string_buffer_t * sb = osl_string_buffer_new();
+    while (*str)
+    {
+	const char * ptr = strstr(str, mat);
+	if (ptr)
+	{
+	    osl_string_buffer_append_buffer(sb, str, ptr - str);
+	    osl_string_buffer_append(sb, sub);
+	    str = (ptr + strlen(mat));
+	}
+	else
+	{
+	    osl_string_buffer_append(sb, str);
+	    break;
+	}
+    }
+    return osl_string_buffer_to_string_and_free(sb);
+}
+
+char * osl_string_uppercase(const char * str)
+{
+    char * ptr = osl_strdup(str);
+    char * ret = ptr;
+    for (; *ptr; ptr++)
+    {
+	if (*ptr >= 'a' && *ptr <= 'z')
+	{
+	    *ptr = *ptr - ('a' - 'A');
+	}
+    }
+    return ret;
+}
+
+char * osl_string_lowercase(const char * str)
+{
+    char * ptr = osl_strdup(str);
+    char * ret = ptr;
+    for (; *ptr; ptr++)
+    {
+	if (*ptr >= 'A' && *ptr <= 'Z')
+	{
+	    *ptr = *ptr - ('A' - 'a');
+	}
+    }
+    return ret;
+}
+
+char * osl_string_capital(const char * str)
+{
+    char * ptr = osl_strdup(str);
+    char * ret = ptr;
+    int first = 1;
+    for (; *ptr; ptr++)
+    {
+	if (first && *ptr != ' ' && *ptr != '\t')
+	{
+	    if (*ptr >= 'a' && *ptr <= 'z')
+	    {
+		*ptr = *ptr - ('a' - 'A');
+	    }
+	    first = 0;
+	    continue;
+	}
+	if (*ptr >= 'A' && *ptr <= 'Z')
+	{
+	    *ptr = *ptr - ('A' - 'a');
+	}
+    }
+    return ret;
 }
 
 char * osl_strdup(const char * str)
