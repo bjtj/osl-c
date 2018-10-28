@@ -35,10 +35,8 @@ void osl_file_stream_free(osl_file_stream_t * stream)
     {
 	return;
     }
-    osl_file_stream_close(stream);
     osl_free(stream);
 }
-
 
 osl_file_stream_t * osl_file_stream_open(const char * path, const char * flags)
 {

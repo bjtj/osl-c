@@ -617,6 +617,7 @@ static void dump_file(const char * path)
     printf("DUMP -- %s\n", path);
     printf("%s\n", dump);
     osl_free(dump);
+    osl_file_stream_close(stream);
     osl_file_stream_free(stream);
 }
 
