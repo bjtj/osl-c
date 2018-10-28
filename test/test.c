@@ -130,6 +130,27 @@ void test_string(void)
 {
     assert(osl_string_starts_with("--hello", "--") == 1);
     assert(osl_string_ends_with("img.jpg", ".jpg") == 1);
+
+    {
+	char * str = osl_string_uppercase("abc123def");
+	printf("%s\n", str);
+	assert(strcmp(str, "ABC123DEF") == 0);
+	osl_free(str);
+    }
+
+    {
+	char * str = osl_string_lowercase("aBc123dEf");
+	printf("%s\n", str);
+	assert(strcmp(str, "abc123def") == 0);
+	osl_free(str);
+    }
+
+    {
+	char * str = osl_string_capital("aBc123dEf");
+	printf("%s\n", str);
+	assert(strcmp(str, "Abc123def") == 0);
+	osl_free(str);
+    }
 }
 
 void test_string_buffer(void)
