@@ -41,6 +41,8 @@ add_library(osl SHARED
   src/platform.h
   src/process.c
   src/process.h
+  src/properties.c
+  src/properties.h
   src/selector.c
   src/selector.h
   src/sem.c
@@ -85,6 +87,7 @@ list(APPEND DIR_HEADERS
   src/pathname.h
   src/platform.h
   src/process.h
+  src/properties.h
   src/selector.h
   src/sem.h
   src/socket.h

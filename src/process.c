@@ -253,7 +253,7 @@ void osl_process_wait(osl_process_t * process)
     }
 }
 
-osl_file_stream_t osl_process_in_stream(osl_process_t * process)
+osl_file_stream_t * osl_process_in_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdin);
@@ -262,7 +262,7 @@ osl_file_stream_t osl_process_in_stream(osl_process_t * process)
 #endif
 }
 
-osl_file_stream_t osl_process_out_stream(osl_process_t * process)
+osl_file_stream_t * osl_process_out_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdout);
@@ -271,7 +271,7 @@ osl_file_stream_t osl_process_out_stream(osl_process_t * process)
 #endif
 }
 
-osl_file_stream_t osl_process_err_stream(osl_process_t * process)
+osl_file_stream_t * osl_process_err_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fderr);

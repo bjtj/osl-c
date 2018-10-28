@@ -22,23 +22,49 @@ static FILE * s_fopen(const char * path, const char * flags)
 #endif
 }
 
-osl_file_stream_t osl_file_stream_open(const char * path, const char * flags)
+osl_file_stream_t * osl_file_stream_new(void)
+{
+    osl_file_stream_t * stream = (osl_file_stream_t*)malloc(sizeof(osl_file_stream_t));
+    memset(stream, 0, sizeof(osl_file_stream_t));
+    return stream;
+}
+
+void osl_file_stream_free(osl_file_stream_t * stream)
+{
+    if (stream == NULL)
+    {
+	return;
+    }
+    osl_file_stream_close(stream);
+    osl_free(stream);
+}
+
+
+osl_file_stream_t * osl_file_stream_open(const char * path, const char * flags)
 {
     return osl_file_stream_init(s_fopen(path, flags));
 }
 
-osl_file_stream_t osl_file_stream_init(FILE * fp)
+osl_file_stream_t * osl_file_stream_init(FILE * fp)
 {
-    osl_file_stream_t stream = {
-	.handle = fp,
-	.eof = 0,
-	.read = s_read_cb,
-	.write = s_write_cb,
-	.close = s_close_cb
-    };
+    if (fp == NULL)
+    {
+	return NULL;
+    }
+    osl_file_stream_t * stream = osl_file_stream_new();
+    stream->handle = fp;
+    stream->eof = 0;
+    stream->read = s_read_cb;
+    stream->write = s_write_cb;
+    stream->close = s_close_cb;
     return stream;
 }
 
+
+int osl_file_stream_is_open(osl_file_stream_t * stream)
+{
+    return (stream != NULL && stream->handle != NULL);
+}
 
 char * osl_file_stream_dump(osl_file_stream_t * stream)
 {
@@ -49,6 +75,38 @@ char * osl_file_stream_dump(osl_file_stream_t * stream)
 	osl_string_buffer_append_buffer(sb, (char*)&ch, 1);
     }
     return osl_string_buffer_to_string_and_free(sb);
+}
+
+char * osl_file_stream_readline(osl_file_stream_t * stream)
+{
+    if (stream->eof)
+    {
+	return NULL;
+    }
+    osl_string_buffer_t * sb = osl_string_buffer_new();
+    int ch;
+    while ((ch = osl_file_stream_read(stream)) > 0 && ch != '\n')
+    {
+	char c = (char)ch;
+	osl_string_buffer_append_buffer(sb, &c, 1);
+    }
+    return osl_string_buffer_to_string_and_free(sb);
+}
+
+void osl_file_stream_writeline(osl_file_stream_t * stream, const char * str)
+{
+    if (str == NULL)
+    {
+	return;
+    }
+    for (; *str; str++)
+    {
+	if (osl_file_stream_write(stream, *str) < 0)
+	{
+	    return;
+	}
+    }
+    osl_file_stream_write(stream, '\n');
 }
 
 
@@ -72,21 +130,27 @@ static int s_write_cb(osl_file_stream_t * stream, int ch)
 static void s_close_cb(osl_file_stream_t * stream)
 {
     FILE * fp = (FILE*)stream->handle;
-    fclose(fp);
-    stream->handle = NULL;
+    if (fp)
+    {
+	fclose(fp);
+	stream->handle = NULL;
+    }
 }
 
 #if defined(USE_MS_WIN)
 
-osl_file_stream_t osl_file_stream_init_win32(HANDLE handle)
+osl_file_stream_t * osl_file_stream_init_win32(HANDLE handle)
 {
-    osl_file_stream_t stream = {
-	.handle = handle,
-	.eof = 0,
-	.read = s_win32_read_cb,
-	.write = s_win32_write_cb,
-	.close = s_win32_close_cb
-    };
+    if (handle == NULL)
+    {
+	return NULL;
+    }
+    osl_file_stream_t * stream = osl_file_stream_new();
+    stream->handle = handle;
+    stream->eof = 0;
+    stream->read = s_win32_read_cb;
+    stream->write = s_win32_write_cb;
+    stream->close = s_win32_close_cb;
     return stream;
 }
 
@@ -113,8 +177,11 @@ static int s_win32_write_cb(osl_file_stream_t * stream, int ch)
 static void s_win32_close_cb(osl_file_stream_t * stream)
 {
     HANDLE handle = (HANDLE)stream->handle;
-    CloseHandle(handle);
-    stream->handle = NULL;
+    if (handle)
+    {
+	CloseHandle(handle);
+	stream->handle = NULL;
+    }
 }
 
 #endif

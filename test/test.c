@@ -19,6 +19,7 @@
 #include "../src/data.h"
 #include "../src/environ.h"
 #include "../src/heap.h"
+#include "../src/properties.h"
 #include <assert.h>
 
 
@@ -149,24 +150,24 @@ void test_string_buffer(void)
 void test_file(void)
 {
     char * dump;
-    osl_file_stream_t stream = osl_file_stream_open("hello", "w");
+    osl_file_stream_t * stream = osl_file_stream_open("hello", "w");
     osl_file_stream_write(stream, 'h');
     osl_file_stream_write(stream, 'e');
     osl_file_stream_write(stream, 'l');
     osl_file_stream_write(stream, 'l');
     osl_file_stream_write(stream, 'o');
-    osl_file_stream_close(stream);
+    osl_file_stream_close_and_free(stream);
 
     assert(osl_pathname_exists("hello"));
     assert(osl_pathname_is_file("hello"));
     assert(osl_pathname_is_dir("hello") == 0);
 
     stream = osl_file_stream_open("hello", "r");
-    dump = osl_file_stream_dump(&stream);
+    dump = osl_file_stream_dump(stream);
     printf("dump: '%s'\n", dump);
     assert(strcmp(dump, "hello") == 0);
     free(dump);
-    osl_file_stream_close(stream);
+    osl_file_stream_close_and_free(stream);
 
     printf("file size: %d\n", (int)osl_pathname_filesize("hello"));
 }
@@ -324,13 +325,14 @@ void test_process(void)
     osl_process_t * process = osl_process_new("echo \"hello\"");
     osl_process_start(process);
 
-    osl_file_stream_t out = osl_process_out_stream(process);
+    osl_file_stream_t * out = osl_process_out_stream(process);
     int ch;
-    while ((ch = out.read(&out)) > 0)
+    while ((ch = osl_file_stream_read(out)) > 0)
     {
 	putchar(ch);
     }
     putchar('\n');
+    osl_file_stream_free(out);
 
     osl_process_wait(process);
     printf("exit code: %d\n", process->exit_code);
@@ -584,6 +586,55 @@ void test_heap(void)
     osl_heap_free(heap);
 }
 
+static void dump_file(const char * path)
+{
+    osl_file_stream_t * stream = osl_file_stream_open(path, "r");
+    char * dump = osl_file_stream_dump(stream);
+    printf("DUMP -- %s\n", path);
+    printf("%s\n", dump);
+    osl_free(dump);
+    osl_file_stream_free(stream);
+}
+
+void test_properties(void)
+{
+    printf("== test properties  ==\n");
+
+    osl_process_t * proc = osl_process_new("rm ./person.properties");
+    osl_process_start(proc);
+    osl_process_wait(proc);
+    printf("exit code: %d\n", proc->exit_code);
+    osl_process_close(proc);
+    osl_process_free(proc);
+
+    osl_properties_t * props = osl_properties_load("./person.properties");
+    assert(props == NULL);
+
+    osl_file_stream_t * stream = osl_file_stream_open("./person.properties", "w");
+    osl_file_stream_writeline(stream, "# Person property");
+    osl_file_stream_writeline(stream, "name=person1");
+    osl_file_stream_writeline(stream, "age=35");
+    osl_file_stream_close_and_free(stream);
+
+    props = osl_properties_load("./person.properties");
+    assert(props != NULL);
+
+    assert(strcmp(osl_properties_get(props, "age"), "35") == 0);
+    assert(strcmp(osl_properties_get(props, "name"), "person1") == 0);
+
+    osl_properties_set(props, "msg", "xyz");
+
+    osl_properties_save(props);
+    dump_file(props->path);
+
+    osl_properties_remove(props, "age");
+
+    osl_properties_save(props);
+    dump_file(props->path);
+
+    osl_properties_free(props);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -610,6 +661,7 @@ int main(int argc, char *argv[])
     test_looper();
     test_environ();
     test_heap();
+    test_properties();
     
     osl_finish();
     
