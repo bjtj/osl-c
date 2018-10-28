@@ -54,6 +54,18 @@ const char * osl_string_find_last_of(const char * str, const char * tokens)
     return NULL;
 }
 
+const char * osl_string_find_first_not_of(const char * str, const char * tokens)
+{
+    for (; *str; str++)
+    {
+	if (s_contains_char(*str, tokens) == 0)
+	{
+	    return str;
+	}
+    }
+    return NULL;
+}
+
 char * osl_strdup(const char * str)
 {
     if (str == NULL)

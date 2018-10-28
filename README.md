@@ -10,7 +10,6 @@
 
 ## TODO
 
-* properties file
 * xml
 
 ## APIs
@@ -32,3 +31,4 @@
 * looper
 * environment
 * heap
+* properties file
