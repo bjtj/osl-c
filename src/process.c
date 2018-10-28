@@ -177,6 +177,7 @@ void osl_process_close(osl_process_t * process)
 {
     if (process->opened == 0)
     {
+	fprintf(stderr, "process not open\n");
 	return;
     }
 
@@ -196,6 +197,8 @@ void osl_process_close(osl_process_t * process)
 	fclose(process->fderr);
 	process->fderr = NULL;
     }
+
+    printf("close pipe\n");
 
     close(process->pipe_in[1]);
     close(process->pipe_out[0]);
