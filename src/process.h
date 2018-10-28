@@ -8,6 +8,7 @@ typedef struct _osl_process_t
 {
     int exit_code;
     char * cmd;
+    int opened;
 #if defined(USE_UNIX_STD)
     pid_t pid;
     FILE * fdin;

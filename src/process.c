@@ -87,6 +87,8 @@ int osl_process_start(osl_process_t * process)
 	close(process->pipe_in[0]);
 	close(process->pipe_out[1]);
 	close(process->pipe_err[1]);
+
+	process->opened = 1;
     }
 
     return 0;
@@ -164,6 +166,8 @@ int osl_process_start(osl_process_t * process)
     CloseHandle(process->out_write);
     CloseHandle(process->in_read);
 
+    process->opened = 1;
+
     return 0;
 }
 
@@ -171,6 +175,13 @@ int osl_process_start(osl_process_t * process)
 
 void osl_process_close(osl_process_t * process)
 {
+    if (process->opened == 0)
+    {
+	return;
+    }
+
+    process->opened = 0;
+    
 #if defined(USE_UNIX_STD)
 
     if (process->fdin) {
@@ -258,7 +269,7 @@ osl_file_stream_t * osl_process_in_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdin);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_win32(process->in_write);
+    return osl_file_stream_init_win32(process->in_write);
 #endif
 }
 
@@ -267,7 +278,7 @@ osl_file_stream_t * osl_process_out_stream(osl_process_t * process)
 #if defined(USE_UNIX_STD)
     return osl_file_stream_init(process->fdout);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_win32(process->out_read);
+    return osl_file_stream_init_win32(process->out_read);
 #endif
 }
 
