@@ -359,7 +359,10 @@ void test_process(void)
     printf("exit code: %d\n", process->exit_code);
     
     osl_process_close(process);
+    printf("free\n");
     osl_process_free(process);
+
+    printf("done -- test process\n");
 }
 
 void test_url(void)
