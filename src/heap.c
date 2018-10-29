@@ -70,7 +70,7 @@ void osl_heap_dealloc(osl_heap_t * heap, void * alloc)
     osl_list_t * ptr = heap->allocs;
     for (; ptr; ptr = ptr->next)
     {
-	if (ptr->data = alloc)
+	if (ptr->data == alloc)
 	{
 	    if (heap->on_dealloc)
 	    {
