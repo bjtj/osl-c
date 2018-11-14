@@ -111,7 +111,7 @@ osl_list_t * osl_list_find(osl_list_t * list, osl_compare_cb compare_cb, void * 
     return NULL;
 }
 
-osl_list_t * osl_list_find_basic(osl_list_t * list, void * data)
+osl_list_t * osl_list_find_by_ptr(osl_list_t * list, void * data)
 {
     for (; list; list = list->next)
     {
@@ -235,4 +235,13 @@ void * osl_list_pop_first(osl_list_t ** list)
     void * data = (*list)->data;
     *list = osl_list_remove(*list, *list, NULL);
     return data;
+}
+
+void * osl_list_each(osl_list_t * list, osl_iter_cb iter_cb, void * user)
+{
+    int i = 0;
+    for (; list; list = list->next, i++) {
+	iter_cb(i, list->data, user);
+    }
+    return user;
 }

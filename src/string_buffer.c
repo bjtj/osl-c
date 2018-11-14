@@ -1,5 +1,23 @@
 #include "string_buffer.h"
 
+#define _MIN(A, B) (((A) < (B)) ? (A) : (B))
+
+static void * _realloc(void * ptr, size_t org_size, size_t new_size)
+{
+    void * temp;
+    if (org_size == new_size)
+    {
+	return ptr;
+    }
+    temp = malloc(new_size);
+    memset(temp, 0, sizeof(new_size));
+    if (ptr)
+    {
+	memcpy(temp, ptr, _MIN(org_size, new_size));
+	free(ptr);
+    }
+    return temp;
+}
 
 osl_string_buffer_t * osl_string_buffer_new(void)
 {
@@ -19,47 +37,28 @@ void osl_string_buffer_free(osl_string_buffer_t * sb)
 
 void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str)
 {
-    if (sb->size == 0)
-    {
-	sb->ptr = strdup(str);
-	sb->size = strlen(str);
-	return;
-    }
-
-    char * new_ptr = malloc(sb->size + strlen(str) + 1);
-    memcpy(new_ptr, sb->ptr, sb->size);
-    memcpy(new_ptr + sb->size, str, strlen(str));
-    new_ptr[sb->size + strlen(str)] = '\0';
-    sb->size = sb->size + strlen(str);
-    free(sb->ptr);
-    sb->ptr = new_ptr;
+    osl_string_buffer_append_buffer(sb, str, strlen(str));
 }
 
 void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buffer, int size)
 {
-    if (sb->size == 0)
+    if (sb->capacity <= (sb->len + size))
     {
-	sb->ptr = (char*)malloc(size + 1);
-	memcpy(sb->ptr, buffer, size);
-	sb->ptr[size] = '\0';
-	sb->size = size;
-	return;
+	size_t new_size = (((sb->len + size) / 1024) + 1) * 1024;
+	printf("new size: %d\n", new_size);
+	sb->ptr = _realloc(sb->ptr, sb->len, new_size);
+	sb->capacity = new_size;
     }
 
-    char * new_ptr = malloc(sb->size + size + 1);
-    memcpy(new_ptr, sb->ptr, sb->size);
-    memcpy(new_ptr + sb->size, buffer, size);
-    new_ptr[sb->size + size] = '\0';
-    sb->size = sb->size + size;
-    free(sb->ptr);
-    sb->ptr = new_ptr;
+    memcpy(sb->ptr + sb->len, buffer, size);
+    sb->len += size;
 }
 
 char * osl_string_buffer_to_string(osl_string_buffer_t * sb)
 {
-    char * str = (char*)malloc(sb->size + 1);
-    memcpy(str, sb->ptr, sb->size);
-    str[sb->size] = '\0';
+    char * str = (char*)malloc(sb->len + 1);
+    memcpy(str, sb->ptr, sb->len);
+    str[sb->len] = '\0';
     return str;
 }
 

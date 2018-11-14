@@ -20,6 +20,7 @@
 #include "../src/environ.h"
 #include "../src/heap.h"
 #include "../src/properties.h"
+#include "../src/cache.h"
 #include <assert.h>
 
 
@@ -660,6 +661,47 @@ void test_properties(void)
     osl_properties_free(props);
 }
 
+static void on_remove_cache(osl_cache_t * cache)
+{
+    printf("remove cache -- %s\n", (char*)cache->data);
+}
+
+void test_cache(void)
+{
+
+#define MILLISECOND_MINUTE (1000 * 60)
+
+    printf(" == test cache ==\n");
+    
+    osl_cache_manager_t * manager = osl_cache_manager_new(NULL);
+    osl_cache_t * cache = osl_cache_manager_get_cache(manager, "hello");
+    assert(cache == NULL);
+
+    const char * msg = "hello";
+    char * uid = osl_cache_manager_set_cache(manager, (void*)msg, strlen(msg) + 1, osl_tick_milli() + MILLISECOND_MINUTE, NULL, NULL)->uid;
+
+    printf("uid -- %s\n", uid);
+
+    cache = osl_cache_manager_get_cache(manager, uid);
+    assert(cache != NULL);
+    assert(strcmp((char*)cache->data, msg) == 0);
+    
+    osl_cache_manager_resolve_expired(manager);
+
+    msg = "hello2";
+    uid = osl_strdup(osl_cache_manager_set_cache(manager, (void*)msg, strlen(msg) + 1, osl_tick_milli() + 1000, NULL, on_remove_cache)->uid);
+
+    osl_idle(1500);
+    osl_cache_manager_resolve_expired(manager);
+
+    cache = osl_cache_manager_get_cache(manager, uid);
+    assert(cache == NULL);
+
+    osl_free(uid);
+    
+    osl_cache_manager_free(manager);
+}
+
 int main(int argc, char *argv[])
 {
     osl_init_once();
@@ -687,6 +729,7 @@ int main(int argc, char *argv[])
     test_environ();
     test_heap();
     test_properties();
+    test_cache();
     
     osl_finish();
     
@@ -952,6 +995,7 @@ void test_datagram_client(int port)
 
 void * multicast_server_thread(void * arg)
 {
+    int i = 0;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
     int sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
@@ -976,11 +1020,14 @@ void * multicast_server_thread(void * arg)
     printf("recvfrom -- %s:%d\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)), ntohs(remote_addr.sin_port));
     printf("data -- %s\n", buffer);
 
-    ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
-    if (ret <= 0)
-    {
-	perror("sento() failed");
-	return 0;
+    for (i = 0; i < 2; ++i) {
+	ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
+	if (ret <= 0)
+	{
+	    perror("sento() failed");
+	    return 0;
+	}
+	osl_idle(100);
     }
 
     osl_socket_close(sock);
@@ -990,6 +1037,7 @@ void * multicast_server_thread(void * arg)
 
 void test_multicast_client(void)
 {
+    int i = 0;
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
     int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
@@ -1003,6 +1051,8 @@ void test_multicast_client(void)
     remote_addr.sin_family = AF_INET;
     remote_addr.sin_addr.s_addr = inet_addr("239.255.255.250");
     remote_addr.sin_port = htons(1900);
+
+    printf("sendto()\n");
     if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
     {
 	perror("sendto() failed");
@@ -1010,6 +1060,7 @@ void test_multicast_client(void)
     }
 
     char buffer[1024] = {0,};
+    printf("recvfrom()\n");
     if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
     {
 	perror("recvfrom() failed");
