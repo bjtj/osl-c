@@ -117,6 +117,12 @@ typedef SOCKET osl_socket;
 
 #endif
 
+
+// callback interfaces
+typedef int (*osl_compare_cb)(void *, void *);
+typedef void (*osl_free_cb)(void *);
+typedef void (*osl_iter_cb)(int, void *, void *);
+
 #ifdef __cplusplus
 extern "C" {
 #endif

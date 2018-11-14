@@ -6,7 +6,8 @@
 typedef struct _osl_string_buffer_t
 {
     char * ptr;
-    uint32_t size;
+    uint32_t len;
+    uint32_t capacity;
 } osl_string_buffer_t;
 
 #ifdef __cplusplus
