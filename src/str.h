@@ -2,7 +2,7 @@
 #define __STR_H__
 
 #include "osl.h"
-
+#include "list.h"
 
 
 #ifdef __cplusplus
@@ -12,7 +12,9 @@ extern "C" {
     int OSL_EXPORT osl_string_is_empty(const char * str);
     char OSL_EXPORT * osl_string_substr(const char * str, int start, int end);
     int OSL_EXPORT osl_string_starts_with(const char * str, const char * query);
+    int OSL_EXPORT osl_string_starts_with_ignorecase(const char * str, const char * query);
     int OSL_EXPORT osl_string_ends_with(const char * str, const char * query);
+    int OSL_EXPORT osl_string_ends_with_ignorecase(const char * str, const char * query);
     const char OSL_EXPORT * osl_string_find_last_of(const char * str, const char * tokens);
     const char OSL_EXPORT * osl_string_find_first_not_of(const char * str, const char * tokens);
     char OSL_EXPORT * osl_string_replace_all(const char * str, const char * mat, const char * sub);
@@ -22,6 +24,10 @@ extern "C" {
     char OSL_EXPORT * osl_strdup(const char * str);
     char OSL_EXPORT * osl_strndup(const char * str, size_t size);
     char OSL_EXPORT * osl_strdup_for(const char * str, const char * end_ptr);
+    const char OSL_EXPORT * osl_str_if(const char * str, const char * def);
+    int OSL_EXPORT osl_strcmp_ignorecase(const char * a, const char * b);
+    osl_list_t OSL_EXPORT * osl_split(const char * str, const char * del);
+    osl_list_t OSL_EXPORT * osl_split_limit(const char * str, const char * del, int limit);
 
 #ifdef __cplusplus
 }
