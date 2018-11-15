@@ -45,7 +45,6 @@ void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buff
     if (sb->capacity <= (sb->len + size))
     {
 	size_t new_size = (((sb->len + size) / 1024) + 1) * 1024;
-	printf("new size: %d\n", new_size);
 	sb->ptr = _realloc(sb->ptr, sb->len, new_size);
 	sb->capacity = new_size;
     }

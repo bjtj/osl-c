@@ -2,7 +2,7 @@
 #define __PROCESS_H__
 
 #include "osl.h"
-#include "file_stream.h"
+#include "stream.h"
 
 typedef struct _osl_process_t
 {
@@ -39,9 +39,9 @@ extern "C" {
     void OSL_EXPORT osl_process_close(osl_process_t * process);
     int OSL_EXPORT osl_process_exited(osl_process_t * process);
     void OSL_EXPORT osl_process_wait(osl_process_t * process);
-    osl_file_stream_t OSL_EXPORT * osl_process_in_stream(osl_process_t * process);
-    osl_file_stream_t OSL_EXPORT * osl_process_out_stream(osl_process_t * process);
-    osl_file_stream_t OSL_EXPORT * osl_process_err_stream(osl_process_t * process);
+    osl_stream_t OSL_EXPORT * osl_process_in_stream(osl_process_t * process);
+    osl_stream_t OSL_EXPORT * osl_process_out_stream(osl_process_t * process);
+    osl_stream_t OSL_EXPORT * osl_process_err_stream(osl_process_t * process);
 
 #ifdef __cplusplus
 }

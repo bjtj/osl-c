@@ -18,8 +18,6 @@ add_library(osl SHARED
   src/date.h
   src/environ.c
   src/environ.h
-  src/file_stream.c
-  src/file_stream.h
   src/heap.c
   src/heap.h
   src/inet_address.c
@@ -53,8 +51,12 @@ add_library(osl SHARED
   src/socket.h
   src/str.c
   src/str.h
+  src/stream.c
+  src/stream.h
   src/string_buffer.c
   src/string_buffer.h
+  src/string_stream.c
+  src/string_stream.h
   src/thread.c
   src/thread.h
   src/url.c
@@ -77,7 +79,6 @@ list(APPEND DIR_HEADERS
   src/data.h
   src/date.h
   src/environ.h
-  src/file_stream.h
   src/heap.h
   src/inet_address.h
   src/library.h
@@ -95,7 +96,9 @@ list(APPEND DIR_HEADERS
   src/sem.h
   src/socket.h
   src/str.h
+  src/stream.h
   src/string_buffer.h
+  src/string_stream.h
   src/thread.h
   src/url.h)
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")

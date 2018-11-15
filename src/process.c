@@ -267,29 +267,29 @@ void osl_process_wait(osl_process_t * process)
     }
 }
 
-osl_file_stream_t * osl_process_in_stream(osl_process_t * process)
+osl_stream_t * osl_process_in_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
-    return osl_file_stream_init(process->fdin);
+    return osl_stream_wrap_std_file(process->fdin);
 #elif defined(USE_MS_WIN)
-    return osl_file_stream_init_win32(process->in_write);
+    return osl_stream_wrap_win32_handle(process->in_write);
 #endif
 }
 
-osl_file_stream_t * osl_process_out_stream(osl_process_t * process)
+osl_stream_t * osl_process_out_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
-    return osl_file_stream_init(process->fdout);
+    return osl_stream_wrap_std_file(process->fdout);
 #elif defined(USE_MS_WIN)
-    return osl_file_stream_init_win32(process->out_read);
+    return osl_stream_wrap_win32_handle(process->out_read);
 #endif
 }
 
-osl_file_stream_t * osl_process_err_stream(osl_process_t * process)
+osl_stream_t * osl_process_err_stream(osl_process_t * process)
 {
 #if defined(USE_UNIX_STD)
-    return osl_file_stream_init(process->fderr);
+    return osl_stream_wrap_std_file(process->fderr);
 #elif defined(USE_MS_WIN)
-	return osl_file_stream_init_win32(process->err_read);
+	return osl_stream_wrap_win32_handle(process->err_read);
 #endif
 }
