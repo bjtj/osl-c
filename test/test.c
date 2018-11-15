@@ -21,6 +21,8 @@
 #include "../src/heap.h"
 #include "../src/properties.h"
 #include "../src/cache.h"
+#include "../src/stream.h"
+#include "../src/string_stream.h"
 #include <assert.h>
 
 
@@ -116,7 +118,7 @@ void test_list(void)
 
 void test_date(void)
 {
-    printf(" == test date ==\n");
+    printf("== test date ==\n");
     int i = 0;
     for (; i < 3; i++)
     {
@@ -156,7 +158,7 @@ void test_string(void)
 
 void test_string_buffer(void)
 {
-    printf(" == test string buffer ==\n");
+    printf("== test string buffer ==\n");
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, "hello");
     osl_string_buffer_append(sb, " ");
@@ -169,29 +171,49 @@ void test_string_buffer(void)
     osl_string_buffer_free(sb);
 }
 
-void test_file(void)
+void test_stream(void)
 {
+
+    printf("== test stream ==\n");
+    
     char * dump;
-    osl_file_stream_t * stream = osl_file_stream_open("hello", "w");
-    osl_file_stream_write(stream, 'h');
-    osl_file_stream_write(stream, 'e');
-    osl_file_stream_write(stream, 'l');
-    osl_file_stream_write(stream, 'l');
-    osl_file_stream_write(stream, 'o');
-    osl_file_stream_close_and_free(stream);
+    osl_stream_t * stream = osl_stream_open("hello", "w");
+    osl_stream_write(stream, 'h');
+    osl_stream_write(stream, 'e');
+    osl_stream_write(stream, 'l');
+    osl_stream_write(stream, 'l');
+    osl_stream_write(stream, 'o');
+    osl_stream_close_and_free(stream);
 
     assert(osl_pathname_exists("hello"));
     assert(osl_pathname_is_file("hello"));
     assert(osl_pathname_is_dir("hello") == 0);
 
-    stream = osl_file_stream_open("hello", "r");
-    dump = osl_file_stream_dump(stream);
+    stream = osl_stream_open("hello", "r");
+    dump = osl_stream_dump(stream);
     printf("dump: '%s'\n", dump);
     assert(strcmp(dump, "hello") == 0);
     free(dump);
-    osl_file_stream_close_and_free(stream);
+    osl_stream_close_and_free(stream);
 
     printf("file size: %d\n", (int)osl_pathname_filesize("hello"));
+}
+
+void test_string_stream(void)
+{
+
+    printf("== test string stream ==\n");
+    
+    const char * str = "hello world\nbye.";
+    osl_stream_t * stream = osl_string_stream_new(str);
+    char * line = osl_stream_readline(stream);
+    assert(strcmp(line, "hello world") == 0);
+    osl_free(line);
+    line = osl_stream_readline(stream);
+    assert(strcmp(line, "bye.") == 0);
+    osl_free(line);
+    assert(stream->eof);
+    osl_stream_close_and_free(stream);
 }
 
 void test_pathname(void)
@@ -227,7 +249,7 @@ void test_network(void)
 void test_echo_server()
 {
     /*  */
-    printf(" == test echo server==\n");
+    printf("== test echo server==\n");
     int port = 0;
     osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &port);
     osl_thread_start(server_thread);
@@ -286,7 +308,7 @@ void test_echo_server()
 void test_datagram_socket(void)
 {
 
-    printf(" == test datagram socket ==\n");
+    printf("== test datagram socket ==\n");
     
     /*  */
     int port = 0;
@@ -305,7 +327,7 @@ void test_datagram_socket(void)
 void test_multicast_socket(void)
 {
 
-    printf(" == test multicast socket ==\n");
+    printf("== test multicast socket ==\n");
     
     /*  */
     osl_thread_t * server_thread = osl_thread_new(multicast_server_thread, NULL);
@@ -321,7 +343,7 @@ void test_multicast_socket(void)
 
 void test_library(void)
 {
-    printf(" == test library ==\n");
+    printf("== test library ==\n");
 #if defined(PLATFORM_WINDOWS)
     osl_lib_handle lib = osl_library_load("./", "hello");
 #else
@@ -347,14 +369,14 @@ void test_process(void)
     osl_process_t * process = osl_process_new("echo \"hello\"");
     osl_process_start(process);
 
-    osl_file_stream_t * out = osl_process_out_stream(process);
+    osl_stream_t * out = osl_process_out_stream(process);
     int ch;
-    while ((ch = osl_file_stream_read(out)) > 0)
+    while ((ch = osl_stream_read(out)) > 0)
     {
 	putchar(ch);
     }
     putchar('\n');
-    osl_file_stream_free(out);
+    osl_stream_free(out);
 
     osl_process_wait(process);
     printf("exit code: %d\n", process->exit_code);
@@ -613,13 +635,13 @@ void test_heap(void)
 
 static void dump_file(const char * path)
 {
-    osl_file_stream_t * stream = osl_file_stream_open(path, "r");
-    char * dump = osl_file_stream_dump(stream);
+    osl_stream_t * stream = osl_stream_open(path, "r");
+    char * dump = osl_stream_dump(stream);
     printf("DUMP -- %s\n", path);
     printf("%s\n", dump);
     osl_free(dump);
-    osl_file_stream_close(stream);
-    osl_file_stream_free(stream);
+    osl_stream_close(stream);
+    osl_stream_free(stream);
 }
 
 void test_properties(void)
@@ -636,11 +658,11 @@ void test_properties(void)
     osl_properties_t * props = osl_properties_load("./person.properties");
     assert(props == NULL);
 
-    osl_file_stream_t * stream = osl_file_stream_open("./person.properties", "w");
-    osl_file_stream_writeline(stream, "# Person property");
-    osl_file_stream_writeline(stream, "name=person1");
-    osl_file_stream_writeline(stream, "age=35");
-    osl_file_stream_close_and_free(stream);
+    osl_stream_t * stream = osl_stream_open("./person.properties", "w");
+    osl_stream_writeline(stream, "# Person property");
+    osl_stream_writeline(stream, "name=person1");
+    osl_stream_writeline(stream, "age=35");
+    osl_stream_close_and_free(stream);
 
     props = osl_properties_load("./person.properties");
     assert(props != NULL);
@@ -671,7 +693,7 @@ void test_cache(void)
 
 #define MILLISECOND_MINUTE (1000 * 60)
 
-    printf(" == test cache ==\n");
+    printf("== test cache ==\n");
     
     osl_cache_manager_t * manager = osl_cache_manager_new(NULL);
     osl_cache_t * cache = osl_cache_manager_get_cache(manager, "hello");
@@ -714,7 +736,8 @@ int main(int argc, char *argv[])
     test_date();
     test_string();
     test_string_buffer();
-    test_file();
+    test_stream();
+    test_string_stream();
     test_pathname();
     test_network();
     test_echo_server();

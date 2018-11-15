@@ -1,6 +1,6 @@
 #include "properties.h"
 #include "str.h"
-#include "file_stream.h"
+#include "stream.h"
 #include "string_buffer.h"
 
 static int __property_cmp_name(osl_property_t * prop, const char * name)
@@ -63,8 +63,8 @@ osl_properties_t * osl_properties_new(void)
 
 osl_properties_t * osl_properties_load(const char * path)
 {
-    osl_file_stream_t * stream = osl_file_stream_open(path, "r");
-    if (osl_file_stream_is_open(stream) == 0)
+    osl_stream_t * stream = osl_stream_open(path, "r");
+    if (osl_stream_is_open(stream) == 0)
     {
 	return NULL;
     }
@@ -72,7 +72,7 @@ osl_properties_t * osl_properties_load(const char * path)
     props->path = osl_strdup(path);
 
     char * line;
-    while ((line = osl_file_stream_readline(stream)) != NULL)
+    while ((line = osl_stream_readline(stream)) != NULL)
     {
 	const char * start = osl_string_find_first_not_of(line, " \t");
 	if (start == NULL)
@@ -102,7 +102,7 @@ osl_properties_t * osl_properties_load(const char * path)
 	osl_free(line);
     }
 
-    osl_file_stream_close_and_free(stream);
+    osl_stream_close_and_free(stream);
     return props;
 }
 
@@ -112,8 +112,8 @@ int osl_properties_save(osl_properties_t * props)
     {
 	return -1;
     }
-    osl_file_stream_t * stream = osl_file_stream_open(props->path, "w");
-    if (osl_file_stream_is_open(stream) == 0)
+    osl_stream_t * stream = osl_stream_open(props->path, "w");
+    if (osl_stream_is_open(stream) == 0)
     {
 	return -1;
     }
@@ -136,10 +136,10 @@ int osl_properties_save(osl_properties_t * props)
 	    }
 	}
 	char * line = osl_string_buffer_to_string_and_free(sb);
-	osl_file_stream_writeline(stream, line);
+	osl_stream_writeline(stream, line);
 	osl_free(line);
     }
-    osl_file_stream_close_and_free(stream);
+    osl_stream_close_and_free(stream);
     return 0;
 }
 
