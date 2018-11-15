@@ -32,6 +32,15 @@ int osl_string_starts_with(const char * str, const char * query)
     return (strstr(str, query) == str);
 }
 
+int osl_string_starts_with_ignorecase(const char * str, const char * query)
+{
+    if (strlen(str) < strlen(query))
+    {
+	return 0;
+    }
+    return strncasecmp(str, query, strlen(query)) == 0;
+}
+
 int osl_string_ends_with(const char * str, const char * query)
 {
     if (strlen(str) < strlen(query))
@@ -39,6 +48,15 @@ int osl_string_ends_with(const char * str, const char * query)
 	return 0;
     }
     return (strcmp(str + strlen(str) - strlen(query), query) == 0);
+}
+
+int osl_string_ends_with_ignorecase(const char * str, const char * query)
+{
+    if (strlen(str) < strlen(query))
+    {
+	return 0;
+    }
+    return (strcasecmp(str + strlen(str) - strlen(query), query) == 0);
 }
 
 const char * osl_string_find_last_of(const char * str, const char * tokens)
@@ -166,4 +184,88 @@ char * osl_strdup_for(const char * str, const char * end_ptr)
     {
 	return osl_strdup(str);
     }
+}
+
+
+const char * osl_str_if(const char * str, const char * def)
+{
+    return (str ? str : def);
+}
+
+int osl_strcmp_ignorecase(const char * a, const char * b)
+{
+    return strcasecmp(a, b);
+}
+
+osl_list_t * osl_split(const char * str, const char * del)
+{
+    const char * ptr = str;
+    osl_list_t * lst = NULL;
+
+    do
+    {
+	const char * end_ptr = strstr(ptr, del);
+
+	if (end_ptr)
+	{
+	    if (ptr != end_ptr)
+	    {
+		lst = osl_list_append(lst, osl_strdup_for(ptr, end_ptr));
+	    }
+	    ptr = end_ptr + strlen(del);
+	}
+	else
+	{
+	    if (strlen(ptr) > 0)
+	    {
+		lst = osl_list_append(lst, osl_strdup(ptr));
+	    }
+	    ptr = NULL;
+	}
+    } while (ptr);
+
+    return lst;
+}
+
+
+osl_list_t * osl_split_limit(const char * str, const char * del, int limit)
+{
+    const char * ptr = str;
+    osl_list_t * lst = NULL;
+
+    do
+    {
+	const char * end_ptr = strstr(ptr, del);
+
+	if (end_ptr)
+	{
+	    if (ptr != end_ptr)
+	    {
+		if (--limit > 0)
+		{
+		    lst = osl_list_append(lst, osl_strdup_for(ptr, end_ptr));
+		    ptr = end_ptr + strlen(del);
+		}
+		else
+		{
+		    lst = osl_list_append(lst, osl_strdup(ptr));
+		    ptr = NULL;
+		}
+	    }
+	    else
+	    {
+		ptr = end_ptr + strlen(del);
+	    }
+	}
+	else
+	{
+	    if (strlen(ptr) > 0)
+	    {
+		lst = osl_list_append(lst, osl_strdup(ptr));
+	    }
+	    ptr = NULL;
+	}
+    } while (ptr);
+
+    return lst;
 }

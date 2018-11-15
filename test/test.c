@@ -129,10 +129,26 @@ void test_date(void)
     }
 }
 
+static void print_string_item(int i, const char * str, const char * user)
+{
+    printf("[%s] '%s'\n", user, str);
+}
+
+static void print_string_list(osl_list_t * lst)
+{
+    osl_list_each(lst, (osl_iter_cb)print_string_item, "print string");
+}
+
 void test_string(void)
 {
+
+    printf("== test string ==\n");
+    
     assert(osl_string_starts_with("--hello", "--") == 1);
     assert(osl_string_ends_with("img.jpg", ".jpg") == 1);
+
+    assert(osl_string_starts_with_ignorecase("hEllo world", "hell") == 1);
+    assert(osl_string_ends_with_ignorecase("img.JPG", "pg") == 1);
 
     {
 	char * str = osl_string_uppercase("abc123def");
@@ -153,6 +169,48 @@ void test_string(void)
 	printf("%s\n", str);
 	assert(strcmp(str, "Abc123def") == 0);
 	osl_free(str);
+    }
+
+    {
+	osl_list_t * lst = osl_split("hello world bye", " ");
+	assert(lst != NULL);
+	assert(osl_list_count(lst) == 3);
+	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
+	osl_list_free(lst, osl_free);
+    }
+
+    {
+	osl_list_t * lst = osl_split("hello    world  bye", " ");
+	assert(lst != NULL);
+	assert(osl_list_count(lst) == 3);
+	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
+	osl_list_free(lst, osl_free);
+    }
+
+    {
+	osl_list_t * lst = osl_split("   hello    world  bye  ", " ");
+	assert(lst != NULL);
+	print_string_list(lst);
+	assert(osl_list_count(lst) == 3);
+	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
+	osl_list_free(lst, osl_free);
+    }
+
+
+    {
+	osl_list_t * lst = osl_split_limit("   hello    world  bye  ", " ", 2);
+	assert(lst != NULL);
+	print_string_list(lst);
+	assert(osl_list_count(lst) == 2);
+	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
+	assert(strcmp((char*)osl_list_get(lst, 1), "world  bye  ") == 0);
+	osl_list_free(lst, osl_free);
     }
 }
 
@@ -942,7 +1000,7 @@ void * datagram_server_thread(void * arg)
 {
     int * port = (int*)arg;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *port);
-    int sock = osl_datagram_socket_bind(addr, 1);
+    osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
     if (!osl_socket_is_valid(sock))
     {
@@ -988,7 +1046,7 @@ void test_datagram_client(int port)
     {
 	return;
     }
-    int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    osl_socket sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (!osl_socket_is_valid(sock))
     {
 	perror("socket() failed");
@@ -1040,17 +1098,18 @@ void * multicast_server_thread(void * arg)
     }
 
     char ip_buffer[INET6_ADDRSTRLEN] = {0,};
-    printf("recvfrom -- %s:%d\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)), ntohs(remote_addr.sin_port));
-    printf("data -- %s\n", buffer);
+    printf("[multicast server] recvfrom -- %s:%d\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)), ntohs(remote_addr.sin_port));
+    printf("[multicast server] data -- %s\n", buffer);
 
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < 3; ++i) {
+	printf("[multicast server] sendto()\n");
 	ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
 	if (ret <= 0)
 	{
 	    perror("sento() failed");
 	    return 0;
 	}
-	osl_idle(100);
+	osl_idle(150);
     }
 
     osl_socket_close(sock);
@@ -1063,7 +1122,7 @@ void test_multicast_client(void)
     int i = 0;
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
-    int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    osl_socket sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
     if (!osl_socket_is_valid(sock))
     {
 	perror("socket() failed");
@@ -1075,7 +1134,7 @@ void test_multicast_client(void)
     remote_addr.sin_addr.s_addr = inet_addr("239.255.255.250");
     remote_addr.sin_port = htons(1900);
 
-    printf("sendto()\n");
+    printf("[multicast client] sendto()\n");
     if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
     {
 	perror("sendto() failed");
@@ -1083,7 +1142,7 @@ void test_multicast_client(void)
     }
 
     char buffer[1024] = {0,};
-    printf("recvfrom()\n");
+    printf("[multicast client] recvfrom()\n");
     if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
     {
 	perror("recvfrom() failed");
