@@ -1,5 +1,5 @@
-#ifndef __CACHE_H__
-#define __CACHE_H__
+#ifndef __OSL_CACHE_H__
+#define __OSL_CACHE_H__
 
 #include "mutex.h"
 #include "list.h"

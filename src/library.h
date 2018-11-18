@@ -1,5 +1,5 @@
-#ifndef __LIBRARY_H__
-#define __LIBRARY_H__
+#ifndef __OSL_LIBRARY_H__
+#define __OSL_LIBRARY_H__
 
 #include "osl.h"
 

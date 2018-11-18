@@ -110,3 +110,10 @@ void osl_free(void * ptr)
 	free(ptr);
     }
 }
+
+void * osl_memdup(void * m, size_t s)
+{
+	void * n = malloc(s);
+	memcpy(n, m, s);
+	return n;
+}

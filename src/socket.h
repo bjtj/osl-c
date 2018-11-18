@@ -1,5 +1,5 @@
-#ifndef __SOCKET_H__
-#define __SOCKET_H__
+#ifndef __OSL_SOCKET_H__
+#define __OSL_SOCKET_H__
 
 #include "osl.h"
 #include "inet_address.h"

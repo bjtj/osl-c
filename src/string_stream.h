@@ -1,5 +1,5 @@
-#ifndef __STRING_STREAM_H__
-#define __STRING_STREAM_H__
+#ifndef __OSL_STRING_STREAM_H__
+#define __OSL_STRING_STREAM_H__
 
 #include "stream.h"
 

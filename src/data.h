@@ -1,5 +1,5 @@
-#ifndef __DATA_H__
-#define __DATA_H__
+#ifndef __OSL_DATA_H__
+#define __OSL_DATA_H__
 
 #include "osl.h"
 

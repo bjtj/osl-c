@@ -1,5 +1,5 @@
-#ifndef __PROPERTIES_H__
-#define __PROPERTIES_H__
+#ifndef __OSL_PROPERTIES_H__
+#define __OSL_PROPERTIES_H__
 
 #include "osl.h"
 #include "list.h"

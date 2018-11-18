@@ -1,5 +1,5 @@
-#ifndef __PLATFORM_H__
-#define __PLATFORM_H__
+#ifndef __OSL_PLATFORM_H__
+#define __OSL_PLATFORM_H__
 
 #if HAVE_CONFIG_H
 #	include <config.h>

@@ -1,5 +1,5 @@
-#ifndef __MUTEX_H__
-#define __MUTEX_H__
+#ifndef __OSL_MUTEX_H__
+#define __OSL_MUTEX_H__
 
 #include "osl.h"
 

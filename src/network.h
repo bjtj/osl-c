@@ -1,5 +1,5 @@
-#ifndef __NETWORK_H__
-#define __NETWORK_H__
+#ifndef __OSL_NETWORK_H__
+#define __OSL_NETWORK_H__
 
 #include "osl.h"
 #include "list.h"

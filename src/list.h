@@ -1,5 +1,5 @@
-#ifndef __LIST_H__
-#define __LIST_H__
+#ifndef __OSL_LIST_H__
+#define __OSL_LIST_H__
 
 #include "osl.h"
 
