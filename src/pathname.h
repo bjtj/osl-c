@@ -1,5 +1,5 @@
-#ifndef __PATHNAME_H__
-#define __PATHNAME_H__
+#ifndef __OSL_PATHNAME_H__
+#define __OSL_PATHNAME_H__
 
 #include "osl.h"
 

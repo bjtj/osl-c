@@ -1,30 +1,33 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#include "../src/osl.h"
-#include "../src/thread.h"
-#include "../src/list.h"
-#include "../src/string_buffer.h"
-#include "../src/network.h"
-#include "../src/date.h"
-#include "../src/sem.h"
-#include "../src/socket.h"
-#include "../src/library.h"
-#include "../src/log.h"
-#include "../src/pathname.h"
-#include "../src/process.h"
-#include "../src/url.h"
 #include "../src/argparse.h"
-#include "../src/str.h"
-#include "../src/looper.h"
+#include "../src/cache.h"
 #include "../src/data.h"
+#include "../src/date.h"
 #include "../src/environ.h"
 #include "../src/heap.h"
+#include "../src/inet_address.h"
+#include "../src/library.h"
+#include "../src/list.h"
+#include "../src/log.h"
+#include "../src/looper.h"
+#include "../src/mutex.h"
+#include "../src/network.h"
+#include "../src/osl.h"
+#include "../src/pathname.h"
+#include "../src/platform.h"
+#include "../src/process.h"
 #include "../src/properties.h"
-#include "../src/cache.h"
+#include "../src/selector.h"
+#include "../src/sem.h"
+#include "../src/socket.h"
+#include "../src/str.h"
 #include "../src/stream.h"
+#include "../src/string_buffer.h"
 #include "../src/string_stream.h"
+#include "../src/thread.h"
+#include "../src/url.h"
 #include <assert.h>
-
 
 /* socket */
 static void * echo_server_thread(void * arg);
@@ -288,6 +291,14 @@ void test_pathname(void)
     name = osl_pathname_dirname("abc/d");
     assert(strcmp(name, "abc/") == 0);
     free(name);
+}
+
+void test_mem(void)
+{
+	const char * str = "hello world";
+	char * mem = (char*)osl_memdup(str, (size_t)strlen(str));
+	assert(strncmp(mem, str, strlen(str)) == 0);
+	osl_free(mem);
 }
 
 void test_network(void)
@@ -797,6 +808,7 @@ int main(int argc, char *argv[])
     test_stream();
     test_string_stream();
     test_pathname();
+	test_mem();
     test_network();
     test_echo_server();
     test_datagram_socket();
@@ -826,7 +838,7 @@ static void * echo_server_thread(void * arg)
     int yes = 1;
     struct sockaddr_in addr;
     socklen_t addr_len = sizeof(addr);
-    int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    osl_socket sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (void*)&yes, sizeof(yes)) != 0)
     {
 	perror("setsockopt() failed");
@@ -866,7 +878,7 @@ static void * echo_server_thread(void * arg)
 	struct sockaddr_in remote_addr;
 	socklen_t remote_addr_len = sizeof(remote_addr);
 	memset(&remote_addr, 0, sizeof(remote_addr));
-	int remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
+	osl_socket remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
 	if (!osl_socket_is_valid(remote_sock))
 	{
@@ -897,7 +909,7 @@ static void * echo_server2_thread(void * arg)
     osl_use_socket();
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *server_port);
-    int sock = osl_server_socket_bind(addr, 1);
+    osl_socket sock = osl_server_socket_bind(addr, 1);
     osl_inet_address_free(addr);
 
     addr = osl_socket_get_inet_address(sock);
@@ -916,7 +928,7 @@ static void * echo_server2_thread(void * arg)
 	struct sockaddr_in remote_addr;
 	socklen_t remote_addr_len = sizeof(remote_addr);
 	memset(&remote_addr, 0, sizeof(remote_addr));
-	int remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
+	osl_socket remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
 	if (!osl_socket_is_valid(remote_sock))
 	{
@@ -1078,7 +1090,7 @@ void * multicast_server_thread(void * arg)
 {
     int i = 0;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
-    int sock = osl_datagram_socket_bind(addr, 1);
+    osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
     if (osl_datagram_socket_join_group(sock, "239.255.255.250") != 0)
     {

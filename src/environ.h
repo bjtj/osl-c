@@ -1,5 +1,5 @@
-#ifndef __ENVIRON_H__
-#define __ENVIRON_H__
+#ifndef __OSL_ENVIRON_H__
+#define __OSL_ENVIRON_H__
 
 #include "osl.h"
 

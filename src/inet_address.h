@@ -1,5 +1,5 @@
-#ifndef __INET_ADDRESS_H__
-#define __INET_ADDRESS_H__
+#ifndef __OSL_INET_ADDRESS_H__
+#define __OSL_INET_ADDRESS_H__
 
 #include "osl.h"
 

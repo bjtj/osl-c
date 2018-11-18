@@ -1,5 +1,5 @@
-#ifndef __PROCESS_H__
-#define __PROCESS_H__
+#ifndef __OSL_PROCESS_H__
+#define __OSL_PROCESS_H__
 
 #include "osl.h"
 #include "stream.h"

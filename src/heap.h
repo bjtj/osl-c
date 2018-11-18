@@ -1,5 +1,5 @@
-#ifndef __MEM_H__
-#define __MEM_H__
+#ifndef __OSL_MEM_H__
+#define __OSL_MEM_H__
 
 #include "osl.h"
 #include "list.h"

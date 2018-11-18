@@ -1,5 +1,5 @@
-#ifndef __LOOPER_H__
-#define __LOOPER_H__
+#ifndef __OSL_LOOPER_H__
+#define __OSL_LOOPER_H__
 
 #include "osl.h"
 #include "list.h"

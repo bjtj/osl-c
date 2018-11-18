@@ -1,5 +1,5 @@
-#ifndef __THREAD_H__
-#define __THREAD_H__
+#ifndef __OSL_THREAD_H__
+#define __OSL_THREAD_H__
 
 #include "osl.h"
 

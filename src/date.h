@@ -1,5 +1,5 @@
-#ifndef __DATE_H__
-#define __DATE_H__
+#ifndef __OSL_DATE_H__
+#define __OSL_DATE_H__
 
 #include "osl.h"
 

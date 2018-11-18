@@ -1,5 +1,5 @@
-#ifndef __URL_H__
-#define __URL_H__
+#ifndef __OSL_URL_H__
+#define __OSL_URL_H__
 
 #include "osl.h"
 #include "list.h"

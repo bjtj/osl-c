@@ -1,5 +1,5 @@
-#ifndef __SEMAPHORE_H__
-#define __SEMAPHORE_H__
+#ifndef __OSL_SEMAPHORE_H__
+#define __OSL_SEMAPHORE_H__
 
 #include "osl.h"
 

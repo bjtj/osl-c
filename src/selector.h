@@ -1,5 +1,5 @@
-#ifndef __SELECTOR_H__
-#define __SELECTOR_H__
+#ifndef __OSL_SELECTOR_H__
+#define __OSL_SELECTOR_H__
 
 #include "osl.h"
 
