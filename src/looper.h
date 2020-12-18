@@ -24,8 +24,8 @@ typedef struct _osl_looper_t
     void * user;
     char * name;
     osl_mutex_t * mutex;
-    int finishing;
-    int running;
+    osl_bool finishing;
+    osl_bool running;
     int retcode;
     osl_looper_on_start_cb on_start;
     osl_looper_on_start_cb on_stop;
@@ -41,7 +41,7 @@ extern "C" {
     void OSL_EXPORT osl_looper_add_task(osl_looper_t * looper, osl_looper_task_cb task, void * user);
     void OSL_EXPORT osl_looper_add_task_schedule(osl_looper_t * looper, osl_looper_task_cb task, osl_looper_schedule_t * schedule, void * user);
     int OSL_EXPORT osl_looper_run(osl_looper_t * looper);
-    int OSL_EXPORT osl_looper_is_running(osl_looper_t * looper);
+    osl_bool OSL_EXPORT osl_looper_is_running(osl_looper_t * looper);
     void OSL_EXPORT osl_looper_finish(osl_looper_t * looper);
     void OSL_EXPORT osl_looper_lock(osl_looper_t * looper);
     void OSL_EXPORT osl_looper_unlock(osl_looper_t * looper);

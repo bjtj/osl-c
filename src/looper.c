@@ -81,13 +81,13 @@ int osl_looper_run(osl_looper_t * looper)
 	return -1;
     }
     
-    looper->finishing = 0;
-    looper->running = 1;
+    looper->finishing = osl_false;
+    looper->running = osl_true;
     if (looper->on_start) {
 	looper->on_start(looper);
     }
 
-    while (looper->finishing == 0)
+    while (looper->finishing == osl_false)
     {
 	if (looper->task_queue)
 	{
@@ -108,19 +108,19 @@ int osl_looper_run(osl_looper_t * looper)
     {
 	looper->on_stop(looper);
     }
-    looper->running = 0;
+    looper->running = osl_false;
 
     return looper->retcode;
 }
 
-int osl_looper_is_running(osl_looper_t * looper)
+osl_bool osl_looper_is_running(osl_looper_t * looper)
 {
     return looper->running;
 }
 
 void osl_looper_finish(osl_looper_t * looper)
 {
-    looper->finishing = 1;
+    looper->finishing = osl_true;
 }
 
 void osl_looper_lock(osl_looper_t * looper)

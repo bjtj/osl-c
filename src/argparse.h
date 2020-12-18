@@ -8,7 +8,7 @@ typedef struct _osl_argument_flag_t
 {
     char * name;
     char * defval;
-    int single_flag;
+    osl_bool single_flag;
     char * description;
 } osl_argument_flag_t;
 
@@ -34,9 +34,9 @@ typedef struct _osl_arguments_t
 extern "C" {
 #endif
 
-    osl_argument_flag_t OSL_EXPORT * osl_argument_flag_new(const char * name, const char * defval, int single, const char * desc);
+    osl_argument_flag_t OSL_EXPORT * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc);
     void OSL_EXPORT osl_argument_flag_free(osl_argument_flag_t * flag);
-    int OSL_EXPORT osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name);
+    osl_bool OSL_EXPORT osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name);
     osl_argument_flag_t OSL_EXPORT * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage, const char * name);
     osl_arguments_usage_t OSL_EXPORT * osl_arguments_usage_new(void);
     void OSL_EXPORT osl_arguments_usage_free(osl_arguments_usage_t * usage);

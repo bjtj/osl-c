@@ -29,7 +29,7 @@ extern "C" {
     osl_stream_t OSL_EXPORT * osl_stream_wrap_win32_handle(HANDLE handle);
 #endif
 
-    int OSL_EXPORT osl_stream_is_open(osl_stream_t * stream);
+    osl_bool OSL_EXPORT osl_stream_is_open(osl_stream_t * stream);
     char OSL_EXPORT * osl_stream_dump(osl_stream_t * stream);
     char OSL_EXPORT * osl_stream_readline(osl_stream_t * stream);
     void OSL_EXPORT osl_stream_writeline(osl_stream_t * stream, const char * str);

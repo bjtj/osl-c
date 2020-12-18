@@ -55,9 +55,9 @@ osl_stream_t * osl_stream_wrap_std_file(FILE * fp)
 }
 
 
-int osl_stream_is_open(osl_stream_t * stream)
+osl_bool osl_stream_is_open(osl_stream_t * stream)
 {
-    return (stream != NULL && stream->handle != NULL);
+    return OSL_BOOL(stream != NULL && stream->handle != NULL);
 }
 
 char * osl_stream_dump(osl_stream_t * stream)

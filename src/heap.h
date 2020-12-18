@@ -29,7 +29,7 @@ extern "C" {
     
     void OSL_EXPORT osl_heap_free(osl_heap_t * heap);
     void OSL_EXPORT * osl_heap_alloc(osl_heap_t * heap, size_t size);
-    int OSL_EXPORT osl_heap_contains(osl_heap_t * heap, void * alloc);
+    osl_bool OSL_EXPORT osl_heap_contains(osl_heap_t * heap, void * alloc);
     void OSL_EXPORT osl_heap_dealloc(osl_heap_t * heap, void * alloc);
 
 #ifdef __cplusplus

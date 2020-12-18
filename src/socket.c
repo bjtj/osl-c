@@ -28,19 +28,19 @@ static int s_err_continue()
 #endif
 }
 
-int OSL_EXPORT osl_socket_is_valid(osl_socket sock)
+osl_bool OSL_EXPORT osl_socket_is_valid(osl_socket sock)
 {
 #if defined(USE_BSD_SOCKET)
     if (sock < 0) {
-	return 0;
+	return osl_false;
     }
 
 #elif defined(USE_WINSOCK2)
     if (sock == INVALID_SOCKET) {
-	return 0;
+	return osl_false;
     }
 #endif
-    return 1;    
+    return osl_true;
 }
 
 osl_socket osl_socket_connect(osl_inet_address_t * addr)
@@ -115,7 +115,7 @@ done:
     return ret;
 }
 
-osl_socket osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
+osl_socket osl_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 {
     osl_socket ret = INVALID_SOCKET;
     struct addrinfo * res = osl_inet_address_resolve_passive(addr, osl_inet_address_get_family(addr), SOCK_STREAM);
@@ -134,6 +134,13 @@ osl_socket osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 	perror("setsockopt() failed");
 	goto done;
     }
+#if defined(OSL_OS_APPLE) 
+    if (reuseaddr && setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, (char*)&reuseaddr, sizeof(reuseaddr)) != 0)
+    {
+	perror("setsockopt() failed");
+	goto done;
+    }
+#endif
     if (bind(sock, res->ai_addr, res->ai_addrlen) != 0)
     {
 	perror("bind() failed");
@@ -143,6 +150,16 @@ osl_socket osl_server_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 done:
     freeaddrinfo(res);
     return ret;
+}
+
+osl_socket OSL_EXPORT osl_socket_listen(osl_socket sock, int backlog)
+{
+    return listen(sock, backlog);
+}
+
+osl_socket OSL_EXPORT osl_socket_accept(osl_socket sock, struct sockaddr * addr, socklen_t * addrlen)
+{
+    return accept(sock, addr, addrlen);
 }
 
 osl_inet_address_t * osl_socket_get_inet_address(int fd)
