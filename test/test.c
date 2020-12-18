@@ -296,7 +296,7 @@ void test_pathname(void)
 void test_mem(void)
 {
 	const char * str = "hello world";
-	char * mem = (char*)osl_memdup(str, (size_t)strlen(str));
+	char * mem = (char*)osl_memdup((char*)str, (size_t)strlen(str));
 	assert(strncmp(mem, str, strlen(str)) == 0);
 	osl_free(mem);
 }
@@ -909,14 +909,14 @@ static void * echo_server2_thread(void * arg)
     osl_use_socket();
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *server_port);
-    osl_socket sock = osl_server_socket_bind(addr, 1);
+    osl_socket sock = osl_socket_bind(addr, 1);
     osl_inet_address_free(addr);
 
     addr = osl_socket_get_inet_address(sock);
     *server_port = addr->port;
     osl_inet_address_free(addr);
 
-    if (listen(sock, 5) != 0)
+    if (osl_socket_listen(sock, 5) != 0)
     {
 	perror("listen() failed");
 	return 0;
@@ -928,7 +928,7 @@ static void * echo_server2_thread(void * arg)
 	struct sockaddr_in remote_addr;
 	socklen_t remote_addr_len = sizeof(remote_addr);
 	memset(&remote_addr, 0, sizeof(remote_addr));
-	osl_socket remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
+	osl_socket remote_sock = osl_socket_accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
 	if (!osl_socket_is_valid(remote_sock))
 	{

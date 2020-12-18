@@ -4,49 +4,49 @@
 
 #if defined(USE_UNIX_STD)
 
-static int s_is_root_path(const char * path)
+static osl_bool s_is_root_path(const char * path)
 {
-    return strcmp(path, "/") == 0;
+    return OSL_BOOL(strcmp(path, "/") == 0);
 }
 
-static int s_exists(const char * path)
+static osl_bool s_exists(const char * path)
 {
     if (osl_string_is_empty(path)) {
-	return 0;
+	return osl_false;
     }
 		
     // http://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
     struct stat st;
     memset(&st, 0, sizeof(struct stat));
-    return (stat(path, &st) == 0);
+    return OSL_BOOL(stat(path, &st) == 0);
 }
 
-static int s_is_file(const char * path)
+static osl_bool s_is_file(const char * path)
 {
     if (osl_string_is_empty(path)) {
-	return 0;
+	return osl_false;
     }
     // http://stackoverflow.com/questions/3536781/accessing-directories-in-c/3536853#3536853
     struct stat st;
     memset(&st, 0, sizeof(struct stat));
     lstat(path, &st);
-    return (S_ISDIR(st.st_mode) ? 0 : 1);
+    return OSL_BOOL(S_ISDIR(st.st_mode) ? 0 : 1);
 }
 
-static int s_is_directory(const char * path)
+static osl_bool s_is_directory(const char * path)
 {
     if (osl_string_is_empty(path)) {
-	return 0;
+	return osl_false;
     }
     struct stat st;
     memset(&st, 0, sizeof(struct stat));
     lstat(path, &st);
-    return (S_ISDIR(st.st_mode) ? 1 : 0);
+    return OSL_BOOL(S_ISDIR(st.st_mode) ? 1 : 0);
 }
 
-static int s_is_separator(char c)
+static osl_bool s_is_separator(char c)
 {
-    return c == '/';
+    return OSL_BOOL(c == '/');
 }
 
 static char * s_remove_last_separator(const char * path)
@@ -109,108 +109,109 @@ static osl_filesize_t s_get_file_size(const char * path)
 #define STAT_FUNC __stat64
 #define SEPARATORS "\\/"
 
-static int s_is_file(const char * path);
-static int s_is_directory(const char * path);
+static osl_bool s_is_file(const char * path);
+static osl_bool s_is_directory(const char * path);
 
-static int s_is_separator(char c) {
-	return c == '/' || c == '\\';
+static osl_bool s_is_separator(char c) {
+    return OSL_BOOL(c == '/' || c == '\\');
 }
 
-static int s_is_root_path(const char * path) 
+static osl_bool s_is_root_path(const char * path) 
 {
-	return (osl_string_is_empty(path) == 0 && strlen(path) == 1 && s_is_separator(path[0]));
+    return OSL_BOOL(osl_string_is_empty(path) == 0 && strlen(path) == 1 && s_is_separator(path[0]));
 }
-static int s_exists(const char * path) 
+static osl_bool s_exists(const char * path) 
 {
-	if (osl_string_is_empty(path)) 
-	{
-		return 0;
-	}
+    if (osl_string_is_empty(path)) 
+    {
+	return osl_false;
+    }
 
-	if (s_is_directory(path) || s_is_file(path))
-	{
-		return 1;
-	}
+    if (s_is_directory(path) || s_is_file(path))
+    {
+	return osl_true;
+    }
 
-	return 0;
+    return osl_false;
 }
-static int s_is_file(const char * path)
+static osl_bool s_is_file(const char * path)
 {
-	if (osl_string_is_empty(path)) {
-		return 0;
-	}
+    if (osl_string_is_empty(path)) {
+	return osl_false;
+    }
 
-	STAT_STRUCT s;
-	memset(&s, 0, sizeof(STAT_STRUCT));
-	if (STAT_FUNC(path, &s) != 0) {
-		// error
-		return 0;
-	}
+    STAT_STRUCT s;
+    memset(&s, 0, sizeof(STAT_STRUCT));
+    if (STAT_FUNC(path, &s) != 0) {
+	// error
+	return osl_false;
+    }
 
-	return (s.st_mode & S_IFREG ? 1 : 0);
+    return OSL_BOOL(s.st_mode & S_IFREG ? 1 : 0);
 }
-static int s_is_directory(const char * path) {
+static osl_bool s_is_directory(const char * path) {
 
-	if (osl_string_is_empty(path)) {
-		return 0;
-	}
+    if (osl_string_is_empty(path)) {
+	return osl_false;
+    }
 
-	STAT_STRUCT s;
-	memset(&s, 0, sizeof(STAT_STRUCT));
-	if (STAT_FUNC(path, &s) != 0) {
-		// error
-		return 0;
-	}
+    STAT_STRUCT s;
+    memset(&s, 0, sizeof(STAT_STRUCT));
+    if (STAT_FUNC(path, &s) != 0) {
+	// error
+	return osl_false;
+    }
 
-	return (s.st_mode & S_IFDIR ? 1 : 0);
+    return OSL_BOOL(s.st_mode & S_IFDIR ? 1 : 0);
 }
 
 static char * s_remove_last_separator(const char * path) {
-	if (!osl_string_is_empty(path) && strlen(path) > 1 && s_is_separator(path[strlen(path) - 1])) {
-		return osl_string_substr(path, 0, strlen(path) - 1); // trailing last / character
-	}
-	return strdup(path);
+    if (!osl_string_is_empty(path) && strlen(path) > 1 && s_is_separator(path[strlen(path) - 1])) {
+	return osl_string_substr(path, 0, strlen(path) - 1); // trailing last / character
+    }
+    return strdup(path);
 }
 
 static char * s_dirname(const char * path) {
 
-	if (osl_string_is_empty(path) || s_is_directory(path) || s_is_root_path(path)) {
-		return s_remove_last_separator(path);
-	}
+    if (osl_string_is_empty(path) || s_is_directory(path) || s_is_root_path(path)) {
+	return s_remove_last_separator(path);
+    }
 
-	const char * f = osl_string_find_last_of(path, SEPARATORS);
-	if (f == NULL) {
-		return NULL;
-	}
+    const char * f = osl_string_find_last_of(path, SEPARATORS);
+    if (f == NULL) {
+	return NULL;
+    }
 
-	return osl_string_substr(path, 0, f - path + 1);
+    return osl_string_substr(path, 0, f - path + 1);
 }
-static char * s_basename(const char * path) {
+static char * s_basename(const char * path)
+{
+    if (osl_string_is_empty(path)) {
+	return NULL;
+    }
 
-	if (osl_string_is_empty(path)) {
-		return NULL;
-	}
+    const char * f = osl_string_find_last_of(path, SEPARATORS);
+    if (f == NULL) {
+	return strdup(path);
+    }
 
-	const char * f = osl_string_find_last_of(path, SEPARATORS);
-	if (f == NULL) {
-		return strdup(path);
-	}
-
-	return osl_string_substr(path, f - path + 1, strlen(path));
+    return osl_string_substr(path, f - path + 1, strlen(path));
 }
-static char * s_get_ext(const char * path) {
-	char * name = s_basename(path);
-	const char * f = osl_string_find_last_of(name, ".");
-	if (f == NULL || f == name) {
-		free(name);
-		return NULL;
-	}
+static char * s_get_ext(const char * path)
+{
+    char * name = s_basename(path);
+    const char * f = osl_string_find_last_of(name, ".");
+    if (f == NULL || f == name) {
 	free(name);
-	return osl_string_substr(name, f - name + 1, strlen(path));
+	return NULL;
+    }
+    free(name);
+    return osl_string_substr(name, f - name + 1, strlen(path));
 }
 
-static osl_filesize_t s_get_file_size(const char * path) {
-
+static osl_filesize_t s_get_file_size(const char * path)
+{
     STAT_STRUCT st;
     memset(&st, 0, sizeof(STAT_STRUCT));
     int ret = STAT_FUNC(path, &st);
@@ -229,17 +230,17 @@ osl_filesize_t osl_pathname_filesize(const char * path)
     return s_get_file_size(path);
 }
 
-int osl_pathname_exists(const char * path)
+osl_bool osl_pathname_exists(const char * path)
 {
     return s_exists(path);
 }
 
-int osl_pathname_is_dir(const char * path)
+osl_bool osl_pathname_is_dir(const char * path)
 {
     return s_is_directory(path);
 }
 
-int osl_pathname_is_file(const char * path)
+osl_bool osl_pathname_is_file(const char * path)
 {
     return s_is_file(path);
 }

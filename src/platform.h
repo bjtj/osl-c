@@ -13,7 +13,7 @@
 
 #if defined(__APPLE__) || defined(__MACH__) /* mac os x */
 
-#	define PLATFORM_APPLE
+#	define OSL_OS_APPLE
 
 #	define USE_UNIX_STD
 #	define USE_APPLE_STD
@@ -41,7 +41,7 @@
 
 #elif defined(unix) || defined(__unix__) || defined(__unix) /* unix or linux */
 
-#	define PLATFORM_UNIX
+#	define OSL_OS_UNIX
 
 #	define USE_UNIX_STD
 #	define USE_POSIX_STD
@@ -72,7 +72,7 @@
 
 #elif defined(_WIN32) || defined(_WIN64) /* windows */
 
-#	define PLATFORM_WINDOWS
+#	define OSL_OS_WINDOWS
 
 // #	define _WIN32_WINNT 0x501 /* force to use windows xp APIs */
 

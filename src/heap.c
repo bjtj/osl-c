@@ -56,9 +56,9 @@ void * osl_heap_alloc(osl_heap_t * heap, size_t size)
     return alloc;
 }
 
-int osl_heap_contains(osl_heap_t * heap, void * alloc)
+osl_bool osl_heap_contains(osl_heap_t * heap, void * alloc)
 {
-    return (osl_list_find_by_ptr(heap->allocs, alloc) != NULL);
+    return OSL_BOOL(osl_list_find_by_ptr(heap->allocs, alloc) != NULL);
 }
 
 void osl_heap_dealloc(osl_heap_t * heap, void * alloc)

@@ -1,9 +1,9 @@
 #include "str.h"
 #include "string_buffer.h"
 
-int osl_string_is_empty(const char * str)
+osl_bool osl_string_is_empty(const char * str)
 {
-    return str == NULL || strlen(str) == 0;
+    return OSL_BOOL(str == NULL || strlen(str) == 0);
 }
 
 char * osl_string_substr(const char * str, int start, int end)
@@ -27,36 +27,36 @@ static int s_contains_char(int ch, const char * tokens)
     return 0;
 }
 
-int osl_string_starts_with(const char * str, const char * query)
+osl_bool osl_string_starts_with(const char * str, const char * query)
 {
-    return (strstr(str, query) == str);
+    return OSL_BOOL(strstr(str, query) == str);
 }
 
-int osl_string_starts_with_ignorecase(const char * str, const char * query)
+osl_bool osl_string_starts_with_ignorecase(const char * str, const char * query)
 {
     if (strlen(str) < strlen(query))
     {
-	return 0;
+	return osl_false;
     }
-    return strncasecmp(str, query, strlen(query)) == 0;
+    return OSL_BOOL(strncasecmp(str, query, strlen(query)) == 0);
 }
 
-int osl_string_ends_with(const char * str, const char * query)
+osl_bool osl_string_ends_with(const char * str, const char * query)
 {
     if (strlen(str) < strlen(query))
     {
-	return 0;
+	return osl_false;
     }
-    return (strcmp(str + strlen(str) - strlen(query), query) == 0);
+    return OSL_BOOL(strcmp(str + strlen(str) - strlen(query), query) == 0);
 }
 
-int osl_string_ends_with_ignorecase(const char * str, const char * query)
+osl_bool osl_string_ends_with_ignorecase(const char * str, const char * query)
 {
     if (strlen(str) < strlen(query))
     {
-	return 0;
+	return osl_false;
     }
-    return (strcasecmp(str + strlen(str) - strlen(query), query) == 0);
+    return OSL_BOOL(strcasecmp(str + strlen(str) - strlen(query), query) == 0);
 }
 
 const char * osl_string_find_last_of(const char * str, const char * tokens)

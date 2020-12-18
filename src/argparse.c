@@ -1,7 +1,7 @@
 #include "argparse.h"
 #include "str.h"
 
-osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, int single, const char * desc)
+osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc)
 {
     osl_argument_flag_t * flag = (osl_argument_flag_t*)malloc(sizeof(osl_argument_flag_t));
     memset(flag, 0, sizeof(osl_argument_flag_t));
@@ -24,14 +24,14 @@ void osl_argument_flag_free(osl_argument_flag_t * flag)
     osl_free(flag);
 }
 
-int osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name)
+osl_bool osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name)
 {
     osl_argument_flag_t * flag = osl_arguments_usage_get_flag(usage, name);
     if (flag)
     {
 	return flag->single_flag;
     }
-    return 0;
+    return osl_false;
 }
 
 osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage, const char * name)
@@ -118,7 +118,7 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	char * next_arg = (i < argc - 1) ? argv[i+1] : NULL;
 	if (osl_string_starts_with(arg, "--"))
 	{
-	    int single = osl_arguments_usage_is_single_flag(usage, arg);
+	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
 	    if (single || next_arg == NULL || next_arg[0] == '-')
 	    {
 		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 2, NULL));
@@ -131,7 +131,7 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	}
 	else if (osl_string_starts_with(arg, "-"))
 	{
-	    int single = osl_arguments_usage_is_single_flag(usage, arg);
+	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
 	    if (single || next_arg == NULL || next_arg[0] == '-')
 	    {
 		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 1, NULL));

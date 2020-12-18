@@ -9,12 +9,12 @@
 extern "C" {
 #endif
 
-    int OSL_EXPORT osl_string_is_empty(const char * str);
+    osl_bool OSL_EXPORT osl_string_is_empty(const char * str);
     char OSL_EXPORT * osl_string_substr(const char * str, int start, int end);
-    int OSL_EXPORT osl_string_starts_with(const char * str, const char * query);
-    int OSL_EXPORT osl_string_starts_with_ignorecase(const char * str, const char * query);
-    int OSL_EXPORT osl_string_ends_with(const char * str, const char * query);
-    int OSL_EXPORT osl_string_ends_with_ignorecase(const char * str, const char * query);
+    osl_bool OSL_EXPORT osl_string_starts_with(const char * str, const char * query);
+    osl_bool OSL_EXPORT osl_string_starts_with_ignorecase(const char * str, const char * query);
+    osl_bool OSL_EXPORT osl_string_ends_with(const char * str, const char * query);
+    osl_bool OSL_EXPORT osl_string_ends_with_ignorecase(const char * str, const char * query);
     const char OSL_EXPORT * osl_string_find_last_of(const char * str, const char * tokens);
     const char OSL_EXPORT * osl_string_find_first_not_of(const char * str, const char * tokens);
     char OSL_EXPORT * osl_string_replace_all(const char * str, const char * mat, const char * sub);

@@ -9,6 +9,12 @@
 #include <stdint.h>
 #include <stdarg.h>
 
+typedef unsigned char osl_bool;
+#define osl_false 0
+#define osl_true 1
+#define OSL_BOOL(X) ((X) ? osl_true : osl_false)
+
+
 /**
  * @brief common feature
  * unused : http://stackoverflow.com/questions/3599160/unused-parameter-warnings-in-c-code

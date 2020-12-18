@@ -65,17 +65,17 @@ int osl_selector_select(osl_selector_t * selector, int timeout_milli)
     return ret;
 }
 
-int osl_selector_is_readable(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_readable(osl_selector_t * selector, int fd)
 {
-    return FD_ISSET(fd, &(selector->cur_readfds));
+    return OSL_BOOL(FD_ISSET(fd, &(selector->cur_readfds)));
 }
 
-int osl_selector_is_writable(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_writable(osl_selector_t * selector, int fd)
 {
-    return FD_ISSET(fd, &(selector->cur_writefds));
+    return OSL_BOOL(FD_ISSET(fd, &(selector->cur_writefds)));
 }
 
-int osl_selector_is_except(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_except(osl_selector_t * selector, int fd)
 {
-    return FD_ISSET(fd, &(selector->cur_exceptfds));
+    return OSL_BOOL(FD_ISSET(fd, &(selector->cur_exceptfds)));
 }
