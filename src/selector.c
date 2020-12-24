@@ -8,7 +8,7 @@ void osl_selector_clear(osl_selector_t * selector)
     FD_ZERO(&(selector->exceptfds));
 }
 
-void osl_selector_register(osl_selector_t * selector, int fd, int flags)
+void osl_selector_register(osl_selector_t * selector, osl_socket fd, int flags)
 {
     if (fd > selector->maxfds)
     {
@@ -29,7 +29,7 @@ void osl_selector_register(osl_selector_t * selector, int fd, int flags)
     }
 }
 
-void osl_selector_unregister(osl_selector_t * selector, int fd, int flags)
+void osl_selector_unregister(osl_selector_t * selector, osl_socket fd, int flags)
 {
     if (flags & osl_read)
     {
@@ -56,7 +56,7 @@ int osl_selector_select(osl_selector_t * selector, int timeout_milli)
     selector->cur_writefds = selector->writefds;
     selector->cur_exceptfds = selector->exceptfds;
 
-    ret = select(selector->maxfds + 1, &(selector->cur_readfds), &(selector->cur_writefds), &(selector->cur_exceptfds), &timeout);
+    ret = select((int)selector->maxfds + 1, &(selector->cur_readfds), &(selector->cur_writefds), &(selector->cur_exceptfds), &timeout);
     if (ret < 0)
     {
 	perror("select() failed");
@@ -65,17 +65,17 @@ int osl_selector_select(osl_selector_t * selector, int timeout_milli)
     return ret;
 }
 
-osl_bool osl_selector_is_readable(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_readable(osl_selector_t * selector, osl_socket fd)
 {
     return OSL_BOOL(FD_ISSET(fd, &(selector->cur_readfds)));
 }
 
-osl_bool osl_selector_is_writable(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_writable(osl_selector_t * selector, osl_socket fd)
 {
     return OSL_BOOL(FD_ISSET(fd, &(selector->cur_writefds)));
 }
 
-osl_bool osl_selector_is_except(osl_selector_t * selector, int fd)
+osl_bool osl_selector_is_except(osl_selector_t * selector, osl_socket fd)
 {
     return OSL_BOOL(FD_ISSET(fd, &(selector->cur_exceptfds)));
 }

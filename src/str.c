@@ -6,10 +6,14 @@ osl_bool osl_string_is_empty(const char * str)
     return OSL_BOOL(str == NULL || strlen(str) == 0);
 }
 
-char * osl_string_substr(const char * str, int start, int end)
+char * osl_string_substr(const char * str, size_t start, size_t end)
 {
-    int size = end - start;
+    size_t size = end - start;
     char * ret = (char*)malloc(size + 1);
+	if (ret == NULL)
+	{
+		return NULL;
+	}
     memcpy(ret, str + start, size);
     ret[size] = '\0';
     return ret;
@@ -92,7 +96,7 @@ char * osl_string_replace_all(const char * str, const char * mat, const char * s
 	const char * ptr = strstr(str, mat);
 	if (ptr)
 	{
-	    osl_string_buffer_append_buffer(sb, str, ptr - str);
+	    osl_string_buffer_append_buffer(sb, str, (int)(ptr - str));
 	    osl_string_buffer_append(sb, sub);
 	    str = (ptr + strlen(mat));
 	}

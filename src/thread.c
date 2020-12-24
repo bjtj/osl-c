@@ -66,7 +66,7 @@ static int s_native_start_thread(osl_thread_t * thread) {
 	return -1;
     }
     thread->handle = (HANDLE)_beginthreadex(NULL,
-					    thread->stack_size,
+					    (unsigned int)thread->stack_size,
 					    s_thread_wrapper,
 					    (void*)thread,
 					    0,

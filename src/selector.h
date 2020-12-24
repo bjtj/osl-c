@@ -5,7 +5,7 @@
 
 typedef struct _osl_selector_t
 {
-    int maxfds;
+    osl_socket maxfds;
     fd_set readfds;
     fd_set writefds;
     fd_set exceptfds;
@@ -24,12 +24,12 @@ extern "C" {
 #endif
 
     void OSL_EXPORT osl_selector_clear(osl_selector_t * selector);
-    void OSL_EXPORT osl_selector_register(osl_selector_t * selector, int fd, int flag);
-    void OSL_EXPORT osl_selector_unregister(osl_selector_t * selector, int fd, int flag);
+    void OSL_EXPORT osl_selector_register(osl_selector_t * selector, osl_socket fd, int flag);
+    void OSL_EXPORT osl_selector_unregister(osl_selector_t * selector, osl_socket fd, int flag);
     int OSL_EXPORT osl_selector_select(osl_selector_t * selector, int timeout_milli);
-    osl_bool OSL_EXPORT osl_selector_is_readable(osl_selector_t * selector, int fd);
-    osl_bool OSL_EXPORT osl_selector_is_writable(osl_selector_t * selector, int fd);
-    osl_bool OSL_EXPORT osl_selector_is_except(osl_selector_t * selector, int fd);
+    osl_bool OSL_EXPORT osl_selector_is_readable(osl_selector_t * selector, osl_socket fd);
+    osl_bool OSL_EXPORT osl_selector_is_writable(osl_selector_t * selector, osl_socket fd);
+    osl_bool OSL_EXPORT osl_selector_is_except(osl_selector_t * selector, osl_socket fd);
 
 #ifdef __cplusplus
 }

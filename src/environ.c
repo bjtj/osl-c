@@ -21,7 +21,7 @@ char * osl_environ_get_full(void)
     osl_string_buffer_t * sb = osl_string_buffer_new();
     for (lpszVariable = (LPTSTR)lpvEnv; *lpszVariable; lpszVariable++)
     {
-	osl_string_buffer_append(sb, *lpszVariable);
+	osl_string_buffer_append(sb, (const char *)*lpszVariable);
 	osl_string_buffer_append(sb, "\n");
     }
     
@@ -43,8 +43,12 @@ char * osl_environ_get(const char * key)
 {
 #if defined(USE_MS_WIN)
     /* https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-getenvironmentvariable */
-    size_t buffer_size = 32767;
+    DWORD buffer_size = 32767;
     char * buffer = (char*)malloc(buffer_size);
+    if (buffer == NULL)
+    {
+        return NULL;
+    }
     memset(buffer, 0, buffer_size);
     GetEnvironmentVariable(key, buffer, buffer_size);
     char * ret = osl_strdup(buffer);
