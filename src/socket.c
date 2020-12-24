@@ -162,7 +162,7 @@ osl_socket OSL_EXPORT osl_socket_accept(osl_socket sock, struct sockaddr * addr,
     return accept(sock, addr, addrlen);
 }
 
-osl_inet_address_t * osl_socket_get_inet_address(size_t fd)
+osl_inet_address_t * osl_socket_get_inet_address(osl_socket fd)
 {
     struct sockaddr_in _addr;
     socklen_t _addr_len = sizeof(_addr);
