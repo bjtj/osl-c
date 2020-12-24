@@ -14,7 +14,7 @@ extern "C" {
     osl_socket OSL_EXPORT osl_socket_bind(osl_inet_address_t * addr, int reuseaddr);
     osl_socket OSL_EXPORT osl_socket_listen(osl_socket sock, int backlog);
     osl_socket OSL_EXPORT osl_socket_accept(osl_socket sock, struct sockaddr * addr, socklen_t * addrlen);
-    osl_inet_address_t OSL_EXPORT * osl_socket_get_inet_address(int fd);
+    osl_inet_address_t OSL_EXPORT * osl_socket_get_inet_address(osl_socket fd);
     osl_socket OSL_EXPORT osl_datagram_socket_connect(osl_inet_address_t * addr);
     osl_socket OSL_EXPORT osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli);
     osl_socket OSL_EXPORT osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr);

@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
     osl_bool OSL_EXPORT osl_string_is_empty(const char * str);
-    char OSL_EXPORT * osl_string_substr(const char * str, int start, int end);
+    char OSL_EXPORT * osl_string_substr(const char * str, size_t start, size_t end);
     osl_bool OSL_EXPORT osl_string_starts_with(const char * str, const char * query);
     osl_bool OSL_EXPORT osl_string_starts_with_ignorecase(const char * str, const char * query);
     osl_bool OSL_EXPORT osl_string_ends_with(const char * str, const char * query);

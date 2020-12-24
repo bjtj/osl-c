@@ -1,7 +1,7 @@
 #include "socket.h"
 #include "selector.h"
 
-int s_set_nonblocking_socket(int sock, int enable)
+int s_set_nonblocking_socket(osl_socket sock, int enable)
 {
 #if defined(USE_WINSOCK2)
     u_long mode = enable ? 1 : 0;
@@ -67,7 +67,7 @@ osl_socket osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned l
 
     if (timeout_milli == 0)
     {
-	if (connect(sock, res->ai_addr, res->ai_addrlen) != 0)
+	if (connect(sock, res->ai_addr, (int)res->ai_addrlen) != 0)
 	{
 	    perror("connect() failed");
 	    goto done;
@@ -77,7 +77,7 @@ osl_socket osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned l
     }
     
     s_set_nonblocking_socket(sock, 1);
-    if (connect(sock, res->ai_addr, res->ai_addrlen) != 0)
+    if (connect(sock, res->ai_addr, (int)res->ai_addrlen) != 0)
     {
 	if (!s_err_continue()) {
 	    perror("connect() failed");
@@ -123,7 +123,7 @@ osl_socket osl_socket_bind(osl_inet_address_t * addr, int reuseaddr)
     {
 	return -1;
     }
-    int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    osl_socket sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sock < 0)
     {
 	perror("socket() failed");
@@ -141,7 +141,7 @@ osl_socket osl_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 	goto done;
     }
 #endif
-    if (bind(sock, res->ai_addr, res->ai_addrlen) != 0)
+    if (bind(sock, res->ai_addr, (int)res->ai_addrlen) != 0)
     {
 	perror("bind() failed");
 	goto done;
@@ -162,7 +162,7 @@ osl_socket OSL_EXPORT osl_socket_accept(osl_socket sock, struct sockaddr * addr,
     return accept(sock, addr, addrlen);
 }
 
-osl_inet_address_t * osl_socket_get_inet_address(int fd)
+osl_inet_address_t * osl_socket_get_inet_address(size_t fd)
 {
     struct sockaddr_in _addr;
     socklen_t _addr_len = sizeof(_addr);
@@ -198,7 +198,7 @@ osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, u
 
     if (timeout_milli == 0)
     {
-	if (connect(sock, res->ai_addr, res->ai_addrlen) != 0)
+	if (connect(sock, res->ai_addr, (int)res->ai_addrlen) != 0)
 	{
 	    perror("connect() failed");
 	    goto done;
@@ -208,7 +208,7 @@ osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, u
     }
     
     s_set_nonblocking_socket(sock, 1);
-    if (connect(sock, res->ai_addr, res->ai_addrlen) != 0)
+    if (connect(sock, res->ai_addr, (int)res->ai_addrlen) != 0)
     {
 	if (!s_err_continue()) {
 	    perror("connect() failed");
@@ -255,7 +255,7 @@ osl_socket osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 	return INVALID_SOCKET;
     }
 
-    int sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    osl_socket sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sock < 0)
     {
 	perror("socket() failed");
@@ -278,7 +278,7 @@ osl_socket osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr)
 #endif
     }
 
-    if (bind(sock, res->ai_addr, res->ai_addrlen) != 0) {
+    if (bind(sock, res->ai_addr, (int)res->ai_addrlen) != 0) {
 	perror("bind() failed");
 	goto done;
     }

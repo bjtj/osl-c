@@ -40,7 +40,7 @@ void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str)
     osl_string_buffer_append_buffer(sb, str, strlen(str));
 }
 
-void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buffer, int size)
+void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buffer, size_t size)
 {
     if (sb->capacity <= (sb->len + size))
     {

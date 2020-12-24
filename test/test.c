@@ -81,7 +81,7 @@ void test_list(void)
 
     osl_list_t * list = NULL;
 
-    printf("count -- %lu\n", osl_list_count(list));
+    printf("count -- %zu\n", osl_list_count(list));
     printf("item of index 3 is %s\n", (char*)osl_list_get(list, 3));
 
     list = osl_list_append(list, strdup("hello"));
@@ -98,7 +98,7 @@ void test_list(void)
 
     printf("item of index 3 is %s\n", (char*)osl_list_get(list, 3));
 
-    printf("count -- %lu\n", osl_list_count(list));
+    printf("count -- %zu\n", osl_list_count(list));
 
     list = osl_list_remove_idx(list, 2, free);
     ptr = list;
@@ -956,7 +956,7 @@ void test_echo_client(int port)
 {
     char buffer[10] = {0,};
     struct sockaddr_in addr;
-    int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    osl_socket sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -976,7 +976,7 @@ void test_echo_client2(int port)
 {
     char buffer[10] = {0,};
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
-    int sock = osl_socket_connect_with_timeout(addr, 1000);
+    osl_socket sock = osl_socket_connect_with_timeout(addr, 1000);
     osl_inet_address_free(addr);
     if (!osl_socket_is_valid(sock))
     {
@@ -994,7 +994,7 @@ void test_echo_client3(int port)
 {
     char buffer[10] = {0,};
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
-    int sock = osl_socket_connect(addr);
+    osl_socket sock = osl_socket_connect(addr);
     osl_inet_address_free(addr);
     if (!osl_socket_is_valid(sock))
     {
@@ -1065,7 +1065,7 @@ void test_datagram_client(int port)
 	return;
     }
 
-    if (sendto(sock, "hello", 5, 0, res->ai_addr, res->ai_addrlen) <= 0)
+    if (sendto(sock, "hello", 5, 0, res->ai_addr, (int)res->ai_addrlen) <= 0)
     {
 	perror("sendto() failed");
 	return;
