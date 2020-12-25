@@ -141,7 +141,7 @@ extern "C" {
     unsigned long OSL_EXPORT osl_tick_milli(void);
     char OSL_EXPORT * osl_getcwd(void);
     void OSL_EXPORT osl_free(void * ptr);
-	void OSL_EXPORT * osl_memdup(void * m, size_t s);
+    void OSL_EXPORT * osl_memdup(void * m, size_t s);
 
 #ifdef __cplusplus
 }
