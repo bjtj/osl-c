@@ -7,7 +7,7 @@
 void test_library(void)
 {
     printf("== test library ==\n");
-#if defined(PLATFORM_WINDOWS)
+#if defined(OSL_OS_WINDOWS)
     osl_lib_handle lib = osl_library_load("./", "hello");
 #else
     osl_lib_handle lib = osl_library_load("./test", "hello");
