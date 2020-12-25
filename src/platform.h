@@ -103,11 +103,8 @@
 
 #	define __func__ __FUNCTION__
 
-#	ifdef osl_EXPORTS
-#		define OSL_EXPORT __declspec(dllexport)
-#	else
-#		define OSL_EXPORT __declspec(dllimport)
-#	endif
+// https://docs.microsoft.com/en-us/cpp/cpp/definitions-and-declarations-cpp?view=msvc-160
+#	define OSL_EXPORT __declspec(dllexport)
 
 #endif
 
