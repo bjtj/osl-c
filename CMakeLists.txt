@@ -4,9 +4,8 @@ project(osl LANGUAGES C VERSION "1.0.0")
 
 include(CTest)
 
-add_subdirectory(test)
 enable_testing()
-add_test(NAME mytest COMMAND Test)
+add_subdirectory(test)
 
 add_library(osl SHARED
   src/argparse.c
