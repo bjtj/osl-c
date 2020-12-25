@@ -1,7 +1,5 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
-#include "library.h"
 #include "osl.h"
+#include "library.h"
 #include <assert.h>
 
 void test_library(void)
@@ -10,8 +8,9 @@ void test_library(void)
 #if defined(OSL_OS_WINDOWS)
     osl_lib_handle lib = osl_library_load("./", "hello");
 #else
-    osl_lib_handle lib = osl_library_load("./test", "hello");
+    osl_lib_handle lib = osl_library_load("./", "hello");
 #endif
+    assert(lib != NULL);
     ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
     osl_library_close(lib);
 }
