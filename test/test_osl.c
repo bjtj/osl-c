@@ -10,7 +10,7 @@ void test_osl(void)
 }
 
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

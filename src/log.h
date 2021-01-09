@@ -12,7 +12,7 @@
 
 typedef struct _osl_logger_t
 {
-	char prefix[10];
+    char prefix[10];
     int level;
 } osl_logger_t;
 
@@ -27,8 +27,8 @@ typedef struct _osl_logger_t
 extern "C" {
 #endif
 
-	osl_logger_t OSL_EXPORT * osl_log_default_logger(void);
-	void OSL_EXPORT osl_log_print(osl_logger_t * logger, int level, const char * file, int line, const char * fmt, ...);
+    extern OSL_EXPORT osl_logger_t * osl_log_default_logger(void);
+    extern OSL_EXPORT void osl_log_print(osl_logger_t * logger, int level, const char * file, int line, const char * fmt, ...);
 
 #ifdef __cplusplus
 }

@@ -4,6 +4,7 @@
 
 void test_library(void)
 {
+    void (*hello_funcp)(void);
     printf("== test library ==\n");
 #if defined(OSL_OS_WINDOWS)
     osl_lib_handle lib = osl_library_load("./", "hello");
@@ -11,11 +12,12 @@ void test_library(void)
     osl_lib_handle lib = osl_library_load("./", "hello");
 #endif
     assert(lib != NULL);
-    ((void (*)(void))osl_library_get_symbol(lib, "hello"))();
+    *(void **) (&hello_funcp) = osl_library_get_symbol(lib, "hello");
+    hello_funcp();
     osl_library_close(lib);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

@@ -31,14 +31,14 @@ typedef struct _osl_cache_manager_t
 extern "C" {
 #endif
 
-    osl_cache_t OSL_EXPORT * osl_cache_copy(const osl_cache_t * cache);
-    void OSL_EXPORT osl_cache_free(osl_cache_t * cache);
-    osl_cache_manager_t OSL_EXPORT * osl_cache_manager_new(void * user);
-    void OSL_EXPORT osl_cache_manager_free(osl_cache_manager_t * manager);
-    osl_cache_t OSL_EXPORT * osl_cache_manager_set_cache(osl_cache_manager_t * manager, void * data, size_t size, unsigned long expire_date, void * user, osl_cache_on_remove_cb on_remove);
-    osl_cache_t OSL_EXPORT * osl_cache_manager_get_cache(osl_cache_manager_t * manager, const char * uid);
-    void OSL_EXPORT osl_cache_manager_remove_cache(osl_cache_manager_t * manager, const char * uid);
-    void OSL_EXPORT osl_cache_manager_resolve_expired(osl_cache_manager_t * manage);
+    extern OSL_EXPORT osl_cache_t * osl_cache_copy(const osl_cache_t * cache);
+    extern OSL_EXPORT void osl_cache_free(osl_cache_t * cache);
+    extern OSL_EXPORT osl_cache_manager_t * osl_cache_manager_new(void * user);
+    extern OSL_EXPORT void osl_cache_manager_free(osl_cache_manager_t * manager);
+    extern OSL_EXPORT osl_cache_t * osl_cache_manager_set_cache(osl_cache_manager_t * manager, void * data, size_t size, unsigned long expire_date, void * user, osl_cache_on_remove_cb on_remove);
+    extern OSL_EXPORT osl_cache_t * osl_cache_manager_get_cache(osl_cache_manager_t * manager, const char * uid);
+    extern OSL_EXPORT void osl_cache_manager_remove_cache(osl_cache_manager_t * manager, const char * uid);
+    extern OSL_EXPORT void osl_cache_manager_resolve_expired(osl_cache_manager_t * manage);
 
 #ifdef __cplusplus
 }

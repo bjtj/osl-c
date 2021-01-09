@@ -63,6 +63,15 @@ add_library(osl SHARED
 
 target_link_libraries(osl ${CMAKE_DL_LIBS})
 
+# https://stackoverflow.com/a/61381440/5676460
+if (MSVC)
+    # warning level 4 and all warnings as errors
+    target_compile_options(osl PRIVATE /W4 /WX)
+else()
+    # lots of warnings and all warnings as errors
+    target_compile_options(osl PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
+
 # properties
 set_target_properties(osl PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(osl PROPERTIES SOVERSION 1)

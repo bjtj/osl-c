@@ -14,7 +14,7 @@ void test_heap(void)
     osl_heap_free(heap);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

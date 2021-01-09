@@ -7,13 +7,13 @@
 extern "C" {
 #endif
 
-    osl_filesize_t OSL_EXPORT osl_pathname_filesize(const char * path);
-    osl_bool OSL_EXPORT osl_pathname_exists(const char * path);
-    osl_bool OSL_EXPORT osl_pathname_is_dir(const char * path);
-    osl_bool OSL_EXPORT osl_pathname_is_file(const char * path);
-    char OSL_EXPORT * osl_pathname_merge(const char * a, const char * b);
-    char OSL_EXPORT * osl_pathname_basename(const char * path);
-    char OSL_EXPORT * osl_pathname_dirname(const char * path);
+    extern OSL_EXPORT osl_filesize_t osl_pathname_filesize(const char * path);
+    extern OSL_EXPORT osl_bool osl_pathname_exists(const char * path);
+    extern OSL_EXPORT osl_bool osl_pathname_is_dir(const char * path);
+    extern OSL_EXPORT osl_bool osl_pathname_is_file(const char * path);
+    extern OSL_EXPORT char * osl_pathname_merge(const char * a, const char * b);
+    extern OSL_EXPORT char * osl_pathname_basename(const char * path);
+    extern OSL_EXPORT char * osl_pathname_dirname(const char * path);
 
 #ifdef __cplusplus
 }

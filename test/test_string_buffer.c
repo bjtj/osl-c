@@ -17,7 +17,7 @@ void test_string_buffer(void)
     osl_string_buffer_free(sb);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

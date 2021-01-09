@@ -10,7 +10,7 @@ static void dump_file(const char * path)
     char * dump = osl_stream_dump(stream);
     printf("DUMP -- %s\n", path);
     printf("%s\n", dump);
-    osl_free(dump);
+    osl_safe_free(dump);
     osl_stream_close(stream);
     osl_stream_free(stream);
 }
@@ -54,7 +54,7 @@ void test_properties(void)
     osl_properties_free(props);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

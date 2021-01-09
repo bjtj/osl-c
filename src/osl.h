@@ -125,7 +125,7 @@ typedef SOCKET osl_socket;
 
 
 // callback interfaces
-typedef int (*osl_compare_cb)(void *, void *);
+typedef osl_bool (*osl_compare_cb)(void *, void *);
 typedef void (*osl_free_cb)(void *);
 typedef void (*osl_iter_cb)(int, void *, void *);
 
@@ -133,15 +133,16 @@ typedef void (*osl_iter_cb)(int, void *, void *);
 extern "C" {
 #endif
 
-    void OSL_EXPORT osl_init_once(void);
-    void OSL_EXPORT osl_ignore_sigpipe(void);
-    int OSL_EXPORT osl_use_socket(void);
-    void OSL_EXPORT osl_finish(void);
-    void OSL_EXPORT osl_idle(unsigned long timeout);
-    unsigned long OSL_EXPORT osl_tick_milli(void);
-    char OSL_EXPORT * osl_getcwd(void);
-    void OSL_EXPORT osl_free(void * ptr);
-    void OSL_EXPORT * osl_memdup(void * m, size_t s);
+    extern OSL_EXPORT void osl_init_once(void);
+    extern OSL_EXPORT void osl_ignore_sigpipe(void);
+    extern OSL_EXPORT int osl_use_socket(void);
+    extern OSL_EXPORT void osl_finish(void);
+    extern OSL_EXPORT void osl_idle(unsigned long timeout);
+    extern OSL_EXPORT unsigned long osl_tick_milli(void);
+    extern OSL_EXPORT char * osl_getcwd(void);
+    extern OSL_EXPORT void osl_free(void * ptr);
+    extern OSL_EXPORT void osl_safe_free(void * ptr);
+    extern OSL_EXPORT void * osl_memdup(void * m, size_t s);
 
 #ifdef __cplusplus
 }

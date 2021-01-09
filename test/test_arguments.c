@@ -67,7 +67,7 @@ void test_arguments(void)
     osl_list_free(usage.flag_list, (osl_free_cb)osl_argument_flag_free);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();

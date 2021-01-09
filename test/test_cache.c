@@ -39,12 +39,12 @@ void test_cache(void)
     cache = osl_cache_manager_get_cache(manager, uid);
     assert(cache == NULL);
 
-    osl_free(uid);
+    osl_safe_free(uid);
     
     osl_cache_manager_free(manager);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();

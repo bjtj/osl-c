@@ -19,10 +19,10 @@ typedef struct _osl_url_t
 extern "C" {
 #endif
 
-    osl_url_t OSL_EXPORT * osl_url_from_string(const char * url);
-    void OSL_EXPORT osl_url_free(osl_url_t * url);
-    osl_url_t OSL_EXPORT * osl_url_merge(osl_url_t * base_url, const char * relative);
-    char OSL_EXPORT * osl_url_to_string(osl_url_t * url);
+    extern OSL_EXPORT osl_url_t * osl_url_from_string(const char * url);
+    extern OSL_EXPORT void osl_url_free(osl_url_t * url);
+    extern OSL_EXPORT osl_url_t * osl_url_merge(osl_url_t * base_url, const char * relative);
+    extern OSL_EXPORT char * osl_url_to_string(osl_url_t * url);
 
 #ifdef __cplusplus
 }
