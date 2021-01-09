@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "str.h"
 #include "string_buffer.h"
 
@@ -227,6 +229,10 @@ char * osl_strdup(const char * str)
 char * osl_strndup(const char * str, size_t size)
 {
     char * ret = (char*)malloc(size + 1);
+    if (ret == NULL) {
+        /* TODO: exception */
+        return NULL;
+    }
     memcpy(ret, str, size);
     ret[size] = '\0';
     return ret;

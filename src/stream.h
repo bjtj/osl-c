@@ -8,10 +8,10 @@ typedef struct _osl_stream_t
     void * handle;
     int eof;
     int (*read)(struct _osl_stream_t * stream);
-    int (*read_buffer)(struct _osl_stream_t * stream, void * buf, size_t max);
+    size_t(*read_buffer)(struct _osl_stream_t * stream, void * buf, size_t max);
     int (*write)(struct _osl_stream_t * stream, int ch);
     int (*write_string)(struct _osl_stream_t * stream, const char * str);
-    int (*write_buffer)(struct _osl_stream_t * stream, const void * buf, size_t siz);
+    size_t(*write_buffer)(struct _osl_stream_t * stream, const void * buf, size_t siz);
     void (*close)(struct _osl_stream_t * stream);
 } osl_stream_t;
 
