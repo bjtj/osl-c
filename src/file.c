@@ -238,7 +238,9 @@ static osl_list_t * s_list(const char * path) {
     }
 
     do {
-	ret = osl_list_append(ret, osl_pathname_merge(path, ffd.cFileName));
+        if (osl_strcmp(ffd.cFileName, ".") != 0 && osl_strcmp(ffd.cFileName, "..") != 0) {
+            ret = osl_list_append(ret, osl_pathname_merge(path, ffd.cFileName));
+        }
     } while (FindNextFileA(hFind, &ffd) != 0);
 
     FindClose(hFind);
@@ -280,7 +282,7 @@ osl_bool osl_file_rmdir_recursive(const char * path)
     osl_list_t * list;
     osl_list_t * ptr;
     if (osl_file_is_file(path)) {
-	return osl_file_unlink(path);
+	    return osl_file_unlink(path);
     }
     list = osl_file_listdir(path);
     ptr = list;
