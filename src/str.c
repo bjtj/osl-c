@@ -210,6 +210,11 @@ char * osl_string_capital(const char * str)
     return ret;
 }
 
+char * osl_strcat(char * s1, const char * s2)
+{
+    return strcat(s1, s2);
+}
+
 char * osl_strdup(const char * str)
 {
     if (str == NULL)
@@ -255,7 +260,7 @@ int osl_strcmp_ignorecase(const char * a, const char * b)
     return strcasecmp(a, b);
 }
 
-osl_list_t * osl_split(const char * str, const char * del)
+osl_list_t * osl_string_split(const char * str, const char * del)
 {
     const char * ptr = str;
     osl_list_t * lst = NULL;
@@ -286,7 +291,7 @@ osl_list_t * osl_split(const char * str, const char * del)
 }
 
 
-osl_list_t * osl_split_limit(const char * str, const char * del, int limit)
+osl_list_t * osl_string_split_limit(const char * str, const char * del, int limit)
 {
     const char * ptr = str;
     osl_list_t * lst = NULL;
@@ -328,7 +333,7 @@ osl_list_t * osl_split_limit(const char * str, const char * del, int limit)
     return lst;
 }
 
-char * osl_trim(const char * str)
+char * osl_string_trim(const char * str)
 {
     const char * start = NULL;
     const char * end = NULL;
@@ -346,7 +351,7 @@ char * osl_trim(const char * str)
     return osl_strndup(start, end - start);
 }
 
-char * osl_ltrim(const char * str)
+char * osl_string_ltrim(const char * str)
 {
     const char * ptr = osl_string_find_first_not_of(str, " \t\n");
     if (ptr == NULL) {
@@ -355,11 +360,25 @@ char * osl_ltrim(const char * str)
     return osl_strdup(ptr);
 }
 
-char * osl_rtrim(const char * str)
+char * osl_string_rtrim(const char * str)
 {
     const char * ptr = osl_string_find_last_not_of(str, " \t\n");
     if (ptr == NULL) {
 	return NULL;
     }
     return osl_strdup(ptr);
+}
+
+char * osl_string_append(const char * s1, const char * s2)
+{
+    size_t len = strlen(s1) + strlen(s2) + 1;
+    char * ret = (char*)malloc(len);
+    if (ret == NULL) {
+	/* TODO: exception */
+	return NULL;
+    }
+    memset(ret, 0, len);
+    osl_strcat(ret, s1);
+    osl_strcat(ret, s2);
+    return ret;
 }

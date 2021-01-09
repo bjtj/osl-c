@@ -2,7 +2,10 @@
 #include "string_buffer.h"
 
 static int s_read_cb(osl_stream_t * stream);
+static int s_read_buffer_cb(osl_stream_t * stream, void * buf, size_t siz);
 static int s_write_cb(osl_stream_t * stream, int ch);
+static int s_write_string_cb(osl_stream_t * stream, const char * str);
+static int s_write_buffer_cb(osl_stream_t * stream, const void * buf, size_t siz);
 static void s_close_cb(osl_stream_t * stream);
 
 static FILE * s_fopen(const char * path, const char * flags)
@@ -54,7 +57,10 @@ osl_stream_t * osl_stream_wrap_std_file(FILE * fp)
     stream->handle = fp;
     stream->eof = 0;
     stream->read = s_read_cb;
+    stream->read_buffer = s_read_buffer_cb;
     stream->write = s_write_cb;
+    stream->write_string = s_write_string_cb;
+    stream->write_buffer = s_write_buffer_cb;
     stream->close = s_close_cb;
     return stream;
 }
@@ -98,13 +104,7 @@ void osl_stream_writeline(osl_stream_t * stream, const char * str)
     {
 	return;
     }
-    for (; *str; str++)
-    {
-	if (osl_stream_write(stream, *str) < 0)
-	{
-	    return;
-	}
-    }
+    osl_stream_write_string(stream, str);
     osl_stream_write(stream, '\n');
 }
 
@@ -120,10 +120,28 @@ static int s_read_cb(osl_stream_t * stream)
     return ch;
 }
 
+static int s_read_buffer_cb(osl_stream_t * stream, void * buf, size_t siz)
+{
+    FILE * fp = (FILE*)stream->handle;
+    return fread(buf, 1, siz, fp);
+}
+
 static int s_write_cb(osl_stream_t * stream, int ch)
 {
     FILE * fp = (FILE*)stream->handle;
     return fputc(ch, fp);
+}
+
+static int s_write_string_cb(osl_stream_t * stream, const char * str)
+{
+    FILE * fp = (FILE*)stream->handle;
+    return fputs(str, fp);
+}
+
+static int s_write_buffer_cb(osl_stream_t * stream, const void * buf, size_t siz)
+{
+    FILE * fp = (FILE*)stream->handle;
+    return fwrite(buf, 1, siz, fp);
 }
 
 static void s_close_cb(osl_stream_t * stream)

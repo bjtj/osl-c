@@ -46,7 +46,7 @@ void test_string(void)
     }
 
     {
-	osl_list_t * lst = osl_split("hello world bye", " ");
+	osl_list_t * lst = osl_string_split("hello world bye", " ");
 	assert(lst != NULL);
 	assert(osl_list_count(lst) == 3);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
@@ -56,7 +56,7 @@ void test_string(void)
     }
 
     {
-	osl_list_t * lst = osl_split("hello    world  bye", " ");
+	osl_list_t * lst = osl_string_split("hello    world  bye", " ");
 	assert(lst != NULL);
 	assert(osl_list_count(lst) == 3);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
@@ -66,7 +66,7 @@ void test_string(void)
     }
 
     {
-	osl_list_t * lst = osl_split("   hello    world  bye  ", " ");
+	osl_list_t * lst = osl_string_split("   hello    world  bye  ", " ");
 	assert(lst != NULL);
 	print_string_list(lst);
 	assert(osl_list_count(lst) == 3);
@@ -77,7 +77,7 @@ void test_string(void)
     }
 
     {
-	osl_list_t * lst = osl_split_limit("   hello    world  bye  ", " ", 2);
+	osl_list_t * lst = osl_string_split_limit("   hello    world  bye  ", " ", 2);
 	assert(lst != NULL);
 	print_string_list(lst);
 	assert(osl_list_count(lst) == 2);
@@ -105,6 +105,12 @@ void test_string(void)
     {
 	assert(strcmp(osl_string_safe("a", "b"), "a") == 0);
 	assert(strcmp(osl_string_safe(NULL, "b"), "b") == 0);
+    }
+
+    {
+	char * str = osl_string_append("hello", "world");
+	assert(osl_strcmp(str, "helloworld") == 0);
+	osl_safe_free(str);
     }
 }
 

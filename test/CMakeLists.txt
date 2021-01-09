@@ -4,6 +4,10 @@ find_package (Threads)
 
 add_library(hello SHARED hello.c)
 
+find_program( MEMORYCHECK_COMMAND valgrind)
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full")
+set( MEMORYCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/valgrind_suppress.txt")
+
 # https://stackoverflow.com/a/14307434/5676460
 set(MYLIBS osl ${CMAKE_DL_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 file(GLOB TEST_SOURCES test_*.c)

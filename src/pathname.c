@@ -9,30 +9,6 @@ static osl_bool s_is_root_path(const char * path)
     return OSL_BOOL(strcmp(path, "/") == 0);
 }
 
-static osl_bool s_exists(const char * path)
-{
-    if (osl_string_is_empty(path)) {
-	return osl_false;
-    }
-		
-    // http://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exist-using-standard-c-c11-c
-    struct stat st;
-    memset(&st, 0, sizeof(struct stat));
-    return OSL_BOOL(stat(path, &st) == 0);
-}
-
-static osl_bool s_is_file(const char * path)
-{
-    if (osl_string_is_empty(path)) {
-	return osl_false;
-    }
-    // http://stackoverflow.com/questions/3536781/accessing-directories-in-c/3536853#3536853
-    struct stat st;
-    memset(&st, 0, sizeof(struct stat));
-    lstat(path, &st);
-    return OSL_BOOL(S_ISDIR(st.st_mode) ? 0 : 1);
-}
-
 static osl_bool s_is_directory(const char * path)
 {
     if (osl_string_is_empty(path)) {
@@ -95,21 +71,12 @@ static char * s_basename(const char * path)
 /*     return osl_string_substr(name, f - name + 1, strlen(name)); */
 /* } */
 
-static osl_filesize_t s_get_file_size(const char * path)
-{
-    struct stat st;
-    memset(&st, 0, sizeof(struct stat));
-    lstat(path, &st);
-    return st.st_size;
-}
-
 #elif defined(USE_MS_WIN)
 
 #define STAT_STRUCT struct _stat64
 #define STAT_FUNC __stat64
 #define SEPARATORS "\\/"
 
-static osl_bool s_is_file(const char * path);
 static osl_bool s_is_directory(const char * path);
 
 static osl_bool s_is_separator(char c) {
@@ -120,35 +87,7 @@ static osl_bool s_is_root_path(const char * path)
 {
     return OSL_BOOL(osl_string_is_empty(path) == 0 && strlen(path) == 1 && s_is_separator(path[0]));
 }
-static osl_bool s_exists(const char * path) 
-{
-    if (osl_string_is_empty(path)) 
-    {
-	return osl_false;
-    }
 
-    if (s_is_directory(path) || s_is_file(path))
-    {
-	return osl_true;
-    }
-
-    return osl_false;
-}
-static osl_bool s_is_file(const char * path)
-{
-    if (osl_string_is_empty(path)) {
-	return osl_false;
-    }
-
-    STAT_STRUCT s;
-    memset(&s, 0, sizeof(STAT_STRUCT));
-    if (STAT_FUNC(path, &s) != 0) {
-	// error
-	return osl_false;
-    }
-
-    return OSL_BOOL(s.st_mode & S_IFREG ? 1 : 0);
-}
 static osl_bool s_is_directory(const char * path) {
 
     if (osl_string_is_empty(path)) {
@@ -210,40 +149,8 @@ static char * s_get_ext(const char * path)
     return osl_string_substr(name, f - name + 1, strlen(path));
 }
 
-static osl_filesize_t s_get_file_size(const char * path)
-{
-    STAT_STRUCT st;
-    memset(&st, 0, sizeof(STAT_STRUCT));
-    int ret = STAT_FUNC(path, &st);
-    if (ret != 0) {
-	return 0;
-    }
-
-    return (osl_filesize_t)st.st_size;
-}
-
 #endif
 
-
-osl_filesize_t osl_pathname_filesize(const char * path)
-{
-    return s_get_file_size(path);
-}
-
-osl_bool osl_pathname_exists(const char * path)
-{
-    return s_exists(path);
-}
-
-osl_bool osl_pathname_is_dir(const char * path)
-{
-    return s_is_directory(path);
-}
-
-osl_bool osl_pathname_is_file(const char * path)
-{
-    return s_is_file(path);
-}
 
 char * osl_pathname_merge(const char * a, const char * b)
 {

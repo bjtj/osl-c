@@ -6,11 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-    extern OSL_EXPORT osl_filesize_t osl_pathname_filesize(const char * path);
-    extern OSL_EXPORT osl_bool osl_pathname_exists(const char * path);
-    extern OSL_EXPORT osl_bool osl_pathname_is_dir(const char * path);
-    extern OSL_EXPORT osl_bool osl_pathname_is_file(const char * path);
+    
     extern OSL_EXPORT char * osl_pathname_merge(const char * a, const char * b);
     extern OSL_EXPORT char * osl_pathname_basename(const char * path);
     extern OSL_EXPORT char * osl_pathname_dirname(const char * path);

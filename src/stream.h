@@ -8,12 +8,18 @@ typedef struct _osl_stream_t
     void * handle;
     int eof;
     int (*read)(struct _osl_stream_t * stream);
+    int (*read_buffer)(struct _osl_stream_t * stream, void * buf, size_t max);
     int (*write)(struct _osl_stream_t * stream, int ch);
+    int (*write_string)(struct _osl_stream_t * stream, const char * str);
+    int (*write_buffer)(struct _osl_stream_t * stream, const void * buf, size_t siz);
     void (*close)(struct _osl_stream_t * stream);
 } osl_stream_t;
 
 #define osl_stream_read(stream) (stream)->read(stream)
+#define osl_stream_read_buffer(stream, buf, siz) (stream)->read_buffer(stream, buf, siz)
 #define osl_stream_write(stream, ch) (stream)->write(stream, ch)
+#define osl_stream_write_string(stream, str) (stream)->write_string(stream, str)
+#define osl_stream_write_buffer(stream, buf, siz) (stream)->write_buffer(stream, buf, siz)
 #define osl_stream_close(stream) (stream)->close(stream)
 #define osl_stream_close_and_free(stream) do { (stream)->close(stream); osl_stream_free(stream); }while(0)
 

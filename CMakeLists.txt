@@ -17,6 +17,8 @@ add_library(osl SHARED
   src/date.h
   src/environ.c
   src/environ.h
+  src/file.c
+  src/file.h
   src/heap.c
   src/heap.h
   src/inet_address.c
@@ -88,6 +90,7 @@ list(APPEND DIR_HEADERS
   src/data.h
   src/date.h
   src/environ.h
+  src/file.h
   src/heap.h
   src/inet_address.h
   src/library.h
