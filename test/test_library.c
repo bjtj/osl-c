@@ -15,7 +15,7 @@ void test_library(void)
 #if defined(OSL_OS_WINDOWS)
     FARPROC hello_funcp = osl_library_get_symbol(lib, "hello");
 #else
-    void (*hello_funcp)(void);
+    void (*hello_funcp)(const char *);
     *(void **) (&hello_funcp) = osl_library_get_symbol(lib, "hello");
 #endif
 
