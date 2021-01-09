@@ -36,7 +36,7 @@ void test_file2()
     
     path = osl_pathname_merge("temp", "a");
     printf("path: %s\n", path);
-    assert(osl_strcmp(path, "temp\\a") == 0);
+    assert(osl_strcmp(path, "temp" OSL_PATH_SEPARATOR "a") == 0);
     _touch(path);
     assert(osl_file_exists(path) == osl_true);
     assert(osl_file_is_file(path) == osl_true);

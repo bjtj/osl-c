@@ -3,6 +3,12 @@
 
 #include "osl.h"
 
+#if defined(USE_MS_WIN)
+#	define OSL_PATH_SEPARATOR "\\"
+#else
+#	define OSL_PATH_SEPARATOR "/"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
