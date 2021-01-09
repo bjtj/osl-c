@@ -19,23 +19,29 @@ void test_properties(void)
 {
     printf("== test properties  ==\n");
 
-    osl_process_t * proc = osl_process_new("rm ./person.properties");
+
+#if defined(OSL_OS_WINDOWS)
+    osl_process_t* proc = osl_process_new("del person.properties");
+#else
+    osl_process_t* proc = osl_process_new("rm person.properties");
+#endif
+
     osl_process_start(proc);
     osl_process_wait(proc);
     printf("exit code: %d\n", proc->exit_code);
     osl_process_close(proc);
     osl_process_free(proc);
 
-    osl_properties_t * props = osl_properties_load("./person.properties");
+    osl_properties_t * props = osl_properties_load("person.properties");
     assert(props == NULL);
 
-    osl_stream_t * stream = osl_stream_open("./person.properties", "w");
+    osl_stream_t * stream = osl_stream_open("person.properties", "w");
     osl_stream_writeline(stream, "# Person property");
     osl_stream_writeline(stream, "name=person1");
     osl_stream_writeline(stream, "age=35");
     osl_stream_close_and_free(stream);
 
-    props = osl_properties_load("./person.properties");
+    props = osl_properties_load("person.properties");
     assert(props != NULL);
 
     assert(strcmp(osl_properties_get(props, "age"), "35") == 0);

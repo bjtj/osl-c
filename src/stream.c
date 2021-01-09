@@ -21,6 +21,11 @@ static FILE * s_fopen(const char * path, const char * flags)
 osl_stream_t * osl_stream_new(void)
 {
     osl_stream_t * stream = (osl_stream_t*)malloc(sizeof(osl_stream_t));
+    if (stream == NULL)
+    {
+        /* TODO: exception */
+        return NULL;
+    }
     memset(stream, 0, sizeof(osl_stream_t));
     return stream;
 }
@@ -169,6 +174,10 @@ static int s_win32_write_cb(osl_stream_t * stream, int ch)
     DWORD dwWritten = 0;
     char c = (char)ch;
     BOOL bSuccess = WriteFile(handle, (const char *)&c, 1, &dwWritten, NULL);
+    if (!bSuccess)
+    {
+        /* TODO: handling write error */
+    }
     return (int)dwWritten;
 }
 

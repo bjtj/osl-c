@@ -72,6 +72,7 @@ else()
     target_compile_options(osl PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 
+
 # properties
 set_target_properties(osl PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(osl PROPERTIES SOVERSION 1)

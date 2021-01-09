@@ -121,7 +121,7 @@ osl_socket osl_socket_bind(osl_inet_address_t * addr, osl_bool reuseaddr)
     struct addrinfo * res = osl_inet_address_resolve_passive(addr, osl_inet_address_get_family(addr), SOCK_STREAM);
     if (res == NULL)
     {
-	return -1;
+	return INVALID_SOCKET;
     }
     osl_socket sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
     if (sock < 0)
