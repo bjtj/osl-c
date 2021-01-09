@@ -69,7 +69,7 @@ if (MSVC)
     target_compile_options(osl PRIVATE /W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    target_compile_options(osl PRIVATE -Wall -Wextra -pedantic -Werror)
+    target_compile_options(osl PRIVATE -Wall -Wextra -pedantic -Werror -Wno-missing-field-initializers)
 endif()
 
 
