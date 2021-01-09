@@ -1,6 +1,7 @@
 #include "file.h"
 #include "stream.h"
 #include "pathname.h"
+#include "str.h"
 #include <assert.h>
 
 void test_file()
@@ -30,8 +31,12 @@ void test_file2()
     osl_list_t * ptr;
     
     osl_file_mkdir("temp");
+    assert(osl_file_exists("temp") == osl_true);
+    assert(osl_file_is_dir("temp") == osl_true);
     
     path = osl_pathname_merge("temp", "a");
+    printf("path: %s\n", path);
+    assert(osl_strcmp(path, "temp\\a") == 0);
     _touch(path);
     assert(osl_file_exists(path) == osl_true);
     assert(osl_file_is_file(path) == osl_true);
@@ -48,6 +53,7 @@ void test_file2()
     assert(osl_file_exists(path) == osl_true);
     assert(osl_file_is_dir(path) == osl_true);
     osl_safe_free(path);
+
     
     list = osl_file_listdir("temp");
     for (ptr = list; ptr; ptr = ptr->next) {
@@ -56,6 +62,7 @@ void test_file2()
     }
     osl_list_free(list, osl_safe_free);
 
+    
     osl_file_rmdir_recursive("temp");
     assert(osl_file_exists("temp") == osl_false);
 }
@@ -63,6 +70,6 @@ void test_file2()
 int main()
 {
     test_file();
-    //test_file2();
+    test_file2();
     return 0;
 }
