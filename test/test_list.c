@@ -45,7 +45,7 @@ void test_list(void)
     osl_list_free(list, free);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

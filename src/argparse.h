@@ -34,17 +34,17 @@ typedef struct _osl_arguments_t
 extern "C" {
 #endif
 
-    osl_argument_flag_t OSL_EXPORT * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc);
-    void OSL_EXPORT osl_argument_flag_free(osl_argument_flag_t * flag);
-    osl_bool OSL_EXPORT osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name);
-    osl_argument_flag_t OSL_EXPORT * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage, const char * name);
-    osl_arguments_usage_t OSL_EXPORT * osl_arguments_usage_new(void);
-    void OSL_EXPORT osl_arguments_usage_free(osl_arguments_usage_t * usage);
-    osl_argument_t OSL_EXPORT * osl_argument_new(const char * name, const char * value);
-    void OSL_EXPORT osl_argument_free(osl_argument_t * arg);
-    osl_arguments_t OSL_EXPORT * osl_arguments_new(void);
-    void OSL_EXPORT osl_arguments_free(osl_arguments_t * args);
-    osl_arguments_t OSL_EXPORT * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, char * argv[]);
+    extern OSL_EXPORT osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc);
+    extern OSL_EXPORT void osl_argument_flag_free(osl_argument_flag_t * flag);
+    extern OSL_EXPORT osl_bool osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name);
+    extern OSL_EXPORT osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage, const char * name);
+    extern OSL_EXPORT osl_arguments_usage_t * osl_arguments_usage_new(void);
+    extern OSL_EXPORT void osl_arguments_usage_free(osl_arguments_usage_t * usage);
+    extern OSL_EXPORT osl_argument_t * osl_argument_new(const char * name, const char * value);
+    extern OSL_EXPORT void osl_argument_free(osl_argument_t * arg);
+    extern OSL_EXPORT osl_arguments_t * osl_arguments_new(void);
+    extern OSL_EXPORT void osl_arguments_free(osl_arguments_t * args);
+    extern OSL_EXPORT osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, char * argv[]);
 
 #ifdef __cplusplus
 }

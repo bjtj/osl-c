@@ -31,7 +31,7 @@ void test_stream(void)
     printf("file size: %d\n", (int)osl_pathname_filesize("hello"));
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

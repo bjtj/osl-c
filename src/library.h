@@ -20,9 +20,9 @@ typedef FARPROC osl_lib_symbol;
 extern "C" {
 #endif
 
-    osl_lib_handle OSL_EXPORT osl_library_load(const char * path, const char * name);
-    void OSL_EXPORT osl_library_close(osl_lib_handle handle);
-    osl_lib_symbol OSL_EXPORT osl_library_get_symbol(osl_lib_handle handle, const char * name);
+    extern OSL_EXPORT osl_lib_handle osl_library_load(const char * path, const char * name);
+    extern OSL_EXPORT void osl_library_close(osl_lib_handle handle);
+    extern OSL_EXPORT osl_lib_symbol osl_library_get_symbol(osl_lib_handle handle, const char * name);
 
 #ifdef __cplusplus
 }

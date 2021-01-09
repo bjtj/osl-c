@@ -4,6 +4,7 @@
 
 static void print_string_item(int i, const char * str, const char * user)
 {
+    (void)i;
     printf("[%s] '%s'\n", user, str);
 }
 
@@ -27,21 +28,21 @@ void test_string(void)
 	char * str = osl_string_uppercase("abc123def");
 	printf("%s\n", str);
 	assert(strcmp(str, "ABC123DEF") == 0);
-	osl_free(str);
+	osl_safe_free(str);
     }
 
     {
 	char * str = osl_string_lowercase("aBc123dEf");
 	printf("%s\n", str);
 	assert(strcmp(str, "abc123def") == 0);
-	osl_free(str);
+	osl_safe_free(str);
     }
 
     {
 	char * str = osl_string_capital("aBc123dEf");
 	printf("%s\n", str);
 	assert(strcmp(str, "Abc123def") == 0);
-	osl_free(str);
+	osl_safe_free(str);
     }
 
     {
@@ -51,7 +52,7 @@ void test_string(void)
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
-	osl_list_free(lst, osl_free);
+	osl_list_free(lst, osl_safe_free);
     }
 
     {
@@ -61,7 +62,7 @@ void test_string(void)
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
-	osl_list_free(lst, osl_free);
+	osl_list_free(lst, osl_safe_free);
     }
 
     {
@@ -72,9 +73,8 @@ void test_string(void)
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
-	osl_list_free(lst, osl_free);
+	osl_list_free(lst, osl_safe_free);
     }
-
 
     {
 	osl_list_t * lst = osl_split_limit("   hello    world  bye  ", " ", 2);
@@ -83,11 +83,32 @@ void test_string(void)
 	assert(osl_list_count(lst) == 2);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world  bye  ") == 0);
-	osl_list_free(lst, osl_free);
+	osl_list_free(lst, osl_safe_free);
+    }
+
+    {
+	const char * ptr;
+	const char * text = "foo bar baz foo bar  baz";
+	const char * text2 = "HTTP/1.1  200\tOK\r\n";
+	assert(osl_string_find(text, "foo") - text == 0);
+	assert(osl_string_find(text, "bar") - text == 4);
+	assert(osl_string_find(text, "xxx") == NULL);
+	assert(osl_string_find(text, "bax") == NULL);
+	ptr = osl_string_find_first_of(text2, " \t");
+	assert(*ptr == ' ');
+	ptr = osl_string_find_first_not_of(ptr, " \t");
+	assert(*ptr == '2');
+	ptr = osl_string_find_first_of(ptr, " \t");
+	assert(*ptr == '\t');
+    }
+
+    {
+	assert(strcmp(osl_string_safe("a", "b"), "a") == 0);
+	assert(strcmp(osl_string_safe(NULL, "b"), "b") == 0);
     }
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

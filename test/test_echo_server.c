@@ -71,7 +71,7 @@ void test_echo_server()
     osl_thread_free(server_thread);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();
@@ -133,7 +133,7 @@ static void * echo_server_thread(void * arg)
 	struct sockaddr_in remote_addr;
 	socklen_t remote_addr_len = sizeof(remote_addr);
 	memset(&remote_addr, 0, sizeof(remote_addr));
-	osl_socket remote_sock = accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
+	osl_socket remote_sock = osl_socket_accept(sock, (struct sockaddr*)&remote_addr, &remote_addr_len);
 	
 	if (!osl_socket_is_valid(remote_sock))
 	{
@@ -164,7 +164,7 @@ static void * echo_server2_thread(void * arg)
     osl_use_socket();
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *server_port);
-    osl_socket sock = osl_socket_bind(addr, 1);
+    osl_socket sock = osl_socket_bind(addr, osl_true);
     osl_inet_address_free(addr);
 
     addr = osl_socket_get_inet_address(sock);

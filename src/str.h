@@ -9,25 +9,35 @@
 extern "C" {
 #endif
 
-    osl_bool OSL_EXPORT osl_string_is_empty(const char * str);
-    char OSL_EXPORT * osl_string_substr(const char * str, size_t start, size_t end);
-    osl_bool OSL_EXPORT osl_string_starts_with(const char * str, const char * query);
-    osl_bool OSL_EXPORT osl_string_starts_with_ignorecase(const char * str, const char * query);
-    osl_bool OSL_EXPORT osl_string_ends_with(const char * str, const char * query);
-    osl_bool OSL_EXPORT osl_string_ends_with_ignorecase(const char * str, const char * query);
-    const char OSL_EXPORT * osl_string_find_last_of(const char * str, const char * tokens);
-    const char OSL_EXPORT * osl_string_find_first_not_of(const char * str, const char * tokens);
-    char OSL_EXPORT * osl_string_replace_all(const char * str, const char * mat, const char * sub);
-    char OSL_EXPORT * osl_string_uppercase(const char * str);
-    char OSL_EXPORT * osl_string_lowercase(const char * str);
-    char OSL_EXPORT * osl_string_capital(const char * str);
-    char OSL_EXPORT * osl_strdup(const char * str);
-    char OSL_EXPORT * osl_strndup(const char * str, size_t size);
-    char OSL_EXPORT * osl_strdup_for(const char * str, const char * end_ptr);
-    const char OSL_EXPORT * osl_str_if(const char * str, const char * def);
-    int OSL_EXPORT osl_strcmp_ignorecase(const char * a, const char * b);
-    osl_list_t OSL_EXPORT * osl_split(const char * str, const char * del);
-    osl_list_t OSL_EXPORT * osl_split_limit(const char * str, const char * del, int limit);
+    extern OSL_EXPORT const char * osl_string_end_ptr(const char * str);
+    extern OSL_EXPORT osl_bool osl_string_is_empty(const char * str);
+    extern OSL_EXPORT osl_bool osl_string_equals(const char * s1, const char * s2);
+    extern OSL_EXPORT osl_bool osl_string_equals_ignorecase(const char * s1, const char * s2);
+    extern OSL_EXPORT char * osl_string_substr(const char * str, size_t start, size_t end);
+    extern OSL_EXPORT osl_bool osl_string_starts_with(const char * str, const char * query);
+    extern OSL_EXPORT osl_bool osl_string_starts_with_ignorecase(const char * str, const char * query);
+    extern OSL_EXPORT osl_bool osl_string_ends_with(const char * str, const char * query);
+    extern OSL_EXPORT osl_bool osl_string_ends_with_ignorecase(const char * str, const char * query);
+    extern OSL_EXPORT const char * osl_string_find(const char * str, const char * match);
+    extern OSL_EXPORT const char * osl_string_find_last_of(const char * str, const char * tokens);
+    extern OSL_EXPORT const char * osl_string_find_last_not_of(const char * str, const char * tokens);
+    extern OSL_EXPORT const char * osl_string_find_first_of(const char * str, const char * tokens);
+    extern OSL_EXPORT const char * osl_string_find_first_not_of(const char * str, const char * tokens);
+    extern OSL_EXPORT char * osl_string_replace_all(const char * str, const char * mat, const char * sub);
+    extern OSL_EXPORT char * osl_string_uppercase(const char * str);
+    extern OSL_EXPORT char * osl_string_lowercase(const char * str);
+    extern OSL_EXPORT char * osl_string_capital(const char * str);
+    extern OSL_EXPORT char * osl_strdup(const char * str);
+    extern OSL_EXPORT char * osl_strndup(const char * str, size_t size);
+    extern OSL_EXPORT char * osl_strdup_for(const char * str, const char * end_ptr);
+    extern OSL_EXPORT const char * osl_string_safe(const char * str, const char * def);
+    extern OSL_EXPORT int osl_strcmp(const char * a, const char * b);
+    extern OSL_EXPORT int osl_strcmp_ignorecase(const char * a, const char * b);
+    extern OSL_EXPORT osl_list_t * osl_split(const char * str, const char * del);
+    extern OSL_EXPORT osl_list_t * osl_split_limit(const char * str, const char * del, int limit);
+    extern OSL_EXPORT char * osl_trim(const char * str);
+    extern OSL_EXPORT char * osl_ltrim(const char * str);
+    extern OSL_EXPORT char * osl_rtrim(const char * str);
 
 #ifdef __cplusplus
 }

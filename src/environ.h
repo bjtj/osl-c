@@ -7,10 +7,10 @@
 extern "C" {
 #endif
 
-    char OSL_EXPORT * osl_environ_get_full(void);
-    char OSL_EXPORT * osl_environ_get(const char * key);
-    void OSL_EXPORT osl_environ_set(const char * key, const char * value);
-    void OSL_EXPORT osl_environ_unset(const char * key);
+    extern OSL_EXPORT char * osl_environ_get_full(void);
+    extern OSL_EXPORT char * osl_environ_get(const char * key);
+    extern OSL_EXPORT void osl_environ_set(const char * key, const char * value);
+    extern OSL_EXPORT void osl_environ_unset(const char * key);
 
 #ifdef __cplusplus
 }

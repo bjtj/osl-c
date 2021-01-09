@@ -1,9 +1,28 @@
 #include "str.h"
 #include "string_buffer.h"
 
+const char * osl_string_end_ptr(const char * str)
+{
+    while (*(str + 1))
+    {
+	str++;
+    }
+    return str;
+}
+
 osl_bool osl_string_is_empty(const char * str)
 {
     return OSL_BOOL(str == NULL || strlen(str) == 0);
+}
+
+osl_bool osl_string_equals(const char * s1, const char * s2)
+{
+    return OSL_BOOL(strcmp(s1, s2) == 0);
+}
+
+osl_bool osl_string_equals_ignorecase(const char * s1, const char * s2)
+{
+    return OSL_BOOL(osl_strcmp_ignorecase(s1, s2) == 0);
 }
 
 char * osl_string_substr(const char * str, size_t start, size_t end)
@@ -19,16 +38,16 @@ char * osl_string_substr(const char * str, size_t start, size_t end)
     return ret;
 }
 
-static int s_contains_char(int ch, const char * tokens)
+static osl_bool s_contains_char(int ch, const char * tokens)
 {
     for (; *tokens; tokens++)
     {
 	if (ch == *tokens)
 	{
-	    return 1;
+	    return osl_true;
 	}
     }
-    return 0;
+    return osl_false;
 }
 
 osl_bool osl_string_starts_with(const char * str, const char * query)
@@ -63,14 +82,44 @@ osl_bool osl_string_ends_with_ignorecase(const char * str, const char * query)
     return OSL_BOOL(strcasecmp(str + strlen(str) - strlen(query), query) == 0);
 }
 
+const char * osl_string_find(const char * str, const char * match)
+{
+    return strstr(str, match);
+}
+
 const char * osl_string_find_last_of(const char * str, const char * tokens)
 {
     const char * ptr = str + strlen(str) - 1;
     for (; ptr != str; ptr--)
     {
-	if (s_contains_char(*ptr, tokens))
+	if (s_contains_char(*ptr, tokens) == osl_true)
 	{
 	    return ptr;
+	}
+    }
+    return NULL;
+}
+
+const char * osl_string_find_last_not_of(const char * str, const char * tokens)
+{
+    const char * ptr = str + strlen(str) - 1;
+    for (; ptr != str; ptr--)
+    {
+	if (s_contains_char(*ptr, tokens) == osl_false)
+	{
+	    return ptr;
+	}
+    }
+    return NULL;
+}
+
+const char * osl_string_find_first_of(const char * str, const char * tokens)
+{
+    for (; *str; str++)
+    {
+	if (s_contains_char(*str, tokens) == osl_true)
+	{
+	    return str;
 	}
     }
     return NULL;
@@ -80,7 +129,7 @@ const char * osl_string_find_first_not_of(const char * str, const char * tokens)
 {
     for (; *str; str++)
     {
-	if (s_contains_char(*str, tokens) == 0)
+	if (s_contains_char(*str, tokens) == osl_false)
 	{
 	    return str;
 	}
@@ -191,9 +240,14 @@ char * osl_strdup_for(const char * str, const char * end_ptr)
 }
 
 
-const char * osl_str_if(const char * str, const char * def)
+const char * osl_string_safe(const char * str, const char * def)
 {
     return (str ? str : def);
+}
+
+int osl_strcmp(const char * a, const char * b)
+{
+    return strcmp(a, b);
 }
 
 int osl_strcmp_ignorecase(const char * a, const char * b)
@@ -272,4 +326,40 @@ osl_list_t * osl_split_limit(const char * str, const char * del, int limit)
     } while (ptr);
 
     return lst;
+}
+
+char * osl_trim(const char * str)
+{
+    const char * start = NULL;
+    const char * end = NULL;
+    start = osl_string_find_first_not_of(str, " \t\n");
+    if (start == NULL) {
+	return NULL;
+    }
+    end = osl_string_find_last_not_of(str, " \t\n");
+    if (end == NULL) {
+	return NULL;
+    }
+    if (start == end) {
+	return NULL;
+    }
+    return osl_strndup(start, end - start);
+}
+
+char * osl_ltrim(const char * str)
+{
+    const char * ptr = osl_string_find_first_not_of(str, " \t\n");
+    if (ptr == NULL) {
+	return NULL;
+    }
+    return osl_strdup(ptr);
+}
+
+char * osl_rtrim(const char * str)
+{
+    const char * ptr = osl_string_find_last_not_of(str, " \t\n");
+    if (ptr == NULL) {
+	return NULL;
+    }
+    return osl_strdup(ptr);
 }

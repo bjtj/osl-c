@@ -23,14 +23,13 @@ typedef struct _osl_heap_t
 extern "C" {
 #endif
 
-    osl_heap_t OSL_EXPORT * osl_heap_new(void);
-    osl_heap_t OSL_EXPORT * osl_heap_new_shread(void);
-    osl_heap_t OSL_EXPORT * osl_heap_new_with_callback(osl_heap_on_alloc_cb on_alloc, osl_heap_on_dealloc_cb on_dealloc);
-    
-    void OSL_EXPORT osl_heap_free(osl_heap_t * heap);
-    void OSL_EXPORT * osl_heap_alloc(osl_heap_t * heap, size_t size);
-    osl_bool OSL_EXPORT osl_heap_contains(osl_heap_t * heap, void * alloc);
-    void OSL_EXPORT osl_heap_dealloc(osl_heap_t * heap, void * alloc);
+    extern OSL_EXPORT osl_heap_t * osl_heap_new(void);
+    extern OSL_EXPORT osl_heap_t * osl_heap_new_shread(void);
+    extern OSL_EXPORT osl_heap_t * osl_heap_new_with_callback(osl_heap_on_alloc_cb on_alloc, osl_heap_on_dealloc_cb on_dealloc);
+    extern OSL_EXPORT void osl_heap_free(osl_heap_t * heap);
+    extern OSL_EXPORT void * osl_heap_alloc(osl_heap_t * heap, size_t size);
+    extern OSL_EXPORT osl_bool osl_heap_contains(osl_heap_t * heap, void * alloc);
+    extern OSL_EXPORT void osl_heap_dealloc(osl_heap_t * heap, void * alloc);
 
 #ifdef __cplusplus
 }

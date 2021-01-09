@@ -18,7 +18,7 @@ void test_network(void)
     osl_list_free(ifaces, (void (*)(void*))osl_network_interface_free);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();

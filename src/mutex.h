@@ -20,10 +20,10 @@ typedef struct _osl_mutex_t
 extern "C" {
 #endif
 
-    osl_mutex_t OSL_EXPORT * osl_mutex_new(void);
-    void OSL_EXPORT osl_mutex_lock(osl_mutex_t * mutex);
-    void OSL_EXPORT osl_mutex_unlock(osl_mutex_t * mutex);
-    void OSL_EXPORT osl_mutex_free(osl_mutex_t * mutex);
+    extern OSL_EXPORT osl_mutex_t * osl_mutex_new(void);
+    extern OSL_EXPORT void osl_mutex_lock(osl_mutex_t * mutex);
+    extern OSL_EXPORT void osl_mutex_unlock(osl_mutex_t * mutex);
+    extern OSL_EXPORT void osl_mutex_free(osl_mutex_t * mutex);
 
 #ifdef __cplusplus
 }

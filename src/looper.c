@@ -71,6 +71,10 @@ void osl_looper_add_task(osl_looper_t * looper, osl_looper_task_cb task, void * 
 
 void osl_looper_add_task_schedule(osl_looper_t * looper, osl_looper_task_cb task, osl_looper_schedule_t * schedule, void * user)
 {
+    (void)looper;
+    (void)task;
+    (void)schedule;
+    (void)user;
     /* todo */
 }
 

@@ -27,7 +27,7 @@ void test_thread(void)
     osl_thread_free(thread2);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();

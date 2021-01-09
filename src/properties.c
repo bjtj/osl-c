@@ -3,14 +3,14 @@
 #include "stream.h"
 #include "string_buffer.h"
 
-static int __property_cmp_name(osl_property_t * prop, const char * name)
+static osl_bool __property_cmp_name(osl_property_t * prop, const char * name)
 {
     if (prop->comment)
     {
-	return 0;
+	return osl_false;
     }
 
-    return strcmp(prop->name, name) == 0;
+    return osl_string_equals(prop->name, name);
 }
 
 osl_property_t * osl_property_new(const char * name, const char * value)

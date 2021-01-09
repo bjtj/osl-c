@@ -27,7 +27,7 @@ void test_multicast_socket(void)
     osl_thread_free(server_thread);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
     osl_ignore_sigpipe();
@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
 
 void * multicast_server_thread(void * arg)
 {
+    (void)arg;
     int i = 0;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
     osl_socket sock = osl_datagram_socket_bind(addr, 1);
@@ -85,7 +86,6 @@ void * multicast_server_thread(void * arg)
 
 void test_multicast_client(void)
 {
-    int i = 0;
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
     osl_socket sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);

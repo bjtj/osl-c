@@ -85,15 +85,15 @@ static char * s_basename(const char * path)
     return osl_string_substr(path, f - path + 1, strlen(path));
 }
 
-static char * s_get_ext(const char * path)
-{
-    char * name = s_basename(path);
-    const char * f = osl_string_find_last_of(name, ".");
-    if (f == NULL || f == name) {
-	return NULL;
-    }
-    return osl_string_substr(name, f - name + 1, strlen(name));
-}
+/* static char * s_get_ext(const char * path) */
+/* { */
+/*     char * name = s_basename(path); */
+/*     const char * f = osl_string_find_last_of(name, "."); */
+/*     if (f == NULL || f == name) { */
+/* 	return NULL; */
+/*     } */
+/*     return osl_string_substr(name, f - name + 1, strlen(name)); */
+/* } */
 
 static osl_filesize_t s_get_file_size(const char * path)
 {

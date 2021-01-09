@@ -20,7 +20,10 @@ static int s_read_cb(osl_stream_t * stream)
 
 static int s_write_cb(osl_stream_t * stream, int ch)
 {
+    (void)stream;
+    (void)ch;
     /* todo: */
+    
     return 0;
 }
 

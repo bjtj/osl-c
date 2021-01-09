@@ -9,45 +9,45 @@ static WSADATA wsaData;
 
 void osl_init_once(void)
 {
-	if (__platform_initilized)
-	{
-		return;
-	}
-	__platform_initilized = 1;
+    if (__platform_initilized)
+    {
+	return;
+    }
+    __platform_initilized = 1;
 }
 
 void osl_ignore_sigpipe(void)
 {
 #if defined(USE_SIGNAL)
-	signal(SIGPIPE, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
 #endif
 }
 
 int osl_use_socket(void)
 {
-	if (__use_socket)
-	{
-		return 0;
-	}
+    if (__use_socket)
+    {
+	return 0;
+    }
 
-	__use_socket = 1;
+    __use_socket = 1;
 
 #if defined(USE_MS_WIN)
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-		return -1;
-	}
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+	return -1;
+    }
 #endif
-	return 0;
+    return 0;
 }
 
 void osl_finish(void)
 {
-	if (__use_socket)
-	{
+    if (__use_socket)
+    {
 #if defined(USE_MS_WIN)
-		WSACleanup();
+	WSACleanup();
 #endif
-	}
+    }
 }
 
 void osl_idle(unsigned long timeout)
@@ -105,6 +105,11 @@ char * osl_getcwd(void)
 
 void osl_free(void * ptr)
 {
+    free(ptr);
+}
+
+void osl_safe_free(void * ptr)
+{
     if (ptr)
     {
 	free(ptr);
@@ -113,7 +118,7 @@ void osl_free(void * ptr)
 
 void * osl_memdup(void * m, size_t s)
 {
-	void * n = malloc(s);
-	memcpy(n, m, s);
-	return n;
+    void * n = malloc(s);
+    memcpy(n, m, s);
+    return n;
 }

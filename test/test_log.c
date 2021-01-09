@@ -14,7 +14,7 @@ void test_log(void)
     osl_log_fatal("hello");
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     osl_init_once();
 

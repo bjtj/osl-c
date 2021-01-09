@@ -10,13 +10,14 @@ static char * _gen_uid(void)
     return osl_strdup(buf);
 }
 
-static int _compare_uid(osl_cache_t * cache, const char * uid)
+static osl_bool _compare_uid(osl_cache_t * cache, const char * uid)
 {
     return (strcmp(cache->uid, uid) == 0);
 }
 
-static int _cache_expired(osl_cache_t * cache, void * user)
+static osl_bool _cache_expired(osl_cache_t * cache, void * user)
 {
+    (void)user;
     if (cache->expire_date == 0)
     {
 	/* infinite */
