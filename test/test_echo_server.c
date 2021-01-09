@@ -5,67 +5,72 @@
 #include "thread.h"
 #include <assert.h>
 
+struct _server_t {
+    uint16_t port;
+};
+
 /* socket */
 static void * echo_server_thread(void * arg);
 static void * echo_server2_thread(void * arg);
-static void test_echo_client(int port);
-static void test_echo_client2(int port);
-static void test_echo_client3(int port);
+static void test_echo_client(uint16_t port);
+static void test_echo_client2(uint16_t port);
+static void test_echo_client3(uint16_t port);
 
 void test_echo_server()
-{
+{   
+    struct _server_t server = { 0, };
+
     /*  */
-    printf("== test echo server==\n");
-    int port = 0;
-    osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &port);
+    printf("== test echo server==\n");    
+    osl_thread_t * server_thread = osl_thread_new(echo_server_thread, &server);
     osl_thread_start(server_thread);
 
     osl_idle(100);
 
-    printf("port %d\n", port);
-    test_echo_client(port);
+    printf("port %d\n", server.port);
+    test_echo_client(server.port);
 
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
 
     /* using osl server socket  */
     printf(" -- using osl server socket -- \n");
-    port = 0;
-    server_thread = osl_thread_new(echo_server2_thread, &port);
+    server.port = 0;
+    server_thread = osl_thread_new(echo_server2_thread, &server);
     osl_thread_start(server_thread);
 
     osl_idle(100);
 
-    printf("port %d\n", port);
-    test_echo_client(port);
+    printf("port %d\n", server.port);
+    test_echo_client(server.port);
 
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect with timeout*/
     printf(" -- using osl server socket and socket connect with timeout -- \n");
-    port = 0;
-    server_thread = osl_thread_new(echo_server2_thread, &port);
+    server.port = 0;
+    server_thread = osl_thread_new(echo_server2_thread, &server);
     osl_thread_start(server_thread);
 
     osl_idle(100);
 
-    printf("port %d\n", port);
-    test_echo_client2(port);
+    printf("port %d\n", server.port);
+    test_echo_client2(server.port);
 
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
 
     /* using osl server socket and socket connect without timeout */
     printf(" -- using osl server socket and socket connect with timeout -- \n");
-    port = 0;
-    server_thread = osl_thread_new(echo_server2_thread, &port);
+    server.port = 0;
+    server_thread = osl_thread_new(echo_server2_thread, &server);
     osl_thread_start(server_thread);
 
     osl_idle(100);
 
-    printf("port %d\n", port);
-    test_echo_client3(port);
+    printf("port %d\n", server.port);
+    test_echo_client3(server.port);
 
     osl_thread_join(server_thread);
     osl_thread_free(server_thread);
@@ -86,7 +91,7 @@ int main()
 
 static void * echo_server_thread(void * arg)
 {
-    int * server_port = (int*)arg;
+    struct _server_t* server = (struct _server_t*)arg;
 
     osl_use_socket();
     
@@ -103,7 +108,7 @@ static void * echo_server_thread(void * arg)
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    addr.sin_port = *server_port;
+    addr.sin_port = (uint16_t)server->port;
     if (bind(sock, (struct sockaddr*)&addr, addr_len) != 0)
     {
 	perror("bind() failed");
@@ -118,7 +123,7 @@ static void * echo_server_thread(void * arg)
 	    perror("getsockname() failed");
 	    return 0;
 	}
-	*server_port = ntohs(_addr.sin_port);
+	server->port = ntohs(_addr.sin_port);
     }
 
     if (listen(sock, 5) != 0)
@@ -159,16 +164,16 @@ static void * echo_server_thread(void * arg)
 
 static void * echo_server2_thread(void * arg)
 {
-    int * server_port = (int*)arg;
+    struct _server_t* server = (struct _server_t*)arg;
 
     osl_use_socket();
 
-    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *server_port);
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", server->port);
     osl_socket sock = osl_socket_bind(addr, osl_true);
     osl_inet_address_free(addr);
 
     addr = osl_socket_get_inet_address(sock);
-    *server_port = addr->port;
+    server->port = (uint16_t)addr->port;
     osl_inet_address_free(addr);
 
     if (osl_socket_listen(sock, 5) != 0)
@@ -207,7 +212,7 @@ static void * echo_server2_thread(void * arg)
     return 0;
 }
 
-void test_echo_client(int port)
+void test_echo_client(uint16_t port)
 {
     char buffer[10] = {0,};
     struct sockaddr_in addr;
@@ -227,7 +232,7 @@ void test_echo_client(int port)
     osl_socket_close(sock);
 }
 
-void test_echo_client2(int port)
+void test_echo_client2(uint16_t port)
 {
     char buffer[10] = {0,};
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
@@ -245,7 +250,7 @@ void test_echo_client2(int port)
 }
 
 
-void test_echo_client3(int port)
+void test_echo_client3(uint16_t port)
 {
     char buffer[10] = {0,};
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);

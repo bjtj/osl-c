@@ -21,7 +21,7 @@ char * osl_environ_get_full(void)
     osl_string_buffer_t * sb = osl_string_buffer_new();
     for (lpszVariable = (LPTSTR)lpvEnv; *lpszVariable; lpszVariable++)
     {
-	osl_string_buffer_append(sb, (const char *)*lpszVariable);
+	osl_string_buffer_append(sb, (const char *)lpszVariable);
 	osl_string_buffer_append(sb, "\n");
     }
     

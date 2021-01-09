@@ -34,7 +34,7 @@ static osl_time_t s_filetime_to_osl_time(const FILETIME * ft) {
     time.HighPart = ft->dwHighDateTime;
     unsigned __int64 uit = time.QuadPart;
     t.sec = (uint64_t)(uit / 10000000);
-    t.nano = (unsigned long)(uit % 10000000) * 100;
+    t.nano = (unsigned long)((uit % 10000000) * 100);
 
     return t;
 }
@@ -212,13 +212,13 @@ osl_time_t osl_date_to_time(osl_date_t * date)
 #if defined(USE_MS_WIN)
     SYSTEMTIME st = {0,};
     FILETIME ft = {0,};
-    st.wYear = date->year;
-    st.wMonth = date->month + 1;
-    st.wDay = date->day;
-    st.wHour = date->hour;
-    st.wMinute = date->minute;
-    st.wSecond = date->second;
-    st.wMilliseconds = date->millisecond;
+    st.wYear = (WORD)date->year;
+    st.wMonth = (WORD)date->month + 1;
+    st.wDay = (WORD)date->day;
+    st.wHour = (WORD)date->hour;
+    st.wMinute = (WORD)date->minute;
+    st.wSecond = (WORD)date->second;
+    st.wMilliseconds = (WORD)date->millisecond;
     SystemTimeToFileTime(&st, &ft);
     osl_time_t ret = s_filetime_to_osl_time(&ft);
     ret.sec -= (date->gmtoffset * 60);

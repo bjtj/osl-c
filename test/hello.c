@@ -7,7 +7,7 @@
 #	define OSL_EXPORT
 #endif
 
-void OSL_EXPORT hello(void)
+OSL_EXPORT void hello(const char * name)
 {
-    printf("hello!!!\n");
+    printf("Hello, %s\n", name);
 }
