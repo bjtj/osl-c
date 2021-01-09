@@ -154,15 +154,15 @@ static char * s_get_ext(const char * path)
 
 char * osl_pathname_merge(const char * a, const char * b)
 {
-    if (b[0] == '\\')
+    if (b[0] == OSL_PATH_SEPARATOR[0])
     {
 	return strdup(b);
     }
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, a);
-    if (a[strlen(a)-1] != '\\')
+    if (a[strlen(a)-1] != OSL_PATH_SEPARATOR[0])
     {
-	osl_string_buffer_append(sb, "\\");
+	osl_string_buffer_append(sb, OSL_PATH_SEPARATOR);
     }
     osl_string_buffer_append(sb, b);
     return osl_string_buffer_to_string_and_free(sb);
