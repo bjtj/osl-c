@@ -8,9 +8,15 @@ add_library(hello SHARED hello.c)
 set(MYLIBS osl ${CMAKE_DL_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 file(GLOB TEST_SOURCES test_*.c)
 foreach( testsourcefile ${TEST_SOURCES} )
+
   # https://stackoverflow.com/a/50738319/5676460
   # https://cmake.org/cmake/help/latest/command/get_filename_component.html
-  get_filename_component( testname ${testsourcefile} NAME_WLE )
+  # get_filename_component( testname ${testsourcefile} NAME_WLE )
+
+  # message("test source file: ${testsourcefile}")
+  string(REGEX REPLACE ".+/(test.*)\.c" "\\1" testname ${testsourcefile})
+  # message("test name: ${testname}")
+  
   add_executable( ${testname} ${testsourcefile} )
   target_link_libraries( ${testname} ${MYLIBS} )
   # https://stackoverflow.com/a/61381440/5676460
