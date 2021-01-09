@@ -63,6 +63,6 @@ void test_file2()
 int main()
 {
     test_file();
-    test_file2();
+    //test_file2();
     return 0;
 }

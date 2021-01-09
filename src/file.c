@@ -163,18 +163,6 @@ static osl_bool s_is_directory(const char * path) {
 }
 
 
-static char * s_get_ext(const char * path)
-{
-    char * name = s_basename(path);
-    const char * f = osl_string_find_last_of(name, ".");
-    if (f == NULL || f == name) {
-	free(name);
-	return NULL;
-    }
-    free(name);
-    return osl_string_substr(name, f - name + 1, strlen(path));
-}
-
 static osl_filesize_t s_get_file_size(const char * path)
 {
     STAT_STRUCT st;
@@ -187,10 +175,23 @@ static osl_filesize_t s_get_file_size(const char * path)
     return (osl_filesize_t)st.st_size;
 }
 
+static osl_bool s_is_separator(char c) {
+    const char* ptr = SEPARATORS;
+    while (*ptr) {
+        if (c == *ptr)
+        {
+            return osl_true;
+        }
+        ptr++;
+    }
+    return osl_false;
+}
+
 // http://stackoverflow.com/questions/2336242/recursive-mkdir-system-call-on-unix
 static int s_mkdir(const char *dir, int mode) {
 	
     // https://msdn.microsoft.com/en-us/library/2fkk4dzw.aspx
+    (void)mode;
 
     char tmp[256];
     char *p = NULL;
@@ -206,19 +207,22 @@ static int s_mkdir(const char *dir, int mode) {
     for(p = tmp + 1; *p; p++) {
 	if(s_is_separator(*p)) {
 	    *p = 0;
-	    _mkdir(tmp);
-	    *p = s_get_default_seprator();
+        if (_mkdir(tmp) != 0)
+        {
+            /* TODO: handling */
+        }
+	    *p = SEPARATORS[0];
 	}
     }
 	
     return _mkdir(tmp);
 }
 
-static bool s_remove_file(const char * path) {
-    return DeleteFile(path) == TRUE ? true : false;
+static osl_bool s_remove_file(const char * path) {
+    return OSL_BOOL(DeleteFile(path) == TRUE);
 }
 
-static osl_list_t * s_list(const chra * path) {
+static osl_list_t * s_list(const char * path) {
 
     osl_list_t * ret = NULL;
 
@@ -226,8 +230,7 @@ static osl_list_t * s_list(const chra * path) {
 
     WIN32_FIND_DATAA ffd;
     HANDLE hFind = INVALID_HANDLE_VALUE;
-    DWORD dwError = 0;
-
+    
     hFind = FindFirstFileA(dir, &ffd);
     if (hFind == INVALID_HANDLE_VALUE) {
 	/* TODO: exception */
@@ -255,12 +258,16 @@ osl_list_t * osl_file_listdir(const char * path)
 
 osl_bool osl_file_mkdir(const char * path)
 {
-    return s_mkdir(path, 0755);
+    return OSL_BOOL(s_mkdir(path, 0755) == 0);
 }
 
 osl_bool osl_file_rmdir(const char * path)
 {
-    return rmdir(path);
+#if defined(USE_MS_WIN)
+    return OSL_BOOL(_rmdir(path) == 0);
+#else
+    return OSL_BOOL(rmdir(path) == 0);
+#endif
 }
 
 osl_bool osl_file_unlink(const char * path)
