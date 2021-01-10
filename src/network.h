@@ -11,6 +11,7 @@ typedef struct _osl_network_interface_t
     unsigned char * mac_address;
     size_t mac_address_size;
     osl_list_t * addr_list;
+    osl_bool is_loopback;
 } osl_network_interface_t;
 
 #ifdef __cplusplus
