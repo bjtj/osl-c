@@ -4,6 +4,7 @@
 osl_process_t * osl_process_new(const char * cmd)
 {
     osl_process_t * process = (osl_process_t*)malloc(sizeof(osl_process_t));
+    OSL_HANDLE_MALLOC_ERROR(process);
     memset(process, 0, sizeof(osl_process_t));
     process->cmd = strdup(cmd);
     return process;
@@ -155,7 +156,7 @@ int osl_process_start(osl_process_t * process)
 			     &siStartInfo,  // STARTUPINFO pointer 
 			     &process->pi_proc_info);
 
-    free(cmd);
+    osl_safe_free(cmd);
 
     if (!bSuccess) {
 	fprintf(stderr, "CreateProcess() failed\n");
@@ -164,7 +165,7 @@ int osl_process_start(osl_process_t * process)
 
     CloseHandle(process->err_write);
     CloseHandle(process->out_write);
-    CloseHandle(process->in_read);
+    CloseHandle(process->in_read);    
 
     process->opened = 1;
 
@@ -208,7 +209,7 @@ void osl_process_close(osl_process_t * process)
 #elif defined(USE_MS_WIN)
 
     CloseHandle(process->pi_proc_info.hProcess);
-    CloseHandle(process->pi_proc_info.hThread);
+    CloseHandle(process->pi_proc_info.hThread);    
     CloseHandle(process->in_write);
     CloseHandle(process->out_read);
     CloseHandle(process->err_read);

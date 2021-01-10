@@ -124,6 +124,8 @@ typedef SOCKET osl_socket;
 #endif
 
 
+#define OSL_HANDLE_MALLOC_ERROR(var) if (var == NULL) { /*TODO: exeption*/ return NULL; }
+
 // callback interfaces
 typedef osl_bool (*osl_compare_cb)(void *, void *);
 typedef void (*osl_free_cb)(void *);

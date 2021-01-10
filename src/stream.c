@@ -24,11 +24,7 @@ static FILE * s_fopen(const char * path, const char * flags)
 osl_stream_t * osl_stream_new(void)
 {
     osl_stream_t * stream = (osl_stream_t*)malloc(sizeof(osl_stream_t));
-    if (stream == NULL)
-    {
-        /* TODO: exception */
-        return NULL;
-    }
+    OSL_HANDLE_MALLOC_ERROR(stream);
     memset(stream, 0, sizeof(osl_stream_t));
     return stream;
 }

@@ -4,6 +4,7 @@
 osl_heap_t * osl_heap_new(void)
 {
     osl_heap_t * heap = (osl_heap_t*)malloc(sizeof(osl_heap_t));
+    OSL_HANDLE_MALLOC_ERROR(heap);
     memset(heap, 0, sizeof(osl_heap_t));
     return heap;
 }
@@ -11,6 +12,7 @@ osl_heap_t * osl_heap_new(void)
 osl_heap_t * osl_heap_new_shared(void)
 {
     osl_heap_t * heap = (osl_heap_t*)malloc(sizeof(osl_heap_t));
+    OSL_HANDLE_MALLOC_ERROR(heap);
     memset(heap, 0, sizeof(osl_heap_t));
     heap->mutex = osl_mutex_new();
     return heap;
@@ -37,6 +39,7 @@ void osl_heap_free(osl_heap_t * heap)
 void * osl_heap_alloc(osl_heap_t * heap, size_t size)
 {
     void * alloc = malloc(size);
+    OSL_HANDLE_MALLOC_ERROR(alloc);
     if (heap->mutex)
     {
 	osl_mutex_lock(heap->mutex);

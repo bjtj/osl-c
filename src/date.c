@@ -191,7 +191,7 @@ osl_date_t osl_date_to_gmt(osl_date_t * date)
 #if defined(USE_MS_WIN)
     int defaultOffset = s_get_gmt_offset();
     osl_time_t t = osl_date_to_time(date);
-    t.sec -= (defaultOffset * 60);
+    t.sec -= ((uint64_t)defaultOffset * 60);
     return osl_date_from_time(&t, 0);
 #else
     int defaultOffset = s_get_gmt_offset();
@@ -221,7 +221,7 @@ osl_time_t osl_date_to_time(osl_date_t * date)
     st.wMilliseconds = (WORD)date->millisecond;
     SystemTimeToFileTime(&st, &ft);
     osl_time_t ret = s_filetime_to_osl_time(&ft);
-    ret.sec -= (date->gmtoffset * 60);
+    ret.sec -= ((uint64_t)date->gmtoffset * 60);
     return ret;
 #else
     struct tm info = {0,};

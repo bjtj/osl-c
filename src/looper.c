@@ -25,6 +25,7 @@ static osl_looper_task_t * _osl_looper_task_new_with_callback(osl_looper_task_cb
 static osl_looper_task_t * _osl_looper_task_new(void * user)
 {
     osl_looper_task_t * task = (osl_looper_task_t*)malloc(sizeof(osl_looper_task_t));
+    OSL_HANDLE_MALLOC_ERROR(task);
     memset(task, 0, sizeof(osl_looper_task_t));
     task->user = user;
     return task;
@@ -42,6 +43,7 @@ static void _osl_looper_task_free(osl_looper_task_t * task)
 osl_looper_t * osl_looper_new(const char * name, void * user)
 {
     osl_looper_t * looper = (osl_looper_t*)malloc(sizeof(osl_looper_t));
+    OSL_HANDLE_MALLOC_ERROR(looper);
     memset(looper, 0, sizeof(osl_looper_t));
     looper->name = osl_strdup(name);
     looper->mutex = osl_mutex_new();

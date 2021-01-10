@@ -79,7 +79,7 @@ unsigned long osl_tick_milli()
     clock_gettime(CLOCK_MONOTONIC, &spec);
     return (spec.tv_sec * 1000) + (spec.tv_nsec / 1000000);
 #elif defined(USE_MS_WIN)
-    return GetTickCount();
+    return (unsigned long)GetTickCount64();
 #else
     /* no implementation */
 #endif
@@ -119,6 +119,7 @@ void osl_safe_free(void * ptr)
 void * osl_memdup(void * m, size_t s)
 {
     void * n = malloc(s);
+    OSL_HANDLE_MALLOC_ERROR(n);
     memcpy(n, m, s);
     return n;
 }

@@ -1,5 +1,3 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include "osl.h"
 #include "socket.h"
 #include "thread.h"
@@ -43,14 +41,12 @@ int main()
 
 void * datagram_server_thread(void * arg)
 {
+    int ret;
     int * port = (int*)arg;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *port);
     osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
-    if (!osl_socket_is_valid(sock))
-    {
-	return 0;
-    }
+    assert(osl_socket_is_valid(sock));
     
     addr = osl_socket_get_inet_address(sock);
     *port = addr->port;
@@ -60,22 +56,12 @@ void * datagram_server_thread(void * arg)
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
     memset(&remote_addr, 0, sizeof(remote_addr));
-    int ret = (int)recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len);
-    if (ret <= 0)
-    {
-	perror("recvfrom() failed");
-	return 0;
-    }
+    assert((ret = osl_datagram_socket_recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len)) > 0);    
 
     char ip_buffer[INET6_ADDRSTRLEN] = {0,};
     printf("recvfrom -- %s\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)));
 
-    ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
-    if (ret <= 0)
-    {
-	perror("sento() failed");
-	return 0;
-    }
+    assert((ret = osl_datagram_socket_sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len)) > 0);    
 
     osl_socket_close(sock);
     
@@ -86,35 +72,18 @@ void test_datagram_client(int port)
 {
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
     struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_DGRAM);
+    assert(res != NULL);
     osl_inet_address_free(addr);
-    if (res == NULL)
-    {
-	return;
-    }
+    
     osl_socket sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-    if (!osl_socket_is_valid(sock))
-    {
-	perror("socket() failed");
-	return;
-    }
-
-    if (sendto(sock, "hello", 5, 0, res->ai_addr, (int)res->ai_addrlen) <= 0)
-    {
-	perror("sendto() failed");
-	return;
-    }
+    assert(osl_socket_is_valid(sock));    
+    assert(osl_datagram_socket_sendto(sock, "hello", 5, 0, res->ai_addr, (int)res->ai_addrlen) > 0);    
 
     freeaddrinfo(res);
 
     char buffer[1024] = {0,};
-    if (recvfrom(sock, buffer, sizeof(buffer), 0, NULL, NULL) <= 0)
-    {
-	perror("recvfrom() failed");
-	return;
-    }
-
+    assert(osl_datagram_socket_recvfrom(sock, buffer, sizeof(buffer), 0, NULL, NULL) > 0);
     assert(strcmp(buffer, "hello") == 0);
 
     osl_socket_close(sock);
 }
-

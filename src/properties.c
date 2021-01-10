@@ -16,6 +16,7 @@ static osl_bool __property_cmp_name(osl_property_t * prop, const char * name)
 osl_property_t * osl_property_new(const char * name, const char * value)
 {
     osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
+    OSL_HANDLE_MALLOC_ERROR(prop);
     memset(prop, 0, sizeof(osl_property_t));
     prop->name = osl_strdup(name);
     prop->value = osl_strdup(value);
@@ -25,6 +26,7 @@ osl_property_t * osl_property_new(const char * name, const char * value)
 osl_property_t * osl_property_new_comment(const char * comment)
 {
     osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
+    OSL_HANDLE_MALLOC_ERROR(prop);
     memset(prop, 0, sizeof(osl_property_t));
     prop->comment = osl_strdup(comment);
     return prop;
@@ -57,6 +59,7 @@ void osl_property_set_value(osl_property_t * prop, const char * value)
 osl_properties_t * osl_properties_new(void)
 {
     osl_properties_t * props = (osl_properties_t *)malloc(sizeof(osl_properties_t));
+    OSL_HANDLE_MALLOC_ERROR(props);
     memset(props, 0, sizeof(osl_properties_t));
     return props;
 }

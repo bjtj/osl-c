@@ -166,6 +166,24 @@ osl_socket OSL_EXPORT osl_socket_accept(osl_socket sock, struct sockaddr * addr,
     return accept(sock, addr, addrlen);
 }
 
+int osl_socket_send(osl_socket sock, const void* buf, size_t len, int flags)
+{
+#if defined(USE_WINSOCK2)
+    return send(sock, buf, (int)len, flags);
+#else
+    return send(sock, buf, len, flags);
+#endif
+}
+
+int osl_socket_recv(osl_socket sock, void* buf, size_t len, int flags)
+{
+#if defined(USE_WINSOCK2)
+    return recv(sock, buf, (int)len, flags);
+#else
+    return recv(sock, buf, len, flags);
+#endif
+}
+
 osl_inet_address_t * osl_socket_get_inet_address(osl_socket fd)
 {
     struct sockaddr_in _addr;
@@ -334,6 +352,43 @@ done:
     freeaddrinfo(group_res);
     return ret;
 }
+
+int osl_datagram_socket_send(osl_socket sock, const void* buf, size_t len, int flags)
+{
+#if defined(USE_WINSOCK2)
+    return send(sock, buf, (int)len, flags);
+#else
+    return send(sock, buf, len, flags);
+#endif
+}
+
+int osl_datagram_socket_sendto(osl_socket sock, const void* buf, size_t len, int flags, const struct sockaddr* dest_addr, socklen_t addrlen)
+{
+#if defined(USE_WINSOCK2)
+    return sendto(sock, buf, (int)len, flags, dest_addr, addrlen);
+#else
+    return sendto(sock, buf, len, flags, dest_addr, addrlen);
+#endif
+}
+
+int osl_datagram_socket_recv(osl_socket sock, void* buf, size_t len, int flags)
+{
+#if defined(USE_WINSOCK2)
+    return recv(sock, buf, (int)len, flags);
+#else
+    return recv(sock, buf, len, flags);
+#endif
+}
+
+int osl_datagram_socket_recvfrom(osl_socket sock, void* buf, size_t len, int flags, struct sockaddr* src_addr, socklen_t* addrlen)
+{
+#if defined(USE_WINSOCK2)
+    return recvfrom(sock, buf, (int)len, flags, src_addr, addrlen);
+#else
+    return recvfrom(sock, buf, len, flags, src_addr, addrlen);
+#endif
+}
+
 
 void osl_socket_close(osl_socket sock)
 {

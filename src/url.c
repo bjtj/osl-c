@@ -5,6 +5,7 @@
 osl_url_t * osl_url_from_string(const char * url_str)
 {
     osl_url_t * url = (osl_url_t*)malloc(sizeof(osl_url_t));
+    OSL_HANDLE_MALLOC_ERROR(url);
     memset(url, 0, sizeof(osl_url_t));
     char * sep = strstr(url_str, "://");
     char * address_part = NULL;
@@ -88,6 +89,7 @@ void osl_url_free(osl_url_t * url)
 osl_url_t * osl_url_merge(osl_url_t * base_url, const char * relative)
 {
     osl_url_t * url = (osl_url_t*)malloc(sizeof(osl_url_t));
+    OSL_HANDLE_MALLOC_ERROR(url);
     memset(url, 0, sizeof(osl_url_t));
     if (relative[0] == '/')
     {

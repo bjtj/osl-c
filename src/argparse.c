@@ -4,6 +4,7 @@
 osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc)
 {
     osl_argument_flag_t * flag = (osl_argument_flag_t*)malloc(sizeof(osl_argument_flag_t));
+    OSL_HANDLE_MALLOC_ERROR(flag);
     memset(flag, 0, sizeof(osl_argument_flag_t));
     flag->name = osl_strdup(name);
     flag->defval = osl_strdup(defval);
@@ -51,6 +52,7 @@ osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage
 osl_arguments_usage_t * osl_arguments_usage_new(void)
 {
     osl_arguments_usage_t * usage = (osl_arguments_usage_t*)malloc(sizeof(osl_arguments_usage_t));
+    OSL_HANDLE_MALLOC_ERROR(usage);
     memset(usage, 0, sizeof(osl_arguments_usage_t));
     return usage;
 }
@@ -67,6 +69,7 @@ void osl_arguments_usage_free(osl_arguments_usage_t * usage)
 osl_argument_t * osl_argument_new(const char * name, const char * value)
 {
     osl_argument_t * arg = (osl_argument_t*)malloc(sizeof(osl_argument_t));
+    OSL_HANDLE_MALLOC_ERROR(arg);
     memset(arg, 0, sizeof(osl_argument_t));
     arg->name = osl_strdup(name);
     arg->value = osl_strdup(value);
@@ -87,6 +90,7 @@ void osl_argument_free(osl_argument_t * arg)
 osl_arguments_t * osl_arguments_new(void)
 {
     osl_arguments_t * args = (osl_arguments_t*)malloc(sizeof(osl_arguments_t));
+    OSL_HANDLE_MALLOC_ERROR(args);
     memset(args, 0, sizeof(osl_arguments_t));
     return args;
 }

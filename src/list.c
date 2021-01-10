@@ -3,6 +3,7 @@
 static osl_list_t * __list_new(void)
 {
     osl_list_t * node = (osl_list_t*)malloc(sizeof(osl_list_t));
+    OSL_HANDLE_MALLOC_ERROR(node);
     memset(node, 0, sizeof(osl_list_t));
     return node;
 }

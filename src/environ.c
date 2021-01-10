@@ -45,10 +45,7 @@ char * osl_environ_get(const char * key)
     /* https://docs.microsoft.com/en-us/windows/desktop/api/winbase/nf-winbase-getenvironmentvariable */
     DWORD buffer_size = 32767;
     char * buffer = (char*)malloc(buffer_size);
-    if (buffer == NULL)
-    {
-        return NULL;
-    }
+    OSL_HANDLE_MALLOC_ERROR(buffer);
     memset(buffer, 0, buffer_size);
     GetEnvironmentVariable(key, buffer, buffer_size);
     char * ret = osl_strdup(buffer);
