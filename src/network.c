@@ -48,7 +48,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
 #if defined(USE_APPLE_STD)
 	case AF_LINK:
 	{
-	    unsigned char * ptr = (unsigned char *)LLADDR((struct sockaddr_dl *)(tmp->ifa_addr));
+	    unsigned char * ptr = (unsigned char *)LLADDR((struct sockaddr_dl *)(ptr->ifa_addr));
 	    osl_network_interface_set_mac_address(iface, ptr, 6);
 	    break;
 	}
