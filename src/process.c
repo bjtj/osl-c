@@ -1,12 +1,13 @@
 #include "process.h"
 #include "string_buffer.h"
+#include "str.h"
 
 osl_process_t * osl_process_new(const char * cmd)
 {
     osl_process_t * process = (osl_process_t*)malloc(sizeof(osl_process_t));
     OSL_HANDLE_MALLOC_ERROR(process);
     memset(process, 0, sizeof(osl_process_t));
-    process->cmd = strdup(cmd);
+    process->cmd = osl_safe_strdup(cmd);
     return process;
 }
 
@@ -21,10 +22,10 @@ void osl_process_free(osl_process_t * process)
 
     if (process->cmd)
     {
-	free(process->cmd);
+	osl_safe_free(process->cmd);
     }
 
-    free(process);
+    osl_safe_free(process);
 }
 
 #if defined(USE_UNIX_STD)

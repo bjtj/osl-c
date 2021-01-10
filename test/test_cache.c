@@ -31,7 +31,7 @@ void test_cache(void)
     osl_cache_manager_resolve_expired(manager);
 
     msg = "hello2";
-    uid = osl_strdup(osl_cache_manager_set_cache(manager, (void*)msg, strlen(msg) + 1, osl_tick_milli() + 1000, NULL, on_remove_cache)->uid);
+    uid = osl_safe_strdup(osl_cache_manager_set_cache(manager, (void*)msg, strlen(msg) + 1, osl_tick_milli() + 1000, NULL, on_remove_cache)->uid);
 
     osl_idle(1500);
     osl_cache_manager_resolve_expired(manager);

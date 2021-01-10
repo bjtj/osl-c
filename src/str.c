@@ -159,7 +159,7 @@ char * osl_string_replace_all(const char * str, const char * mat, const char * s
 
 char * osl_string_uppercase(const char * str)
 {
-    char * ptr = osl_strdup(str);
+    char * ptr = osl_safe_strdup(str);
     char * ret = ptr;
     for (; *ptr; ptr++)
     {
@@ -173,7 +173,7 @@ char * osl_string_uppercase(const char * str)
 
 char * osl_string_lowercase(const char * str)
 {
-    char * ptr = osl_strdup(str);
+    char * ptr = osl_safe_strdup(str);
     char * ret = ptr;
     for (; *ptr; ptr++)
     {
@@ -187,7 +187,7 @@ char * osl_string_lowercase(const char * str)
 
 char * osl_string_capital(const char * str)
 {
-    char * ptr = osl_strdup(str);
+    char * ptr = osl_safe_strdup(str);
     char * ret = ptr;
     int first = 1;
     for (; *ptr; ptr++)
@@ -214,12 +214,16 @@ char * osl_strcat(char * s1, const char * s2)
     return strcat(s1, s2);
 }
 
-char * osl_strdup(const char * str)
+char * osl_safe_strdup(const char * str)
 {
-    if (str == NULL)
-    {
+    if (str == NULL) {
 	return NULL;
     }
+    return osl_strdup(str);
+}
+
+char * osl_strdup(const char * str)
+{
     return strdup(str);
 }
 
@@ -240,7 +244,7 @@ char * osl_strdup_for(const char * str, const char * end_ptr)
     }
     else
     {
-	return osl_strdup(str);
+	return osl_safe_strdup(str);
     }
 }
 
@@ -281,7 +285,7 @@ osl_list_t * osl_string_split(const char * str, const char * del)
 	{
 	    if (strlen(ptr) > 0)
 	    {
-		lst = osl_list_append(lst, osl_strdup(ptr));
+		lst = osl_list_append(lst, osl_safe_strdup(ptr));
 	    }
 	    ptr = NULL;
 	}
@@ -311,7 +315,7 @@ osl_list_t * osl_string_split_limit(const char * str, const char * del, int limi
 		}
 		else
 		{
-		    lst = osl_list_append(lst, osl_strdup(ptr));
+		    lst = osl_list_append(lst, osl_safe_strdup(ptr));
 		    ptr = NULL;
 		}
 	    }
@@ -324,7 +328,7 @@ osl_list_t * osl_string_split_limit(const char * str, const char * del, int limi
 	{
 	    if (strlen(ptr) > 0)
 	    {
-		lst = osl_list_append(lst, osl_strdup(ptr));
+		lst = osl_list_append(lst, osl_safe_strdup(ptr));
 	    }
 	    ptr = NULL;
 	}
@@ -357,7 +361,7 @@ char * osl_string_ltrim(const char * str)
     if (ptr == NULL) {
 	return NULL;
     }
-    return osl_strdup(ptr);
+    return osl_safe_strdup(ptr);
 }
 
 char * osl_string_rtrim(const char * str)
@@ -366,7 +370,7 @@ char * osl_string_rtrim(const char * str)
     if (ptr == NULL) {
 	return NULL;
     }
-    return osl_strdup(ptr);
+    return osl_safe_strdup(ptr);
 }
 
 char * osl_string_append(const char * s1, const char * s2)

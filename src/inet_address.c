@@ -1,4 +1,5 @@
 #include "inet_address.h"
+#include "str.h"
 
 static void s_get_ip_address(struct sockaddr * addr, char * ipstr, size_t size)
 {
@@ -25,6 +26,20 @@ static int s_get_port(struct sockaddr * addr)
 }
 
 
+const char * osl_inet_version_to_string(osl_inet_version_e ver)
+{
+    switch (ver) {
+    case osl_inet4: {
+	return "inet4";
+    }
+    case osl_inet6: {
+	return "inet6";
+    }
+    default:
+	return "(unknown)";
+    }
+}
+
 char * osl_ip_string(struct sockaddr * addr, char * ip_buffer, size_t size)
 {
     s_get_ip_address(addr, ip_buffer, size);
@@ -33,23 +48,25 @@ char * osl_ip_string(struct sockaddr * addr, char * ip_buffer, size_t size)
 
 osl_inet_address_t * osl_inet_address_new_with_sockaddr(struct sockaddr * addr)
 {
-    osl_inet_address_t * ret = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
-    OSL_HANDLE_MALLOC_ERROR(ret);
-    memset(ret, 0, sizeof(osl_inet_address_t));
-    if (addr->sa_family == AF_INET)
-    {
-	ret->inet_version = osl_inet4;
-    }
-    else if (addr->sa_family == AF_INET6)
-    {
-	ret->inet_version = osl_inet6;
-    }
-
     char ipstr[INET6_ADDRSTRLEN] = {0,};
+    osl_inet_address_t * inetaddr;
+    osl_inet_version_e inetver;
+    if (addr->sa_family == AF_INET) {
+	inetver = osl_inet4;
+    } else if (addr->sa_family == AF_INET6) {
+	inetver = osl_inet6;
+    } else {
+	/* TODO: exception */
+	return NULL;
+    }
+    inetaddr = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
+    OSL_HANDLE_MALLOC_ERROR(inetaddr);
+    memset(inetaddr, 0, sizeof(osl_inet_address_t));
+    inetaddr->inet_version = inetver;
     s_get_ip_address(addr, ipstr, sizeof(ipstr));
-    ret->host = strdup(ipstr);
-    ret->port = s_get_port(addr);
-    return ret;
+    inetaddr->host = osl_safe_strdup(ipstr);
+    inetaddr->port = s_get_port(addr);
+    return inetaddr;
 }
 
 osl_inet_address_t * osl_inet_address_new(osl_inet_version_e version, const char * host, int port)
@@ -60,7 +77,7 @@ osl_inet_address_t * osl_inet_address_new(osl_inet_version_e version, const char
     addr->inet_version = version;
     if (host)
     {
-	addr->host = strdup(host);
+	addr->host = osl_safe_strdup(host);
     }
     addr->port = port;
     return addr;
@@ -68,13 +85,11 @@ osl_inet_address_t * osl_inet_address_new(osl_inet_version_e version, const char
 
 void osl_inet_address_free(osl_inet_address_t * addr)
 {
-    if (addr) {
-	if (addr->host)
-	{
-	    free(addr->host);
-	}
-	free(addr);	
+    if (addr == NULL) {
+	return;
     }
+    osl_safe_free(addr->host);
+    osl_safe_free(addr);
 }
 
 int osl_inet_address_get_family(osl_inet_address_t * addr)
@@ -92,15 +107,19 @@ int osl_inet_address_get_family(osl_inet_address_t * addr)
 
 struct addrinfo * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_type)
 {
+    int port;
     char port_str[10] = {0,};
-    snprintf(port_str, sizeof(port_str), "%d", addr->port);
-
     struct addrinfo * res;
     struct addrinfo hints;
+    if (addr == NULL) {
+	return NULL;
+    }
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = sock_type;
-    if (getaddrinfo(addr->host, (addr->port == -1 ? NULL : port_str), &hints, &res) != 0)
+    port = addr->port;
+    snprintf(port_str, sizeof(port_str), "%d", port);
+    if (getaddrinfo(addr->host, (port == -1 ? NULL : port_str), &hints, &res) != 0)
     {
 	return NULL;
     }
@@ -109,16 +128,20 @@ struct addrinfo * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_t
 
 struct addrinfo * osl_inet_address_resolve_numeric(osl_inet_address_t * addr, int sock_type)
 {
+    int port;
     char port_str[10] = {0,};
-    snprintf(port_str, sizeof(port_str), "%d", addr->port);
-
     struct addrinfo * res;
     struct addrinfo hints;
+    if (addr == NULL) {
+	return NULL;
+    }
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = sock_type;
     hints.ai_flags = AI_NUMERICHOST;
-    if (getaddrinfo(addr->host, (addr->port == -1 ? NULL : port_str), &hints, &res) != 0)
+    port = addr->port;
+    snprintf(port_str, sizeof(port_str), "%d", port);
+    if (getaddrinfo(addr->host, (port == -1 ? NULL : port_str), &hints, &res) != 0)
     {
 	return NULL;
     }
@@ -127,16 +150,20 @@ struct addrinfo * osl_inet_address_resolve_numeric(osl_inet_address_t * addr, in
 
 struct addrinfo * osl_inet_address_resolve_passive(osl_inet_address_t * addr, int family, int sock_type)
 {
+    int port;
     char port_str[10] = {0,};
-    snprintf(port_str, sizeof(port_str), "%d", addr->port);
-
     struct addrinfo * res;
     struct addrinfo hints;
+    if (addr == NULL) {
+	return NULL;
+    }
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = family;
     hints.ai_socktype = sock_type;
     hints.ai_flags = AI_PASSIVE;
-    if (getaddrinfo(addr->host, (addr->port == -1 ? NULL : port_str), &hints, &res) != 0)
+    port = addr->port;
+    snprintf(port_str, sizeof(port_str), "%d", port);
+    if (getaddrinfo(addr->host, (port == -1 ? NULL : port_str), &hints, &res) != 0)
     {
 	return NULL;
     }

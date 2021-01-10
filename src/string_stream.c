@@ -32,8 +32,8 @@ static void s_close_cb(osl_stream_t * stream)
     struct container * con = (struct container*)stream->handle;
     if (con)
     {
-	osl_free(con->str);
-	osl_free(con);
+	osl_safe_free(con->str);
+	osl_safe_free(con);
 	stream->handle = NULL;
     }
 }
@@ -48,7 +48,7 @@ osl_stream_t * osl_string_stream_new(const char * str)
     struct container * con = (struct container*)malloc(sizeof(struct container));
     OSL_HANDLE_MALLOC_ERROR(con);
     memset(con, 0, sizeof(struct container));
-    con->str = osl_strdup(str);
+    con->str = osl_safe_strdup(str);
     con->ptr = con->str;
     stream->handle = con;
     stream->eof = 0;

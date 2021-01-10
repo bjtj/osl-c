@@ -6,10 +6,10 @@ osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defv
     osl_argument_flag_t * flag = (osl_argument_flag_t*)malloc(sizeof(osl_argument_flag_t));
     OSL_HANDLE_MALLOC_ERROR(flag);
     memset(flag, 0, sizeof(osl_argument_flag_t));
-    flag->name = osl_strdup(name);
-    flag->defval = osl_strdup(defval);
+    flag->name = osl_safe_strdup(name);
+    flag->defval = osl_safe_strdup(defval);
     flag->single_flag = single;
-    flag->description = osl_strdup(desc);
+    flag->description = osl_safe_strdup(desc);
     return flag;
 }
 
@@ -19,10 +19,10 @@ void osl_argument_flag_free(osl_argument_flag_t * flag)
     {
 	return;
     }
-    osl_free(flag->name);
-    osl_free(flag->defval);
-    osl_free(flag->description);
-    osl_free(flag);
+    osl_safe_free(flag->name);
+    osl_safe_free(flag->defval);
+    osl_safe_free(flag->description);
+    osl_safe_free(flag);
 }
 
 osl_bool osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name)
@@ -71,8 +71,8 @@ osl_argument_t * osl_argument_new(const char * name, const char * value)
     osl_argument_t * arg = (osl_argument_t*)malloc(sizeof(osl_argument_t));
     OSL_HANDLE_MALLOC_ERROR(arg);
     memset(arg, 0, sizeof(osl_argument_t));
-    arg->name = osl_strdup(name);
-    arg->value = osl_strdup(value);
+    arg->name = osl_safe_strdup(name);
+    arg->value = osl_safe_strdup(value);
     return arg;
 }
 
@@ -82,9 +82,9 @@ void osl_argument_free(osl_argument_t * arg)
     {
 	return;
     }
-    osl_free(arg->name);
-    osl_free(arg->value);
-    osl_free(arg);
+    osl_safe_free(arg->name);
+    osl_safe_free(arg->value);
+    osl_safe_free(arg);
 }
 
 osl_arguments_t * osl_arguments_new(void)
@@ -101,10 +101,10 @@ void osl_arguments_free(osl_arguments_t * args)
     {
 	return;
     }
-    osl_free(args->name);
+    osl_safe_free(args->name);
     osl_list_free(args->arg_list, (osl_free_cb)osl_argument_free);
     osl_list_free(args->text_list, free);
-    osl_free(args);
+    osl_safe_free(args);
 }
 
 osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, char * argv[])
@@ -116,7 +116,7 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	char * arg = argv[i];
 	if (i == 0)
 	{
-	    args->name = osl_strdup(arg);
+	    args->name = osl_safe_strdup(arg);
 	    continue;
 	}
 	char * next_arg = (i < argc - 1) ? argv[i+1] : NULL;
@@ -148,7 +148,7 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	}
 	else
 	{
-	    args->text_list = osl_list_append(args->text_list, osl_strdup(arg));
+	    args->text_list = osl_list_append(args->text_list, osl_safe_strdup(arg));
 	}
     }
     return args;

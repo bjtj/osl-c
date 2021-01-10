@@ -32,10 +32,10 @@ osl_lib_handle osl_library_load(const char * path, const char * name)
     char * filename = s_get_lib_filename(name);
     char * fullpath = osl_pathname_merge(path, filename);
     osl_lib_handle handle;
-    free(filename);
+    osl_safe_free(filename);
 #if defined(USE_UNIX_STD)
     handle = dlopen(fullpath, RTLD_LAZY);
-    free(fullpath);
+    osl_safe_free(fullpath);
     if (handle == NULL) {
 	fprintf(stderr, "Failed: dlopen() - %s", dlerror());
 	return NULL;
@@ -45,7 +45,7 @@ osl_lib_handle osl_library_load(const char * path, const char * name)
     
 #elif defined(USE_MS_WIN)
     handle = LoadLibrary(fullpath);
-    free(fullpath);
+    osl_safe_free(fullpath);
     if (!handle) {
 	fprintf(stderr, "LoadLibrary() failed");
 	return NULL;

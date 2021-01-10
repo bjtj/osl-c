@@ -32,16 +32,17 @@ static char * s_remove_last_separator(const char * path)
     {
 	return osl_string_substr(path, 0, strlen(path) - 1);
     }
-    return strdup(path);
+    return osl_safe_strdup(path);
 }
 
 static char * s_dirname(const char * path)
 {
+    const char * sep;
     if (osl_string_is_empty(path) || s_is_directory(path) || s_is_root_path(path))
     {
 	return s_remove_last_separator(path);
     }
-    const char * sep = osl_string_find_last_of(path, "/");
+    sep = osl_string_find_last_of(path, "/");
     if (sep == NULL)
     {
 	return NULL;
@@ -56,7 +57,7 @@ static char * s_basename(const char * path)
     }
     const char * f = osl_string_find_last_of(path, "/");
     if (f == NULL) {
-	return strdup(path);
+	return osl_safe_strdup(path);
     }
     return osl_string_substr(path, f - path + 1, strlen(path));
 }
@@ -108,7 +109,7 @@ static char * s_remove_last_separator(const char * path) {
     if (!osl_string_is_empty(path) && strlen(path) > 1 && s_is_separator(path[strlen(path) - 1])) {
 	return osl_string_substr(path, 0, strlen(path) - 1); // trailing last / character
     }
-    return strdup(path);
+    return osl_safe_strdup(path);
 }
 
 static char * s_dirname(const char * path) {
@@ -132,7 +133,7 @@ static char * s_basename(const char * path)
 
     const char * f = osl_string_find_last_of(path, SEPARATORS);
     if (f == NULL) {
-	return strdup(path);
+	return osl_safe_strdup(path);
     }
 
     return osl_string_substr(path, f - path + 1, strlen(path));
@@ -145,7 +146,7 @@ static char * s_get_ext(const char * path)
 	free(name);
 	return NULL;
     }
-    free(name);
+    osl_safe_free(name);
     return osl_string_substr(name, f - name + 1, strlen(path));
 }
 
@@ -156,7 +157,7 @@ char * osl_pathname_merge(const char * a, const char * b)
 {
     if (b[0] == OSL_PATH_SEPARATOR[0])
     {
-	return strdup(b);
+	return osl_safe_strdup(b);
     }
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, a);

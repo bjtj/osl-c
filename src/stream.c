@@ -31,11 +31,7 @@ osl_stream_t * osl_stream_new(void)
 
 void osl_stream_free(osl_stream_t * stream)
 {
-    if (stream == NULL)
-    {
-	return;
-    }
-    osl_free(stream);
+    osl_safe_free(stream);
 }
 
 osl_stream_t * osl_stream_open(const char * path, const char * flags)
@@ -45,11 +41,12 @@ osl_stream_t * osl_stream_open(const char * path, const char * flags)
 
 osl_stream_t * osl_stream_wrap_std_file(FILE * fp)
 {
+    osl_stream_t * stream;
     if (fp == NULL)
     {
 	return NULL;
     }
-    osl_stream_t * stream = osl_stream_new();
+    stream = osl_stream_new();
     stream->handle = fp;
     stream->eof = 0;
     stream->read = s_read_cb;

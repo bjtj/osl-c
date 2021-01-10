@@ -90,6 +90,8 @@ typedef HANDLE THREAD_HANDLE;
 #	include <ifaddrs.h>
 #	include <netdb.h>
 #	include <netinet/in.h>
+#	include <net/if.h>
+
 
 #	if defined(USE_APPLE_STD)
 #		include <net/if_dl.h>

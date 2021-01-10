@@ -8,7 +8,7 @@ osl_mutex_t * osl_mutex_new(void)
     memset(mutex, 0, sizeof(osl_mutex_t));
     if (pthread_mutex_init(&(mutex->handle), NULL) != 0) {
 	/* assert */
-	free(mutex);
+	osl_safe_free(mutex);
 	return NULL;
     }
     return mutex;
@@ -63,6 +63,6 @@ void osl_mutex_free(osl_mutex_t * mutex)
 #else
 	/*  */
 #endif
-	free(mutex);
+	osl_safe_free(mutex);
     }
 }

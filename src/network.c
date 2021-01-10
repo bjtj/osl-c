@@ -24,44 +24,46 @@ static osl_network_interface_t* s_obtain_network_interface(osl_list_t** list, co
 static osl_list_t * s_get_all_network_interfaces(void)
 {
     osl_list_t * ifaces = NULL;
-    struct ifaddrs * addrs, * tmp;
+    struct ifaddrs * addrs, * ptr;
     getifaddrs(&addrs);
-    tmp = addrs;
+    ptr = addrs;
         
-    while (tmp) {
-            
-	if (tmp->ifa_addr) {
-
-	    osl_network_interface_t * iface = s_obtain_network_interface(&ifaces, tmp->ifa_name);
-
-	    switch (tmp->ifa_addr->sa_family) {
-	    case AF_INET:
-	    case AF_INET6:
-	    {
-		iface->addr_list = osl_list_append(iface->addr_list, osl_inet_address_new_with_sockaddr((struct sockaddr*)tmp->ifa_addr));
-	    }
-	    break;
-#if defined(USE_APPLE_STD)
-	    case AF_LINK:
-	    {
-		unsigned char * ptr = (unsigned char *)LLADDR((struct sockaddr_dl *)(tmp->ifa_addr));
-		osl_network_interface_set_mac_address(iface, ptr, 6);
-	    }
-	    break;
-#else
-	    case AF_PACKET:
-	    {
-		struct sockaddr_ll * s = (struct sockaddr_ll*)tmp->ifa_addr;
-		osl_network_interface_set_mac_address(iface, s->sll_addr, 6);
-	    }
-	    break;
-#endif
-	    default:
-		break;
-	    }
-                
+    for (; ptr; ptr = ptr->ifa_next) {
+	osl_network_interface_t * iface;
+	if (ptr->ifa_addr == NULL) {
+	    continue;
 	}
-	tmp = tmp->ifa_next;
+	
+	iface = s_obtain_network_interface(&ifaces, ptr->ifa_name);
+
+	iface->is_loopback = OSL_BOOL((ptr->ifa_flags & IFF_LOOPBACK) != 0);
+
+	switch (ptr->ifa_addr->sa_family) {
+	case AF_INET:
+	case AF_INET6:
+	{
+	    iface->addr_list = osl_list_append(iface->addr_list, osl_inet_address_new_with_sockaddr((struct sockaddr*)ptr->ifa_addr));
+	    break;
+	}
+#if defined(USE_APPLE_STD)
+	case AF_LINK:
+	{
+	    unsigned char * ptr = (unsigned char *)LLADDR((struct sockaddr_dl *)(tmp->ifa_addr));
+	    osl_network_interface_set_mac_address(iface, ptr, 6);
+	    break;
+	}
+#else
+	case AF_PACKET:
+	{
+	    struct sockaddr_ll * s = (struct sockaddr_ll*)ptr->ifa_addr;
+	    osl_network_interface_set_mac_address(iface, s->sll_addr, 6);
+	    break;
+	}
+#endif
+	default:
+	    break;
+	}
+
     }
     freeifaddrs(addrs);
         
@@ -152,9 +154,9 @@ static osl_list_t * s_get_all_network_interfaces(void)
 osl_network_interface_t * osl_network_interface_new_with_name(const char * name)
 {
     osl_network_interface_t * iface = (osl_network_interface_t*)malloc(sizeof(osl_network_interface_t));
-	OSL_HANDLE_MALLOC_ERROR(iface);
+    OSL_HANDLE_MALLOC_ERROR(iface);
     memset(iface, 0, sizeof(osl_network_interface_t));
-    iface->name = strdup(name);
+    iface->name = osl_safe_strdup(name);
     return iface;
 }
 
@@ -165,15 +167,15 @@ void osl_network_interface_free(osl_network_interface_t * iface)
     }
     if (iface->name)
     {
-		osl_safe_free(iface->name);
+	osl_safe_free(iface->name);
     }
     if (iface->description)
     {
-		osl_safe_free(iface->description);
+	osl_safe_free(iface->description);
     }
     if (iface->mac_address)
     {
-		osl_safe_free(iface->mac_address);
+	osl_safe_free(iface->mac_address);
     }
     osl_list_free(iface->addr_list, (void (*)(void*))osl_inet_address_free);
     free(iface);
@@ -181,19 +183,19 @@ void osl_network_interface_free(osl_network_interface_t * iface)
 
 unsigned char* osl_network_interface_set_mac_address(osl_network_interface_t * iface, const unsigned char * addr, size_t size)
 {
-	if (iface == NULL)
-	{
-		return NULL;
-	}
+    if (iface == NULL)
+    {
+	return NULL;
+    }
     if (iface->mac_address)
     {
 	osl_safe_free(iface->mac_address);
     }
     iface->mac_address = (unsigned char*)malloc(size);
-	OSL_HANDLE_MALLOC_ERROR(iface->mac_address);
+    OSL_HANDLE_MALLOC_ERROR(iface->mac_address);
     memcpy(iface->mac_address, addr, size);
     iface->mac_address_size = size;
-	return iface->mac_address;
+    return iface->mac_address;
 }
 
 osl_list_t * osl_network_all_interfaces(void)

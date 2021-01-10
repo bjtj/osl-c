@@ -214,7 +214,6 @@ void test_echo_client(uint16_t port)
 {
     char buffer[10] = {0,};
     osl_socket sock;
-    // struct sockaddr_in addr;
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
     assert(osl_socket_is_valid(sock = osl_socket_connect(addr)));
