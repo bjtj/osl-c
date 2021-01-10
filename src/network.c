@@ -75,6 +75,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
     ULONG outBufLen = 0;
     DWORD dwRetVal = 0;
     IP_ADAPTER_INFO * pAdapterInfos = (IP_ADAPTER_INFO*) malloc(sizeof(IP_ADAPTER_INFO));
+	OSL_HANDLE_MALLOC_ERROR(pAdapterInfos);
 
     // retry up to 5 times, to get the adapter infos needed
     const int retry = 5;
@@ -90,6 +91,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
 	{
 	    free(pAdapterInfos);
 	    pAdapterInfos = (IP_ADAPTER_INFO *)malloc(outBufLen);
+		OSL_HANDLE_MALLOC_ERROR(pAdapterInfos);
 	}
 	else
 	{
@@ -120,7 +122,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
 	    ifaces = osl_list_append(ifaces, iface);
 	}
     }
-    free(pAdapterInfos);
+	osl_safe_free(pAdapterInfos);
 
     return ifaces;
 }
@@ -130,6 +132,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
 osl_network_interface_t * osl_network_interface_new_with_name(const char * name)
 {
     osl_network_interface_t * iface = (osl_network_interface_t*)malloc(sizeof(osl_network_interface_t));
+	OSL_HANDLE_MALLOC_ERROR(iface);
     memset(iface, 0, sizeof(osl_network_interface_t));
     iface->name = strdup(name);
     return iface;
@@ -142,29 +145,35 @@ void osl_network_interface_free(osl_network_interface_t * iface)
     }
     if (iface->name)
     {
-	free(iface->name);
+		osl_safe_free(iface->name);
     }
     if (iface->description)
     {
-	free(iface->description);
+		osl_safe_free(iface->description);
     }
     if (iface->mac_address)
     {
-	free(iface->mac_address);
+		osl_safe_free(iface->mac_address);
     }
     osl_list_free(iface->addr_list, (void (*)(void*))osl_inet_address_free);
     free(iface);
 }
 
-void osl_network_interface_set_mac_address(osl_network_interface_t * iface, const unsigned char * addr, size_t size)
+unsigned char* osl_network_interface_set_mac_address(osl_network_interface_t * iface, const unsigned char * addr, size_t size)
 {
+	if (iface == NULL)
+	{
+		return NULL;
+	}
     if (iface->mac_address)
     {
-	free(iface->mac_address);
+	osl_safe_free(iface->mac_address);
     }
-    iface->mac_address = malloc(size);
+    iface->mac_address = (unsigned char*)malloc(size);
+	OSL_HANDLE_MALLOC_ERROR(iface->mac_address);
     memcpy(iface->mac_address, addr, size);
     iface->mac_address_size = size;
+	return iface->mac_address;
 }
 
 osl_list_t * osl_network_all_interfaces(void)

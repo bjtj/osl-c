@@ -46,6 +46,7 @@ osl_stream_t * osl_string_stream_new(const char * str)
     }
     osl_stream_t * stream = osl_stream_new();
     struct container * con = (struct container*)malloc(sizeof(struct container));
+    OSL_HANDLE_MALLOC_ERROR(con);
     memset(con, 0, sizeof(struct container));
     con->str = osl_strdup(str);
     con->ptr = con->str;

@@ -12,7 +12,7 @@ void test_string_buffer(void)
 
     char * str = osl_string_buffer_to_string(sb);
     printf("str is '%s'\n", str);
-    free(str);
+    osl_safe_free(str);
 
     osl_string_buffer_free(sb);
 }

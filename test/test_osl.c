@@ -6,7 +6,7 @@ void test_osl(void)
 {
     char * cwd = osl_getcwd();
     printf("cwd: %s\n", cwd);
-    free(cwd);
+    osl_safe_free(cwd);
 }
 
 

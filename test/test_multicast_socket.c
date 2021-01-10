@@ -1,9 +1,8 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include "osl.h"
 #include "selector.h"
 #include "socket.h"
 #include "thread.h"
+#include "inet_address.h"
 #include <assert.h>
 
 /* multicast socket */
@@ -44,25 +43,17 @@ void * multicast_server_thread(void * arg)
 {
     (void)arg;
     int i = 0;
+    int ret;
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
     osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
-    if (osl_datagram_socket_join_group(sock, "239.255.255.250") != 0)
-    {
-	fprintf(stderr, "join group failed\n");
-	return 0;
-    }
+    assert(osl_datagram_socket_join_group(sock, "239.255.255.250") == 0);
 
     char buffer[1024] = {0,};
     struct sockaddr_in remote_addr;
     socklen_t remote_addr_len = sizeof(remote_addr);
     memset(&remote_addr, 0, sizeof(remote_addr));
-    int ret = (int)recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len);
-    if (ret <= 0)
-    {
-	perror("recvfrom() failed");
-	return 0;
-    }
+    assert((ret = osl_datagram_socket_recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len)) > 0);
 
     char ip_buffer[INET6_ADDRSTRLEN] = {0,};
     printf("[multicast server] recvfrom -- %s:%d\n", osl_ip_string((struct sockaddr*)&remote_addr, ip_buffer, sizeof(ip_buffer)), ntohs(remote_addr.sin_port));
@@ -70,12 +61,7 @@ void * multicast_server_thread(void * arg)
 
     for (i = 0; i < 3; ++i) {
 	printf("[multicast server] sendto()\n");
-	ret = (int)sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len);
-	if (ret <= 0)
-	{
-	    perror("sento() failed");
-	    return 0;
-	}
+    assert(osl_datagram_socket_sendto(sock, buffer, ret, 0, (struct sockaddr*)&remote_addr, remote_addr_len) > 0);	
 	osl_idle(150);
     }
 
@@ -87,35 +73,26 @@ void * multicast_server_thread(void * arg)
 void test_multicast_client(void)
 {
     struct sockaddr_in remote_addr;
-    socklen_t remote_addr_len = sizeof(remote_addr);
+    socklen_t sockaddr_len = sizeof(remote_addr);
+    osl_inet_address_t* addr;    
+    struct addrinfo* info;
     osl_socket sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
-    if (!osl_socket_is_valid(sock))
-    {
-	perror("socket() failed");
-	return;
-    }
+    assert(osl_socket_is_valid(sock));    
 
-    memset(&remote_addr, 0, remote_addr_len);
-    remote_addr.sin_family = AF_INET;
-    remote_addr.sin_addr.s_addr = inet_addr("239.255.255.250");
-    remote_addr.sin_port = htons(1900);
-
+    addr = osl_inet_address_new(osl_inet4, "239.255.255.250", 1900);
+    info = osl_inet_address_resolve(addr, SOCK_DGRAM);
+    
     printf("[multicast client] sendto()\n");
-    if (sendto(sock, "hello", 5, 0, (struct sockaddr*)&remote_addr, remote_addr_len) <= 0)
-    {
-	perror("sendto() failed");
-	return;
-    }
+    assert(osl_datagram_socket_sendto(sock, "hello", 5, 0, info->ai_addr, (socklen_t)info->ai_addrlen) > 0);    
 
     char buffer[1024] = {0,};
     printf("[multicast client] recvfrom()\n");
-    if (recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &remote_addr_len) <= 0)
-    {
-	perror("recvfrom() failed");
-	return;
-    }
+    assert(osl_datagram_socket_recvfrom(sock, buffer, sizeof(buffer), 0, (struct sockaddr*)&remote_addr, &sockaddr_len) > 0);
 
     assert(strcmp(buffer, "hello") == 0);
+
+    freeaddrinfo(info);
+    osl_inet_address_free(addr);
 
     osl_socket_close(sock);
 }

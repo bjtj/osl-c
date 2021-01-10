@@ -31,10 +31,7 @@ char * osl_string_substr(const char * str, size_t start, size_t end)
 {
     size_t size = end - start;
     char * ret = (char*)malloc(size + 1);
-	if (ret == NULL)
-	{
-		return NULL;
-	}
+    OSL_HANDLE_MALLOC_ERROR(ret);
     memcpy(ret, str + start, size);
     ret[size] = '\0';
     return ret;
@@ -229,10 +226,7 @@ char * osl_strdup(const char * str)
 char * osl_strndup(const char * str, size_t size)
 {
     char * ret = (char*)malloc(size + 1);
-    if (ret == NULL) {
-        /* TODO: exception */
-        return NULL;
-    }
+    OSL_HANDLE_MALLOC_ERROR(ret);
     memcpy(ret, str, size);
     ret[size] = '\0';
     return ret;
@@ -379,10 +373,7 @@ char * osl_string_append(const char * s1, const char * s2)
 {
     size_t len = strlen(s1) + strlen(s2) + 1;
     char * ret = (char*)malloc(len);
-    if (ret == NULL) {
-	/* TODO: exception */
-	return NULL;
-    }
+    OSL_HANDLE_MALLOC_ERROR(ret);
     memset(ret, 0, len);
     osl_strcat(ret, s1);
     osl_strcat(ret, s2);

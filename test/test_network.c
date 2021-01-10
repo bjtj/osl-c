@@ -1,5 +1,3 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include "network.h"
 #include "osl.h"
 #include <assert.h>

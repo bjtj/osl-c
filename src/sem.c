@@ -69,6 +69,7 @@ static void s_sem_destroy(SEM_HANDLE * handle) {
 osl_semaphore_t * osl_semaphore_new(int initial)
 {
     osl_semaphore_t * sem = (osl_semaphore_t*)malloc(sizeof(osl_semaphore_t));
+    OSL_HANDLE_MALLOC_ERROR(sem);
     memset(sem, 0, sizeof(osl_semaphore_t));
     s_sem_init(&(sem->handle), initial);
     return sem;

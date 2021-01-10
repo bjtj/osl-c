@@ -1,5 +1,3 @@
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-
 #include "osl.h"
 #include "socket.h"
 #include "thread.h"
@@ -215,20 +213,17 @@ static void * echo_server2_thread(void * arg)
 void test_echo_client(uint16_t port)
 {
     char buffer[10] = {0,};
-    struct sockaddr_in addr;
-    osl_socket sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    memset(&addr, 0, sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    addr.sin_port = htons(port);
-    if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) != 0)
-    {
-	perror("connect() error");
-	exit(1);
-    }
-    send(sock, "hello", 5, 0);
-    recv(sock, buffer, sizeof(buffer), 0);
+    osl_socket sock;
+    // struct sockaddr_in addr;
+
+    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
+    assert(osl_socket_is_valid(sock = osl_socket_connect(addr)));
+    osl_socket_send(sock, "hello", 5, 0);
+    osl_socket_recv(sock, buffer, sizeof(buffer), 0);
     assert(strcmp(buffer, "hello") == 0);
+        
+    osl_inet_address_free(addr);
+
     osl_socket_close(sock);
 }
 

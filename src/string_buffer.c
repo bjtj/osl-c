@@ -10,7 +10,8 @@ static void * _realloc(void * ptr, size_t org_size, size_t new_size)
 	return ptr;
     }
     temp = malloc(new_size);
-    memset(temp, 0, sizeof(new_size));
+    OSL_HANDLE_MALLOC_ERROR(temp);
+    memset(temp, 0, new_size);
     if (ptr)
     {
 	memcpy(temp, ptr, _MIN(org_size, new_size));
@@ -22,6 +23,7 @@ static void * _realloc(void * ptr, size_t org_size, size_t new_size)
 osl_string_buffer_t * osl_string_buffer_new(void)
 {
     osl_string_buffer_t * sb = (osl_string_buffer_t*)malloc(sizeof(osl_string_buffer_t));
+    OSL_HANDLE_MALLOC_ERROR(sb);
     memset(sb, 0, sizeof(osl_string_buffer_t));
     return sb;
 }
@@ -56,6 +58,7 @@ void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buff
 char * osl_string_buffer_to_string(osl_string_buffer_t * sb)
 {
     char * str = (char*)malloc(sb->len + 1);
+    OSL_HANDLE_MALLOC_ERROR(str);
     memcpy(str, sb->ptr, sb->len);
     str[sb->len] = '\0';
     return str;
