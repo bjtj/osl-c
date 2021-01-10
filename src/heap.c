@@ -32,8 +32,8 @@ void osl_heap_free(osl_heap_t * heap)
     {
 	return;
     }
-    osl_list_free(heap->allocs, osl_free);
-    osl_free(heap);
+    osl_list_free(heap->allocs, osl_safe_free);
+    osl_safe_free(heap);
 }
 
 void * osl_heap_alloc(osl_heap_t * heap, size_t size)
@@ -79,7 +79,7 @@ void osl_heap_dealloc(osl_heap_t * heap, void * alloc)
 	    {
 		heap->on_dealloc(heap, alloc);
 	    }
-	    osl_free(alloc);
+	    osl_safe_free(alloc);
 	    break;
 	}
     }

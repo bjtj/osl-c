@@ -7,7 +7,7 @@ static char * _gen_uid(void)
 {
     char buf[1024] = {0,};
     snprintf(buf, sizeof(buf), "cache-%010lu-%010lu", osl_tick_milli(), ++_idx);
-    return osl_strdup(buf);
+    return osl_safe_strdup(buf);
 }
 
 static osl_bool _compare_uid(osl_cache_t * cache, const char * uid)
@@ -31,7 +31,7 @@ osl_cache_t * osl_cache_copy(const osl_cache_t * other)
     osl_cache_t * cache = (osl_cache_t*)malloc(sizeof(osl_cache_t));
     OSL_HANDLE_MALLOC_ERROR(cache);
     memset(cache, 0, sizeof(osl_cache_t));
-    cache->uid = osl_strdup(other->uid);
+    cache->uid = osl_safe_strdup(other->uid);
     cache->data = other->data;
     cache->size = other->size;
     cache->create_date = other->create_date;
@@ -53,8 +53,8 @@ void osl_cache_free(osl_cache_t * cache)
 	cache->on_remove(cache);
     }
     
-    osl_free(cache->uid);
-    osl_free(cache);
+    osl_safe_free(cache->uid);
+    osl_safe_free(cache);
 }
 
 osl_cache_manager_t * osl_cache_manager_new(void * user)
@@ -73,7 +73,7 @@ void osl_cache_manager_free(osl_cache_manager_t * manager)
 	return;
     }
     osl_list_free(manager->caches, (osl_free_cb)osl_cache_free);
-    osl_free(manager);
+    osl_safe_free(manager);
 }
 
 osl_cache_t * osl_cache_manager_set_cache(osl_cache_manager_t * manager, void * data, size_t size, unsigned long expire_date, void * user, osl_cache_on_remove_cb on_remove)
@@ -89,7 +89,7 @@ osl_cache_t * osl_cache_manager_set_cache(osl_cache_manager_t * manager, void * 
     };
     osl_cache_t * cache = osl_cache_copy(&temp);
     manager->caches = osl_list_append(manager->caches, cache);
-    osl_free(temp.uid);
+    osl_safe_free(temp.uid);
     return cache;
 }
 

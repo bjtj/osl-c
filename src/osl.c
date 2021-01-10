@@ -1,4 +1,5 @@
 #include "osl.h"
+#include "str.h"
 
 static int __platform_initilized = 0;
 static int __use_socket = 0;
@@ -92,13 +93,13 @@ char * osl_getcwd(void)
     if (_getcwd(buffer, sizeof(buffer)) == NULL) {
 	return NULL;
     }
-    return strdup(buffer);
+    return osl_safe_strdup(buffer);
 #else
     char buffer[2048] = {0,};
     if (getcwd(buffer, sizeof(buffer)) == NULL) {
 	return NULL;
     }
-    return strdup(buffer);
+    return osl_safe_strdup(buffer);
 #endif
 }
 
@@ -112,7 +113,7 @@ void osl_safe_free(void * ptr)
 {
     if (ptr)
     {
-	free(ptr);
+	osl_free(ptr);
     }
 }
 

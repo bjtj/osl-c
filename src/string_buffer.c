@@ -15,7 +15,7 @@ static void * _realloc(void * ptr, size_t org_size, size_t new_size)
     if (ptr)
     {
 	memcpy(temp, ptr, _MIN(org_size, new_size));
-	free(ptr);
+	osl_safe_free(ptr);
     }
     return temp;
 }
@@ -32,9 +32,9 @@ void osl_string_buffer_free(osl_string_buffer_t * sb)
 {
     if (sb->ptr)
     {
-	free(sb->ptr);
+	osl_safe_free(sb->ptr);
     }
-    free(sb);
+    osl_safe_free(sb);
 }
 
 void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str)

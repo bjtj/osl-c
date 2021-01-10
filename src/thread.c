@@ -106,5 +106,5 @@ void osl_thread_join(osl_thread_t * thread)
 
 void osl_thread_free(osl_thread_t * thread)
 {
-    free(thread);
+    osl_safe_free(thread);
 }

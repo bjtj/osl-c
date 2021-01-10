@@ -90,6 +90,6 @@ void osl_semaphore_free(osl_semaphore_t * sem)
     if (sem)
     {
 	s_sem_destroy(&(sem->handle));
-	free(sem);
+	osl_safe_free(sem);
     }
 }

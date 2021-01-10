@@ -28,6 +28,7 @@ extern "C" {
     extern OSL_EXPORT char * osl_string_lowercase(const char * str);
     extern OSL_EXPORT char * osl_string_capital(const char * str);
     extern OSL_EXPORT char * osl_strcat(char * s1, const char * s2);
+    extern OSL_EXPORT char * osl_safe_strdup(const char * str);
     extern OSL_EXPORT char * osl_strdup(const char * str);
     extern OSL_EXPORT char * osl_strndup(const char * str, size_t size);
     extern OSL_EXPORT char * osl_strdup_for(const char * str, const char * end_ptr);

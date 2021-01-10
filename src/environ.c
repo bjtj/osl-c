@@ -48,11 +48,11 @@ char * osl_environ_get(const char * key)
     OSL_HANDLE_MALLOC_ERROR(buffer);
     memset(buffer, 0, buffer_size);
     GetEnvironmentVariable(key, buffer, buffer_size);
-    char * ret = osl_strdup(buffer);
-    free(buffer);
+    char * ret = osl_safe_strdup(buffer);
+    osl_safe_free(buffer);
     return ret;
 #else
-    return osl_strdup(getenv(key));
+    return osl_safe_strdup(getenv(key));
 #endif
 }
 

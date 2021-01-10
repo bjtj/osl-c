@@ -18,8 +18,8 @@ osl_property_t * osl_property_new(const char * name, const char * value)
     osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
     OSL_HANDLE_MALLOC_ERROR(prop);
     memset(prop, 0, sizeof(osl_property_t));
-    prop->name = osl_strdup(name);
-    prop->value = osl_strdup(value);
+    prop->name = osl_safe_strdup(name);
+    prop->value = osl_safe_strdup(value);
     return prop;
 }
 
@@ -28,7 +28,7 @@ osl_property_t * osl_property_new_comment(const char * comment)
     osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
     OSL_HANDLE_MALLOC_ERROR(prop);
     memset(prop, 0, sizeof(osl_property_t));
-    prop->comment = osl_strdup(comment);
+    prop->comment = osl_safe_strdup(comment);
     return prop;
 }
 
@@ -38,22 +38,22 @@ void osl_property_free(osl_property_t * prop)
     {
 	return;
     }
-    osl_free(prop->comment);
-    osl_free(prop->name);
-    osl_free(prop->value);
-    osl_free(prop);
+    osl_safe_free(prop->comment);
+    osl_safe_free(prop->name);
+    osl_safe_free(prop->value);
+    osl_safe_free(prop);
 }
 
 void osl_property_set_name(osl_property_t * prop, const char * name)
 {
-    osl_free(prop->name);
-    prop->name = osl_strdup(name);
+    osl_safe_free(prop->name);
+    prop->name = osl_safe_strdup(name);
 }
 
 void osl_property_set_value(osl_property_t * prop, const char * value)
 {
-    osl_free(prop->value);
-    prop->name = osl_strdup(value);
+    osl_safe_free(prop->value);
+    prop->name = osl_safe_strdup(value);
 }
 
 osl_properties_t * osl_properties_new(void)
@@ -72,7 +72,7 @@ osl_properties_t * osl_properties_load(const char * path)
 	return NULL;
     }
     osl_properties_t * props = osl_properties_new();
-    props->path = osl_strdup(path);
+    props->path = osl_safe_strdup(path);
 
     char * line;
     while ((line = osl_stream_readline(stream)) != NULL)
@@ -80,29 +80,29 @@ osl_properties_t * osl_properties_load(const char * path)
 	const char * start = osl_string_find_first_not_of(line, " \t");
 	if (start == NULL)
 	{
-	    osl_free(line);
+	    osl_safe_free(line);
 	    continue;
 	}
 	if (start[0] == '#')
 	{
 	    props->properties = osl_list_append(props->properties, osl_property_new_comment(start));
-	    osl_free(line);
+	    osl_safe_free(line);
 	    continue;
 	}
 	char * ptr = strstr(line, "=");
 	if (ptr)
 	{
 	    char * name = osl_strdup_for(line, ptr);
-	    char * value = osl_strdup(ptr+1);
+	    char * value = osl_safe_strdup(ptr+1);
 	    props->properties = osl_list_append(props->properties, osl_property_new(name, value));
-	    osl_free(name);
-	    osl_free(value);
+	    osl_safe_free(name);
+	    osl_safe_free(value);
 	}
 	else
 	{
 	    props->properties = osl_list_append(props->properties, osl_property_new(line, NULL));
 	}
-	osl_free(line);
+	osl_safe_free(line);
     }
 
     osl_stream_close_and_free(stream);
@@ -111,16 +111,21 @@ osl_properties_t * osl_properties_load(const char * path)
 
 int osl_properties_save(osl_properties_t * props)
 {
+    osl_stream_t * stream;
+    osl_list_t * node;
+    if (props == NULL) {
+	return -1;
+    }
     if (props->path == NULL)
     {
 	return -1;
     }
-    osl_stream_t * stream = osl_stream_open(props->path, "w");
+    stream = osl_stream_open(props->path, "w");
     if (osl_stream_is_open(stream) == 0)
     {
 	return -1;
     }
-    osl_list_t * node = props->properties;
+    node = props->properties;
     for (; node; node = node->next)
     {
 	osl_property_t * prop = (osl_property_t*)node->data;
@@ -140,7 +145,7 @@ int osl_properties_save(osl_properties_t * props)
 	}
 	char * line = osl_string_buffer_to_string_and_free(sb);
 	osl_stream_writeline(stream, line);
-	osl_free(line);
+	osl_safe_free(line);
     }
     osl_stream_close_and_free(stream);
     return 0;
@@ -153,9 +158,9 @@ void osl_properties_free(osl_properties_t * props)
 	return;
     }
 
-    osl_free(props->path);
+    osl_safe_free(props->path);
     osl_properties_clear(props);
-    osl_free(props);
+    osl_safe_free(props);
 }
 
 void osl_properties_clear(osl_properties_t * props)

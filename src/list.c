@@ -25,7 +25,7 @@ static void __list_free_single(osl_list_t * list, osl_free_cb free_cb)
     {
 	free_cb(list->data);
     }
-    free(list);
+    osl_safe_free(list);
 }
 
 void osl_list_free(osl_list_t * list, osl_free_cb free_cb)
