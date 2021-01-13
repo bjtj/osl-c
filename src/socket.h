@@ -4,6 +4,8 @@
 #include "osl.h"
 #include "inet_address.h"
 
+#define OSL_INVALID_SOCKET -1
+
 #ifdef __cplusplus
 extern "C" {
 #endif
