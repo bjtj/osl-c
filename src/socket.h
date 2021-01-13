@@ -4,7 +4,11 @@
 #include "osl.h"
 #include "inet_address.h"
 
-#define OSL_INVALID_SOCKET -1
+#if defined(USE_MS_WIN)
+#	define OSL_INVALID_SOCKET INVALID_SOCKET
+#else
+#	define OSL_INVALID_SOCKET -1
+#endif
 
 #ifdef __cplusplus
 extern "C" {
