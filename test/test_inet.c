@@ -45,9 +45,7 @@ void test_resolve_passive(void)
 
 int main(void)
 {
-
     test_resolve();
-    /* test_resolve_passive(); */
-    
+    test_resolve_passive();
     return 0;
 }
