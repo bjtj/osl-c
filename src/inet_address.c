@@ -121,6 +121,7 @@ struct addrinfo * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_t
     snprintf(port_str, sizeof(port_str), "%d", port);
     if (getaddrinfo(addr->host, (port == -1 ? NULL : port_str), &hints, &res) != 0)
     {
+	perror("getaddrinfo() failed");
 	return NULL;
     }
     return res;

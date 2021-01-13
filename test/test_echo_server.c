@@ -168,6 +168,7 @@ static void * echo_server2_thread(void * arg)
 
     osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", server->port);
     osl_socket sock = osl_socket_bind(addr, osl_true);
+    assert(osl_socket_is_valid(sock));
     osl_inet_address_free(addr);
 
     addr = osl_socket_get_inet_address(sock);
