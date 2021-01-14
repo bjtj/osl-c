@@ -26,7 +26,7 @@ char * osl_environ_get_full(void)
     }
     
     FreeEnvironmentStrings(lpvEnv);
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 #else
     osl_string_buffer_t * sb = osl_string_buffer_new();
     char ** ptr = environ;
@@ -35,7 +35,7 @@ char * osl_environ_get_full(void)
 	osl_string_buffer_append(sb, *ptr);
 	osl_string_buffer_append(sb, "\n");
     }
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 #endif
 }
 

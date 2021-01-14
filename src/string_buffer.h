@@ -18,8 +18,8 @@ extern "C" {
     extern OSL_EXPORT void osl_string_buffer_free(osl_string_buffer_t * sb);
     extern OSL_EXPORT void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str);
     extern OSL_EXPORT void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buffer, size_t size);
-    extern OSL_EXPORT char * osl_string_buffer_to_string(osl_string_buffer_t * sb);
-    extern OSL_EXPORT char * osl_string_buffer_to_string_and_free(osl_string_buffer_t * sb);
+    extern OSL_EXPORT char * osl_string_buffer_to_str(osl_string_buffer_t * sb);
+    extern OSL_EXPORT char * osl_string_buffer_to_str_and_free(osl_string_buffer_t * sb);
 
 #ifdef __cplusplus
 }

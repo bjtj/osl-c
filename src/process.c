@@ -144,7 +144,7 @@ int osl_process_start(osl_process_t * process)
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, "cmd /C ");
     osl_string_buffer_append(sb, process->cmd);
-    char * cmd = osl_string_buffer_to_string_and_free(sb);
+    char * cmd = osl_string_buffer_to_str_and_free(sb);
 		
     bSuccess = CreateProcess(NULL, 
 			     (LPSTR)cmd,

@@ -10,18 +10,18 @@ static char * s_get_lib_filename(const char * name)
     osl_string_buffer_append(sb, "lib");
     osl_string_buffer_append(sb, name);
     osl_string_buffer_append(sb, ".dylib");
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 #elif defined(USE_UNIX_STD)
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, "lib");
     osl_string_buffer_append(sb, name);
     osl_string_buffer_append(sb, ".so");
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 #elif defined(USE_MS_WIN)
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, name);
     osl_string_buffer_append(sb, ".dll");
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 #else
     return NULL;
 #endif

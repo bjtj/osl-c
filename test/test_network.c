@@ -18,7 +18,7 @@ void test_network(void)
 	addr_ptr = iface->addr_list;
 	for (; addr_ptr; addr_ptr = addr_ptr->next) {
 	    osl_inet_address_t* addr = (osl_inet_address_t*)addr_ptr->data;
-	    printf(" - IP: %s (%s)\n", addr->host, osl_inet_version_to_string(addr->inet_version));
+	    printf(" - IP: %s (%s)\n", addr->host, osl_inet_version_to_str(addr->inet_version));
 	}
 
     }

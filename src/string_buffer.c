@@ -55,7 +55,7 @@ void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buff
     sb->len += size;
 }
 
-char * osl_string_buffer_to_string(osl_string_buffer_t * sb)
+char * osl_string_buffer_to_str(osl_string_buffer_t * sb)
 {
     char * str = (char*)malloc(sb->len + 1);
     OSL_HANDLE_MALLOC_ERROR(str);
@@ -64,9 +64,9 @@ char * osl_string_buffer_to_string(osl_string_buffer_t * sb)
     return str;
 }
 
-char * osl_string_buffer_to_string_and_free(osl_string_buffer_t * sb)
+char * osl_string_buffer_to_str_and_free(osl_string_buffer_t * sb)
 {
-    char * str = osl_string_buffer_to_string(sb);
+    char * str = osl_string_buffer_to_str(sb);
     osl_string_buffer_free(sb);
     return str;
 }

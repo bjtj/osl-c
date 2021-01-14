@@ -154,7 +154,7 @@ char * osl_string_replace_all(const char * str, const char * mat, const char * s
 	    break;
 	}
     }
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 }
 
 char * osl_string_uppercase(const char * str)

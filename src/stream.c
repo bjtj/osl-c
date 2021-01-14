@@ -72,7 +72,7 @@ char * osl_stream_dump(osl_stream_t * stream)
     {
 	osl_string_buffer_append_buffer(sb, (char*)&ch, 1);
     }
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 }
 
 char * osl_stream_readline(osl_stream_t * stream)
@@ -88,7 +88,7 @@ char * osl_stream_readline(osl_stream_t * stream)
 	char c = (char)ch;
 	osl_string_buffer_append_buffer(sb, &c, 1);
     }
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 }
 
 void osl_stream_writeline(osl_stream_t * stream, const char * str)
