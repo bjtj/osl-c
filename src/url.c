@@ -118,21 +118,21 @@ osl_url_t * osl_url_merge(osl_url_t * base_url, const char * relative)
 		osl_string_buffer_append(sb, "/");
 	    }
 	    osl_string_buffer_append(sb, relative);
-	    url->path = osl_string_buffer_to_string_and_free(sb);
+	    url->path = osl_string_buffer_to_str_and_free(sb);
 	}
 	else
 	{
 	    osl_string_buffer_t * sb = osl_string_buffer_new();
 	    osl_string_buffer_append(sb, "/");
 	    osl_string_buffer_append(sb, relative);
-	    url->path = osl_string_buffer_to_string_and_free(sb);
+	    url->path = osl_string_buffer_to_str_and_free(sb);
 	}
     }
     return url;
 }
 
 
-char * osl_url_to_string(osl_url_t * url)
+char * osl_url_to_str(osl_url_t * url)
 {
     osl_string_buffer_t * sb = osl_string_buffer_new();
     osl_string_buffer_append(sb, url->protocol);
@@ -162,5 +162,5 @@ char * osl_url_to_string(osl_url_t * url)
 	osl_string_buffer_append(sb, "?");
 	osl_string_buffer_append(sb, url->query);
     }
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 }

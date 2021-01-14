@@ -143,7 +143,7 @@ int osl_properties_save(osl_properties_t * props)
 		osl_string_buffer_append(sb, prop->value);
 	    }
 	}
-	char * line = osl_string_buffer_to_string_and_free(sb);
+	char * line = osl_string_buffer_to_str_and_free(sb);
 	osl_stream_writeline(stream, line);
 	osl_safe_free(line);
     }

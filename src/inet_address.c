@@ -26,7 +26,7 @@ static int s_get_port(struct sockaddr * addr)
 }
 
 
-const char * osl_inet_version_to_string(osl_inet_version_e ver)
+const char * osl_inet_version_to_str(osl_inet_version_e ver)
 {
     switch (ver) {
     case osl_inet4: {

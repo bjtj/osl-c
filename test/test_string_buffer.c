@@ -10,7 +10,7 @@ void test_string_buffer(void)
     osl_string_buffer_append(sb, " ");
     osl_string_buffer_append(sb, "world");
 
-    char * str = osl_string_buffer_to_string(sb);
+    char * str = osl_string_buffer_to_str(sb);
     printf("str is '%s'\n", str);
     osl_safe_free(str);
 

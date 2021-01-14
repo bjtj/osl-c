@@ -166,7 +166,7 @@ char * osl_pathname_merge(const char * a, const char * b)
 	osl_string_buffer_append(sb, OSL_PATH_SEPARATOR);
     }
     osl_string_buffer_append(sb, b);
-    return osl_string_buffer_to_string_and_free(sb);
+    return osl_string_buffer_to_str_and_free(sb);
 }
 
 char * osl_pathname_basename(const char * path)
