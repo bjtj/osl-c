@@ -194,7 +194,7 @@ osl_inet_address_t * osl_socket_get_inet_address(osl_socket fd)
 	perror("getsockname() failed");
 	return NULL;
     }
-    return osl_inet_address_new_with_sockaddr((struct sockaddr*)&_addr);
+    return osl_inet_address_init_with_sockaddr(osl_inet_address_new(), (struct sockaddr*)&_addr);
 }
 
 osl_socket osl_datagram_socket_connect(osl_inet_address_t * addr)
@@ -316,7 +316,7 @@ done:
 int osl_datagram_socket_join_group(osl_socket sock, const char * group)
 {
     int ret = -1;
-    osl_inet_address_t * group_addr = osl_inet_address_new(osl_inet_unspec, group, -1);
+    osl_inet_address_t * group_addr = osl_inet_address_init(osl_inet_address_new(), osl_inet_unspec, group, -1);
     struct addrinfo * group_res = osl_inet_address_resolve_numeric(group_addr, SOCK_DGRAM);
     if (group_res->ai_family == AF_INET)
     {

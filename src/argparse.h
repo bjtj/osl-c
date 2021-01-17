@@ -34,17 +34,20 @@ typedef struct _osl_arguments_t
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc);
-    extern OSL_EXPORT void osl_argument_flag_free(osl_argument_flag_t * flag);
-    extern OSL_EXPORT osl_bool osl_arguments_usage_is_single_flag(osl_arguments_usage_t * usage, const char * name);
-    extern OSL_EXPORT osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage, const char * name);
+    extern OSL_EXPORT osl_argument_flag_t * osl_argument_flag_new(void);
+    extern OSL_EXPORT osl_argument_flag_t * osl_argument_flag_init(osl_argument_flag_t *, const char *, const char *, osl_bool, const char *);
+    extern OSL_EXPORT void osl_argument_flag_free(osl_argument_flag_t *);
+    extern OSL_EXPORT osl_bool osl_arguments_usage_is_single_flag(osl_arguments_usage_t *, const char *);
+    extern OSL_EXPORT osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t *, const char *);
     extern OSL_EXPORT osl_arguments_usage_t * osl_arguments_usage_new(void);
-    extern OSL_EXPORT void osl_arguments_usage_free(osl_arguments_usage_t * usage);
-    extern OSL_EXPORT osl_argument_t * osl_argument_new(const char * name, const char * value);
-    extern OSL_EXPORT void osl_argument_free(osl_argument_t * arg);
+    extern OSL_EXPORT osl_arguments_usage_t * osl_arguments_usage_init(osl_arguments_usage_t *);
+    extern OSL_EXPORT void osl_arguments_usage_free(osl_arguments_usage_t *);
+    extern OSL_EXPORT osl_argument_t * osl_argument_new(void);
+    extern OSL_EXPORT osl_argument_t * osl_argument_init(osl_argument_t *, const char *, const char *);
+    extern OSL_EXPORT void osl_argument_free(osl_argument_t *);
     extern OSL_EXPORT osl_arguments_t * osl_arguments_new(void);
-    extern OSL_EXPORT void osl_arguments_free(osl_arguments_t * args);
-    extern OSL_EXPORT osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, char * argv[]);
+    extern OSL_EXPORT void osl_arguments_free(osl_arguments_t *);
+    extern OSL_EXPORT osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t *, int, char * argv[]);
 
 #ifdef __cplusplus
 }

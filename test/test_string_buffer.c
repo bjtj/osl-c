@@ -5,7 +5,7 @@
 void test_string_buffer(void)
 {
     printf("== test string buffer ==\n");
-    osl_string_buffer_t * sb = osl_string_buffer_new();
+    osl_string_buffer_t * sb = osl_string_buffer_init(osl_string_buffer_new());
     osl_string_buffer_append(sb, "hello");
     osl_string_buffer_append(sb, " ");
     osl_string_buffer_append(sb, "world");

@@ -46,10 +46,29 @@ char * osl_ip_string(struct sockaddr * addr, char * ip_buffer, size_t size)
     return ip_buffer;
 }
 
-osl_inet_address_t * osl_inet_address_new_with_sockaddr(struct sockaddr * addr)
+osl_inet_address_t * osl_inet_address_new(void)
+{
+    osl_inet_address_t * inetaddr;
+    inetaddr = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
+    OSL_HANDLE_MALLOC_ERROR(inetaddr);
+    memset(inetaddr, 0, sizeof(osl_inet_address_t));
+    return inetaddr;
+}
+
+osl_inet_address_t * osl_inet_address_init(osl_inet_address_t * inetaddr, osl_inet_version_e version, const char * host, int port)
+{
+    inetaddr->inet_version = version;
+    if (host)
+    {
+	inetaddr->host = osl_safe_strdup(host);
+    }
+    inetaddr->port = port;
+    return inetaddr;
+}
+
+osl_inet_address_t * osl_inet_address_init_with_sockaddr(osl_inet_address_t * inetaddr, struct sockaddr * addr)
 {
     char ipstr[INET6_ADDRSTRLEN] = {0,};
-    osl_inet_address_t * inetaddr;
     osl_inet_version_e inetver;
     if (addr->sa_family == AF_INET) {
 	inetver = osl_inet4;
@@ -59,28 +78,11 @@ osl_inet_address_t * osl_inet_address_new_with_sockaddr(struct sockaddr * addr)
 	/* TODO: exception */
 	return NULL;
     }
-    inetaddr = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
-    OSL_HANDLE_MALLOC_ERROR(inetaddr);
-    memset(inetaddr, 0, sizeof(osl_inet_address_t));
     inetaddr->inet_version = inetver;
     s_get_ip_address(addr, ipstr, sizeof(ipstr));
     inetaddr->host = osl_safe_strdup(ipstr);
     inetaddr->port = s_get_port(addr);
     return inetaddr;
-}
-
-osl_inet_address_t * osl_inet_address_new(osl_inet_version_e version, const char * host, int port)
-{
-    osl_inet_address_t * addr = (osl_inet_address_t*)malloc(sizeof(osl_inet_address_t));
-    OSL_HANDLE_MALLOC_ERROR(addr);
-    memset(addr, 0, sizeof(osl_inet_address_t));
-    addr->inet_version = version;
-    if (host)
-    {
-	addr->host = osl_safe_strdup(host);
-    }
-    addr->port = port;
-    return addr;
 }
 
 void osl_inet_address_free(osl_inet_address_t * addr)

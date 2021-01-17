@@ -2,11 +2,17 @@
 #include "string_buffer.h"
 #include "str.h"
 
-osl_process_t * osl_process_new(const char * cmd)
+osl_process_t * osl_process_new(void)
 {
     osl_process_t * process = (osl_process_t*)malloc(sizeof(osl_process_t));
     OSL_HANDLE_MALLOC_ERROR(process);
     memset(process, 0, sizeof(osl_process_t));
+    
+    return process;
+}
+
+osl_process_t * osl_process_init(osl_process_t * process, const char * cmd)
+{
     process->cmd = osl_safe_strdup(cmd);
     return process;
 }

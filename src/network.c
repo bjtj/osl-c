@@ -14,7 +14,7 @@ static osl_network_interface_t* s_obtain_network_interface(osl_list_t** list, co
         }
     }
 
-    osl_network_interface_t* iface = osl_network_interface_new_with_name(iface_name);
+    osl_network_interface_t* iface = osl_network_interface_init_with_name(osl_network_interface_new(), iface_name);
     *list = osl_list_append(*list, iface);
     return iface;
 }
@@ -42,7 +42,8 @@ static osl_list_t * s_get_all_network_interfaces(void)
 	case AF_INET:
 	case AF_INET6:
 	{
-	    iface->addr_list = osl_list_append(iface->addr_list, osl_inet_address_new_with_sockaddr((struct sockaddr*)ptr->ifa_addr));
+	    osl_inet_address_t * x = osl_inet_address_init_with_sockaddr(osl_inet_address_new(), (struct sockaddr*)ptr->ifa_addr);
+	    iface->addr_list = osl_list_append(iface->addr_list, x);
 	    break;
 	}
 #if defined(USE_APPLE_STD)
@@ -151,11 +152,16 @@ static osl_list_t * s_get_all_network_interfaces(void)
 
 #endif
 
-osl_network_interface_t * osl_network_interface_new_with_name(const char * name)
+osl_network_interface_t * osl_network_interface_new(void)
 {
     osl_network_interface_t * iface = (osl_network_interface_t*)malloc(sizeof(osl_network_interface_t));
     OSL_HANDLE_MALLOC_ERROR(iface);
     memset(iface, 0, sizeof(osl_network_interface_t));
+    return iface;
+}
+
+osl_network_interface_t * osl_network_interface_init_with_name(osl_network_interface_t * iface, const char * name)
+{
     iface->name = osl_safe_strdup(name);
     return iface;
 }

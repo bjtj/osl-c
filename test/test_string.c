@@ -48,7 +48,7 @@ void test_string(void)
     {
 	osl_list_t * lst = osl_string_split("hello world bye", " ");
 	assert(lst != NULL);
-	assert(osl_list_count(lst) == 3);
+	assert(osl_list_size(lst) == 3);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
@@ -58,7 +58,7 @@ void test_string(void)
     {
 	osl_list_t * lst = osl_string_split("hello    world  bye", " ");
 	assert(lst != NULL);
-	assert(osl_list_count(lst) == 3);
+	assert(osl_list_size(lst) == 3);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
@@ -69,7 +69,7 @@ void test_string(void)
 	osl_list_t * lst = osl_string_split("   hello    world  bye  ", " ");
 	assert(lst != NULL);
 	print_string_list(lst);
-	assert(osl_list_count(lst) == 3);
+	assert(osl_list_size(lst) == 3);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 2), "bye") == 0);
@@ -80,7 +80,7 @@ void test_string(void)
 	osl_list_t * lst = osl_string_split_limit("   hello    world  bye  ", " ", 2);
 	assert(lst != NULL);
 	print_string_list(lst);
-	assert(osl_list_count(lst) == 2);
+	assert(osl_list_size(lst) == 2);
 	assert(strcmp((char*)osl_list_get(lst, 0), "hello") == 0);
 	assert(strcmp((char*)osl_list_get(lst, 1), "world  bye  ") == 0);
 	osl_list_free(lst, osl_safe_free);

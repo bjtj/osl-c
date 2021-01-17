@@ -36,15 +36,16 @@ typedef struct _osl_looper_t
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_looper_t * osl_looper_new(const char * name, void * user);
-    extern OSL_EXPORT void osl_looper_free(osl_looper_t * looper);
-    extern OSL_EXPORT void osl_looper_add_task(osl_looper_t * looper, osl_looper_task_cb task, void * user);
-    extern OSL_EXPORT void osl_looper_add_task_schedule(osl_looper_t * looper, osl_looper_task_cb task, osl_looper_schedule_t * schedule, void * user);
-    extern OSL_EXPORT int osl_looper_run(osl_looper_t * looper);
-    extern OSL_EXPORT osl_bool osl_looper_is_running(osl_looper_t * looper);
-    extern OSL_EXPORT void osl_looper_finish(osl_looper_t * looper);
-    extern OSL_EXPORT void osl_looper_lock(osl_looper_t * looper);
-    extern OSL_EXPORT void osl_looper_unlock(osl_looper_t * looper);
+    extern OSL_EXPORT osl_looper_t * osl_looper_new(void);
+    extern OSL_EXPORT osl_looper_t * osl_looper_init(osl_looper_t *, const char *, void *);
+    extern OSL_EXPORT void osl_looper_free(osl_looper_t *);
+    extern OSL_EXPORT void osl_looper_add_task(osl_looper_t *, osl_looper_task_cb, void *);
+    extern OSL_EXPORT void osl_looper_add_task_schedule(osl_looper_t *, osl_looper_task_cb, osl_looper_schedule_t *, void *);
+    extern OSL_EXPORT int osl_looper_run(osl_looper_t *);
+    extern OSL_EXPORT osl_bool osl_looper_is_running(osl_looper_t *);
+    extern OSL_EXPORT void osl_looper_finish(osl_looper_t *);
+    extern OSL_EXPORT void osl_looper_lock(osl_looper_t *);
+    extern OSL_EXPORT void osl_looper_unlock(osl_looper_t *);
 
 #ifdef __cplusplus
 }

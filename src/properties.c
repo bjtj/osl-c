@@ -13,21 +13,23 @@ static osl_bool __property_cmp_name(osl_property_t * prop, const char * name)
     return osl_string_equals(prop->name, name);
 }
 
-osl_property_t * osl_property_new(const char * name, const char * value)
+osl_property_t * osl_property_new(void)
 {
     osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
     OSL_HANDLE_MALLOC_ERROR(prop);
     memset(prop, 0, sizeof(osl_property_t));
+    return prop;
+}
+
+osl_property_t * osl_property_init(osl_property_t * prop, const char * name, const char * value)
+{
     prop->name = osl_safe_strdup(name);
     prop->value = osl_safe_strdup(value);
     return prop;
 }
 
-osl_property_t * osl_property_new_comment(const char * comment)
+osl_property_t * osl_property_init_comment(osl_property_t * prop, const char * comment)
 {
-    osl_property_t * prop = (osl_property_t*)malloc(sizeof(osl_property_t));
-    OSL_HANDLE_MALLOC_ERROR(prop);
-    memset(prop, 0, sizeof(osl_property_t));
     prop->comment = osl_safe_strdup(comment);
     return prop;
 }
@@ -85,7 +87,8 @@ osl_properties_t * osl_properties_load(const char * path)
 	}
 	if (start[0] == '#')
 	{
-	    props->properties = osl_list_append(props->properties, osl_property_new_comment(start));
+	    osl_property_t * x = osl_property_init_comment(osl_property_new(), start);
+	    props->properties = osl_list_append(props->properties, x);
 	    osl_safe_free(line);
 	    continue;
 	}
@@ -94,13 +97,15 @@ osl_properties_t * osl_properties_load(const char * path)
 	{
 	    char * name = osl_strdup_for(line, ptr);
 	    char * value = osl_safe_strdup(ptr+1);
-	    props->properties = osl_list_append(props->properties, osl_property_new(name, value));
+	    osl_property_t * x = osl_property_init(osl_property_new(), name, value);
+	    props->properties = osl_list_append(props->properties, x);
 	    osl_safe_free(name);
 	    osl_safe_free(value);
 	}
 	else
 	{
-	    props->properties = osl_list_append(props->properties, osl_property_new(line, NULL));
+	    osl_property_t * x = osl_property_init(osl_property_new(), line, NULL);
+	    props->properties = osl_list_append(props->properties, x);
 	}
 	osl_safe_free(line);
     }
@@ -205,7 +210,11 @@ void osl_properties_set(osl_properties_t * props, const char * name, const char 
 	    osl_property_set_value(prop, value);
 	}
     }
-    props->properties = osl_list_append(props->properties, osl_property_new(name, value));
+    
+    {
+	osl_property_t * x = osl_property_init(osl_property_new(), name, value);
+	props->properties = osl_list_append(props->properties, x);
+    }
 }
 
 void osl_properties_remove(osl_properties_t * props, const char * name)

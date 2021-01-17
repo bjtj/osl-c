@@ -57,7 +57,7 @@ void test_arguments(void)
 	    "--single",
 	    "text2"
 	};
-	usage.flag_list = osl_list_append(usage.flag_list, osl_argument_flag_new("--single", NULL, 1, NULL));
+	usage.flag_list = osl_list_append(usage.flag_list, osl_argument_flag_init(osl_argument_flag_new(), "--single", NULL, 1, NULL));
 	int argc = 6;
 	osl_arguments_t * args = osl_arguments_parse(&usage, argc, argv);
 	print_arguments(args);

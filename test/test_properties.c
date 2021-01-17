@@ -21,9 +21,9 @@ void test_properties(void)
 
 
 #if defined(OSL_OS_WINDOWS)
-    osl_process_t* proc = osl_process_new("del person.properties");
+    osl_process_t* proc = osl_process_init(osl_process_new(), "del person.properties");
 #else
-    osl_process_t* proc = osl_process_new("rm person.properties");
+    osl_process_t* proc = osl_process_init(osl_process_new(), "rm person.properties");
 #endif
 
     osl_process_start(proc);

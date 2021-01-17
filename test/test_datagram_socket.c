@@ -14,7 +14,7 @@ void test_datagram_socket(void)
     
     /*  */
     int port = 0;
-    osl_thread_t * server_thread = osl_thread_new(datagram_server_thread, &port);
+    osl_thread_t * server_thread = osl_thread_init(osl_thread_new(), datagram_server_thread, &port);
     osl_thread_start(server_thread);
 
     osl_idle(100);
@@ -43,7 +43,7 @@ void * datagram_server_thread(void * arg)
 {
     int ret;
     int * port = (int*)arg;
-    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "0.0.0.0", *port);
+    osl_inet_address_t * addr = osl_inet_address_init(osl_inet_address_new(), osl_inet4, "0.0.0.0", *port);
     osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
     assert(osl_socket_is_valid(sock));
@@ -70,7 +70,7 @@ void * datagram_server_thread(void * arg)
 
 void test_datagram_client(int port)
 {
-    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, "127.0.0.1", port);
+    osl_inet_address_t * addr = osl_inet_address_init(osl_inet_address_new(), osl_inet4, "127.0.0.1", port);
     struct addrinfo * res = osl_inet_address_resolve(addr, SOCK_DGRAM);
     assert(res != NULL);
     osl_inet_address_free(addr);

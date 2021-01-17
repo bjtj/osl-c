@@ -21,9 +21,10 @@ extern "C" {
 #endif
 
     extern OSL_EXPORT osl_mutex_t * osl_mutex_new(void);
-    extern OSL_EXPORT void osl_mutex_lock(osl_mutex_t * mutex);
-    extern OSL_EXPORT void osl_mutex_unlock(osl_mutex_t * mutex);
-    extern OSL_EXPORT void osl_mutex_free(osl_mutex_t * mutex);
+    extern OSL_EXPORT osl_mutex_t * osl_mutex_init(osl_mutex_t *);
+    extern OSL_EXPORT void osl_mutex_lock(osl_mutex_t *);
+    extern OSL_EXPORT void osl_mutex_unlock(osl_mutex_t *);
+    extern OSL_EXPORT void osl_mutex_free(osl_mutex_t *);
 
 #ifdef __cplusplus
 }

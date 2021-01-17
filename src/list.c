@@ -38,7 +38,7 @@ void osl_list_free(osl_list_t * list, osl_free_cb free_cb)
     }
 }
 
-size_t osl_list_count(osl_list_t * list)
+size_t osl_list_size(osl_list_t * list)
 {
     int count = 0;
     for (; list; list = list->next)
@@ -152,6 +152,16 @@ osl_list_t * osl_list_remove(osl_list_t * list, osl_list_t * ptr, osl_free_cb fr
     return list;
 }
 
+osl_bool _compare_ptr(void * p1, void * p2)
+{
+    return OSL_BOOL(p1 == p2);
+}
+
+osl_list_t * osl_list_remove_by_ptr(osl_list_t * list, void * ptr, osl_free_cb free_cb)
+{
+    return osl_list_remove_if(list, _compare_ptr, ptr, free_cb);
+}
+
 osl_list_t * osl_list_remove_idx(osl_list_t * list, int idx, osl_free_cb free_cb)
 {
     if (idx == 0)
@@ -233,7 +243,11 @@ void * osl_list_get(osl_list_t * list, int idx)
 
 void * osl_list_pop_first(osl_list_t ** list)
 {
-    void * data = (*list)->data;
+    void * data;
+    if (*list == NULL) {
+	return NULL;
+    }
+    data = (*list)->data;
     *list = osl_list_remove(*list, *list, NULL);
     return data;
 }

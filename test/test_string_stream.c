@@ -8,7 +8,7 @@ void test_string_stream(void)
     printf("== test string stream ==\n");
     
     const char * str = "hello world\nbye.";
-    osl_stream_t * stream = osl_string_stream_new(str);
+    osl_stream_t * stream = osl_string_stream_init(osl_stream_new(), str);
     char * line = osl_stream_readline(stream);
     assert(strcmp(line, "hello world") == 0);
     osl_safe_free(line);

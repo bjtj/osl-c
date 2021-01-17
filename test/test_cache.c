@@ -15,7 +15,7 @@ void test_cache(void)
 
     printf("== test cache ==\n");
     
-    osl_cache_manager_t * manager = osl_cache_manager_new(NULL);
+    osl_cache_manager_t * manager = osl_cache_manager_init(osl_cache_manager_new(), NULL);
     osl_cache_t * cache = osl_cache_manager_get_cache(manager, "hello");
     assert(cache == NULL);
 
