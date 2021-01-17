@@ -53,6 +53,8 @@ void test()
 	
 	assert(arg.due >= 1000);
     }
+
+    osl_event_free(event);
 }
 
 void test2()
@@ -85,6 +87,8 @@ void test2()
 	osl_thread_free(threads[i]);
 	assert(arg[i].due >= 1000);
     }
+
+    osl_event_free(event);
 }
 
 int main()
