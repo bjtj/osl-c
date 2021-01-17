@@ -37,6 +37,8 @@ void test_resolve(void)
 
 int main(void)
 {
+    osl_use_socket();
     test_resolve();
+    osl_finish();
     return 0;
 }

@@ -130,7 +130,7 @@ static osl_list_t * s_get_all_network_interfaces(void)
             if (pUnicast != NULL) {
                 for (i = 0; pUnicast != NULL; i++) {
 
-                    osl_inet_address_t * addr = osl_inet_address_new_with_sockaddr(pUnicast->Address.lpSockaddr);
+                    osl_inet_address_t * addr = osl_inet_address_init_with_sockaddr(osl_inet_address_new(), pUnicast->Address.lpSockaddr);
                     iface->addr_list = osl_list_append(iface->addr_list, addr);
                                         
                     pUnicast = pUnicast->Next;

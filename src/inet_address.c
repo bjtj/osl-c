@@ -123,7 +123,11 @@ struct addrinfo * osl_inet_address_resolve(osl_inet_address_t * addr, int sock_t
     snprintf(port_str, sizeof(port_str), "%d", port);
     if (getaddrinfo(addr->host, (port == -1 ? NULL : port_str), &hints, &res) != 0)
     {
+#if defined(USE_MS_WIN)
+        fprintf(stderr, "getaddrinfo() failed - %d\n", WSAGetLastError());
+#else
 	perror("getaddrinfo() failed");
+#endif
 	return NULL;
     }
     return res;

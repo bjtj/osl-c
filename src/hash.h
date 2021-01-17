@@ -1,11 +1,13 @@
 #ifndef __HASH_H__
 #define __HASH_H__
 
+#include "osl.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    extern unsigned long osl_hash(const char *);
+    extern OSL_EXPORT unsigned long osl_hash(const char *);
 
 #ifdef __cplusplus
 }
