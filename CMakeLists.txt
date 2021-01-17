@@ -17,6 +17,8 @@ add_library(osl SHARED
   src/date.h
   src/environ.c
   src/environ.h
+  src/event.c
+  src/event.h
   src/file.c
   src/file.h
   src/hash.c
@@ -92,6 +94,7 @@ list(APPEND DIR_HEADERS
   src/data.h
   src/date.h
   src/environ.h
+  src/event.h
   src/file.h
   src/hash.h
   src/heap.h

@@ -10,7 +10,7 @@ osl_mutex_t * osl_mutex_new(void)
 
 osl_mutex_t * osl_mutex_init(osl_mutex_t * mutex)
 {
-    #if defined(USE_PTHREAD)
+#if defined(USE_PTHREAD)
     if (pthread_mutex_init(&(mutex->handle), NULL) != 0) {
 	/* assert */
 	osl_safe_free(mutex);
