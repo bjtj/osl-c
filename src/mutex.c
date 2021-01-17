@@ -18,7 +18,7 @@ osl_mutex_t * osl_mutex_init(osl_mutex_t * mutex)
     }
     return mutex;
 #elif defined(USE_MS_WIN)
-    mutex->handle = CreateMutex(NULL, FALSE, NULL);
+    InitializeCriticalSection(&(mutex->cs));
     return mutex;
 #else
     return NULL;
@@ -31,9 +31,8 @@ void osl_mutex_lock(osl_mutex_t * mutex)
     if (pthread_mutex_lock(&(mutex->handle)) != 0) {
 	/* error */
     }
-#elif defined(USE_MS_WIN)
-    // TODO: https://msdn.microsoft.com/ko-kr/library/windows/desktop/ms686927(v=vs.85).aspx
-    WaitForSingleObject(mutex->handle, INFINITE);
+#elif defined(USE_MS_WIN)    
+    EnterCriticalSection(&(mutex->cs));
 #else
     /* no implementation */
 #endif
@@ -45,8 +44,8 @@ void osl_mutex_unlock(osl_mutex_t * mutex)
     if (pthread_mutex_unlock(&(mutex->handle)) != 0) {
 	/* error */
     }
-#elif defined(USE_MS_WIN)
-    ReleaseMutex(mutex->handle);
+#elif defined(USE_MS_WIN)    
+    LeaveCriticalSection(&(mutex->cs));
 #else
     /* no implementation */
 #endif
@@ -60,8 +59,8 @@ void osl_mutex_free(osl_mutex_t * mutex)
 	if (pthread_mutex_destroy(&(mutex->handle)) != 0) {
 	    /* error */
 	}
-#elif defined(USE_MS_WIN)
-	CloseHandle(mutex->handle);
+#elif defined(USE_MS_WIN)	
+    DeleteCriticalSection(&(mutex->cs));
 #else
 	/*  */
 #endif

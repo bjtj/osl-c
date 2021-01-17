@@ -9,7 +9,8 @@ typedef struct _osl_event_t {
 #if defined(USE_PTHREAD)
     pthread_cond_t _cond;
 #elif defined(USE_MS_WIN)
-    HANDLE _evt;
+    // https://nachtimwald.com/2019/04/05/cross-platform-thread-wrapper/
+    CONDITION_VARIABLE _cond;
 #endif
 } osl_event_t;
 

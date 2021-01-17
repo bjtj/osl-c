@@ -53,8 +53,8 @@ fail1:
 
     return NULL;
 
-#elif defined(USE_MS_WIN)
-    event->_evt = CreateEvent(NULL, FALSE, FALSE, NULL);
+#elif defined(USE_MS_WIN)    
+    InitializeConditionVariable(&(event->_cond));
     return event;
 #else
     return NULL;
@@ -69,7 +69,7 @@ void osl_event_free(osl_event_t * event)
 	// pthread_cond_destroy() error
     }
 #elif defined(USE_MS_WIN)
-    CloseHandle(event->_evt);
+    (void)event;    
 #else
     /* TODO:  */
 #endif
@@ -123,25 +123,9 @@ int osl_event_wait_with_timeout(osl_event_t * event, unsigned long timeout)
     }
     return 0;
 #elif defined(USE_MS_WIN)
-    DWORD ret;
-    osl_event_unlock(event);
-    if (timeout == 0) {
-	ret = WaitForSingleObject(event->_evt, INFINITE);
-    } else {
-	ret = WaitForSingleObject(event->_evt, timeout);
-    }		
-    osl_event_lock(event);
-    switch (ret) {
-    case WAIT_OBJECT_0:
-	// good
-	break;
-    case WAIT_ABANDONED:
-	break;
-    case WAIT_TIMEOUT:
-	return -1;
-    case WAIT_FAILED:
-    default:
-	return -1;
+
+    if (!SleepConditionVariableCS(&(event->_cond), &(event->mutex->cs), timeout == 0 ? INFINITE : timeout)) {
+        return -1;
     }
     return 0;
 #else
@@ -157,9 +141,7 @@ int osl_event_notify(osl_event_t * event)
     }
     return 0;
 #elif defined(USE_MS_WIN)
-    if (SetEvent(event->_evt) == 0) {
-	return -1;
-    }
+    WakeConditionVariable(&(event->_cond));
     return 0;
 #else
     return -1;
@@ -173,10 +155,8 @@ int osl_event_notify_all(osl_event_t * event)
 	return -1;
     }
     return 0;
-#elif defined(USE_MS_WIN)
-    if (SetEvent(event->_evt) == 0) {
-	return -1;
-    }
+#elif defined(USE_MS_WIN)    
+    WakeAllConditionVariable(&(event->_cond));
     return 0;
 #else
     return -1;

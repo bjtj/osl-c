@@ -9,8 +9,8 @@ typedef struct _osl_mutex_t
     pthread_mutex_t handle;
     pthread_cond_t cond;
 #elif defined(USE_MS_WIN)
-    HANDLE handle;
-    HANDLE evt;
+    // https://nachtimwald.com/2019/04/05/cross-platform-thread-wrapper/
+    CRITICAL_SECTION cs;    
 #else
 // not support
 #endif
