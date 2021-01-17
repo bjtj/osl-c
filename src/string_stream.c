@@ -38,14 +38,14 @@ static void s_close_cb(osl_stream_t * stream)
     }
 }
 
-osl_stream_t * osl_string_stream_new(const char * str)
+
+osl_stream_t * osl_string_stream_init(osl_stream_t * stream, const char * str)
 {
-    if (str == NULL)
-    {
+    struct container * con;
+    if (str == NULL) {
 	return NULL;
     }
-    osl_stream_t * stream = osl_stream_new();
-    struct container * con = (struct container*)malloc(sizeof(struct container));
+    con = (struct container*)malloc(sizeof(struct container));
     OSL_HANDLE_MALLOC_ERROR(con);
     memset(con, 0, sizeof(struct container));
     con->str = osl_safe_strdup(str);

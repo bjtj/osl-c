@@ -1,11 +1,16 @@
 #include "argparse.h"
 #include "str.h"
 
-osl_argument_flag_t * osl_argument_flag_new(const char * name, const char * defval, osl_bool single, const char * desc)
+osl_argument_flag_t * osl_argument_flag_new(void)
 {
     osl_argument_flag_t * flag = (osl_argument_flag_t*)malloc(sizeof(osl_argument_flag_t));
     OSL_HANDLE_MALLOC_ERROR(flag);
     memset(flag, 0, sizeof(osl_argument_flag_t));
+    return flag;
+}
+
+osl_argument_flag_t * osl_argument_flag_init(osl_argument_flag_t * flag, const char * name, const char * defval, osl_bool single, const char * desc)
+{
     flag->name = osl_safe_strdup(name);
     flag->defval = osl_safe_strdup(defval);
     flag->single_flag = single;
@@ -57,6 +62,11 @@ osl_arguments_usage_t * osl_arguments_usage_new(void)
     return usage;
 }
 
+osl_arguments_usage_t * osl_arguments_usage_init(osl_arguments_usage_t * usage)
+{
+    return usage;
+}
+
 void osl_arguments_usage_free(osl_arguments_usage_t * usage)
 {
     if (usage == NULL)
@@ -66,11 +76,16 @@ void osl_arguments_usage_free(osl_arguments_usage_t * usage)
     osl_list_free(usage->flag_list, (osl_free_cb)osl_argument_flag_free);
 }
 
-osl_argument_t * osl_argument_new(const char * name, const char * value)
+osl_argument_t * osl_argument_new(void)
 {
     osl_argument_t * arg = (osl_argument_t*)malloc(sizeof(osl_argument_t));
     OSL_HANDLE_MALLOC_ERROR(arg);
     memset(arg, 0, sizeof(osl_argument_t));
+    return arg;
+}
+
+osl_argument_t * osl_argument_init(osl_argument_t * arg, const char * name, const char * value)
+{
     arg->name = osl_safe_strdup(name);
     arg->value = osl_safe_strdup(value);
     return arg;
@@ -125,11 +140,13 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
 	    if (single || next_arg == NULL || next_arg[0] == '-')
 	    {
-		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 2, NULL));
+		osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 2, NULL);
+		args->arg_list = osl_list_append(args->arg_list, x);
 	    }
 	    else
 	    {
-		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 2, next_arg));
+		osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 2, next_arg);
+		args->arg_list = osl_list_append(args->arg_list, x);
 		i++;
 	    }
 	}
@@ -138,11 +155,13 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
 	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
 	    if (single || next_arg == NULL || next_arg[0] == '-')
 	    {
-		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 1, NULL));
+		osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 1, NULL);
+		args->arg_list = osl_list_append(args->arg_list, x);
 	    }
 	    else
 	    {
-		args->arg_list = osl_list_append(args->arg_list, osl_argument_new(arg + 1, next_arg));
+		osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 1, next_arg);
+		args->arg_list = osl_list_append(args->arg_list, x);
 		i++;
 	    }
 	}

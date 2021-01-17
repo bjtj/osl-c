@@ -5,7 +5,7 @@
 void test_process(void)
 {
     puts("== test process==");
-    osl_process_t * process = osl_process_new("echo \"hello\"");
+    osl_process_t * process = osl_process_init(osl_process_new(), "echo \"hello\"");
     osl_process_start(process);
 
     osl_stream_t * out = osl_process_out_stream(process);

@@ -29,6 +29,11 @@ osl_stream_t * osl_stream_new(void)
     return stream;
 }
 
+osl_stream_t * osl_stream_init(osl_stream_t * stream)
+{
+    return stream;
+}
+
 void osl_stream_free(osl_stream_t * stream)
 {
     osl_safe_free(stream);

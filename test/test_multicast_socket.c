@@ -15,7 +15,7 @@ void test_multicast_socket(void)
     printf("== test multicast socket ==\n");
     
     /*  */
-    osl_thread_t * server_thread = osl_thread_new(multicast_server_thread, NULL);
+    osl_thread_t * server_thread = osl_thread_init(osl_thread_new(), multicast_server_thread, NULL);
     osl_thread_start(server_thread);
 
     osl_idle(100);
@@ -44,7 +44,7 @@ void * multicast_server_thread(void * arg)
     (void)arg;
     int i = 0;
     int ret;
-    osl_inet_address_t * addr = osl_inet_address_new(osl_inet4, NULL, 1900);
+    osl_inet_address_t * addr = osl_inet_address_init(osl_inet_address_new(), osl_inet4, NULL, 1900);
     osl_socket sock = osl_datagram_socket_bind(addr, 1);
     osl_inet_address_free(addr);
     assert(osl_datagram_socket_join_group(sock, "239.255.255.250") == 0);
@@ -79,7 +79,7 @@ void test_multicast_client(void)
     osl_socket sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
     assert(osl_socket_is_valid(sock));    
 
-    addr = osl_inet_address_new(osl_inet4, "239.255.255.250", 1900);
+    addr = osl_inet_address_init(osl_inet_address_new(), osl_inet4, "239.255.255.250", 1900);
     info = osl_inet_address_resolve(addr, SOCK_DGRAM);
     
     printf("[multicast client] sendto()\n");

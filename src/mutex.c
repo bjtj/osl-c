@@ -2,10 +2,15 @@
 
 osl_mutex_t * osl_mutex_new(void)
 {
-#if defined(USE_PTHREAD)
     osl_mutex_t * mutex = (osl_mutex_t*)malloc(sizeof(osl_mutex_t));
     OSL_HANDLE_MALLOC_ERROR(mutex);
     memset(mutex, 0, sizeof(osl_mutex_t));
+    return mutex;
+}
+
+osl_mutex_t * osl_mutex_init(osl_mutex_t * mutex)
+{
+    #if defined(USE_PTHREAD)
     if (pthread_mutex_init(&(mutex->handle), NULL) != 0) {
 	/* assert */
 	osl_safe_free(mutex);
@@ -13,9 +18,6 @@ osl_mutex_t * osl_mutex_new(void)
     }
     return mutex;
 #elif defined(USE_MS_WIN)
-    osl_mutex_t * mutex = (osl_mutex_t*)malloc(sizeof(osl_mutex_t));
-    OSL_HANDLE_MALLOC_ERROR(mutex);
-    memset(mutex, 0, sizeof(osl_mutex_t));
     mutex->handle = CreateMutex(NULL, FALSE, NULL);
     return mutex;
 #else

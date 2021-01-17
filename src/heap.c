@@ -9,18 +9,14 @@ osl_heap_t * osl_heap_new(void)
     return heap;
 }
 
-osl_heap_t * osl_heap_new_shared(void)
+osl_heap_t * osl_heap_init_shared(osl_heap_t * heap)
 {
-    osl_heap_t * heap = (osl_heap_t*)malloc(sizeof(osl_heap_t));
-    OSL_HANDLE_MALLOC_ERROR(heap);
-    memset(heap, 0, sizeof(osl_heap_t));
-    heap->mutex = osl_mutex_new();
+    heap->mutex = osl_mutex_init(osl_mutex_new());
     return heap;
 }
 
-osl_heap_t * osl_heap_new_with_callback(osl_heap_on_alloc_cb on_alloc, osl_heap_on_dealloc_cb on_dealloc)
+osl_heap_t * osl_heap_new_with_callback(osl_heap_t * heap, osl_heap_on_alloc_cb on_alloc, osl_heap_on_dealloc_cb on_dealloc)
 {
-    osl_heap_t * heap = osl_heap_new();
     heap->on_alloc = on_alloc;
     heap->on_dealloc = on_dealloc;
     return heap;

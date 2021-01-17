@@ -18,10 +18,11 @@ typedef struct _osl_thread_t {
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_thread_t * osl_thread_new(osl_thread_func func, void * arg);
-    extern OSL_EXPORT int osl_thread_start(osl_thread_t * thread);
-    extern OSL_EXPORT void osl_thread_join(osl_thread_t * thread);
-    extern OSL_EXPORT void osl_thread_free(osl_thread_t * thread);
+    extern OSL_EXPORT osl_thread_t * osl_thread_new(void);
+    extern OSL_EXPORT osl_thread_t * osl_thread_init(osl_thread_t *, osl_thread_func, void *);
+    extern OSL_EXPORT int osl_thread_start(osl_thread_t *);
+    extern OSL_EXPORT void osl_thread_join(osl_thread_t *);
+    extern OSL_EXPORT void osl_thread_free(osl_thread_t *);
 
 #ifdef __cplusplus
 }

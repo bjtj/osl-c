@@ -14,24 +14,24 @@
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_bool osl_socket_is_valid(osl_socket sock);
-    extern OSL_EXPORT osl_socket osl_socket_connect(osl_inet_address_t * addr);
-    extern OSL_EXPORT osl_socket osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli);
-    extern OSL_EXPORT osl_socket osl_socket_bind(osl_inet_address_t * addr, osl_bool reuseaddr);
-    extern OSL_EXPORT osl_socket osl_socket_listen(osl_socket sock, int backlog);
-    extern OSL_EXPORT osl_socket osl_socket_accept(osl_socket sock, struct sockaddr * addr, socklen_t * addrlen);
-    extern OSL_EXPORT int osl_socket_send(osl_socket sock, const void* buf, size_t len, int flags);
-    extern OSL_EXPORT int osl_socket_recv(osl_socket sock, void* buf, size_t len, int flags);
-    extern OSL_EXPORT osl_inet_address_t * osl_socket_get_inet_address(osl_socket fd);
-    extern OSL_EXPORT osl_socket osl_datagram_socket_connect(osl_inet_address_t * addr);
-    extern OSL_EXPORT osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned long timeout_milli);
-    extern OSL_EXPORT osl_socket osl_datagram_socket_bind(osl_inet_address_t * addr, int reuseaddr);
-    extern OSL_EXPORT int osl_datagram_socket_send(osl_socket sock, const void* buf, size_t len, int flags);
-    extern OSL_EXPORT int osl_datagram_socket_sendto(osl_socket sock, const void* buf, size_t len, int flags,  const struct sockaddr* dest_addr, socklen_t addrlen);
-    extern OSL_EXPORT int osl_datagram_socket_recv(osl_socket sock, void* buf, size_t len, int flags);
-    extern OSL_EXPORT int osl_datagram_socket_recvfrom(osl_socket sock, void* buf, size_t len, int flags, struct sockaddr* src_addr, socklen_t* addrlen);
-    extern OSL_EXPORT int osl_datagram_socket_join_group(osl_socket sock, const char * group);
-    extern OSL_EXPORT void osl_socket_close(osl_socket sock);
+    extern OSL_EXPORT osl_bool osl_socket_is_valid(osl_socket);
+    extern OSL_EXPORT osl_socket osl_socket_connect(osl_inet_address_t *);
+    extern OSL_EXPORT osl_socket osl_socket_connect_with_timeout(osl_inet_address_t *, unsigned long);
+    extern OSL_EXPORT osl_socket osl_socket_bind(osl_inet_address_t *, osl_bool);
+    extern OSL_EXPORT osl_socket osl_socket_listen(osl_socket, int);
+    extern OSL_EXPORT osl_socket osl_socket_accept(osl_socket, struct sockaddr *, socklen_t *);
+    extern OSL_EXPORT int osl_socket_send(osl_socket, const void *, size_t, int);
+    extern OSL_EXPORT int osl_socket_recv(osl_socket, void *, size_t, int);
+    extern OSL_EXPORT osl_inet_address_t * osl_socket_get_inet_address(osl_socket);
+    extern OSL_EXPORT osl_socket osl_datagram_socket_connect(osl_inet_address_t *);
+    extern OSL_EXPORT osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t *, unsigned long);
+    extern OSL_EXPORT osl_socket osl_datagram_socket_bind(osl_inet_address_t *, int);
+    extern OSL_EXPORT int osl_datagram_socket_send(osl_socket, const void *, size_t, int);
+    extern OSL_EXPORT int osl_datagram_socket_sendto(osl_socket, const void *, size_t, int,  const struct sockaddr *, socklen_t);
+    extern OSL_EXPORT int osl_datagram_socket_recv(osl_socket, void *, size_t, int);
+    extern OSL_EXPORT int osl_datagram_socket_recvfrom(osl_socket, void *, size_t, int, struct sockaddr *, socklen_t *);
+    extern OSL_EXPORT int osl_datagram_socket_join_group(osl_socket, const char *);
+    extern OSL_EXPORT void osl_socket_close(osl_socket);
 
 #ifdef __cplusplus
 }

@@ -19,7 +19,7 @@ void _looper_hello_and_bye_task_cb(osl_looper_t * looper, void * user)
 void test_looper(void)
 {
     printf("== test looper ==\n");
-    osl_looper_t * looper = osl_looper_new("looper-1", NULL);
+    osl_looper_t * looper = osl_looper_init(osl_looper_new(), "looper-1", NULL);
 
     osl_looper_add_task(looper, _looper_print_task_cb, "a");
     osl_looper_add_task(looper, _looper_print_task_cb, "b");

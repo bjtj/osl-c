@@ -5,7 +5,7 @@ void _test_resolve(const char * ip, int ver)
 {
     osl_inet_address_t * addr;
     struct addrinfo * info;
-    addr = osl_inet_address_new(osl_inet_unspec, ip, 0);
+    addr = osl_inet_address_init(osl_inet_address_new(), osl_inet_unspec, ip, 0);
     assert(addr != NULL);
     info = osl_inet_address_resolve(addr, SOCK_STREAM);
     assert(info != NULL);
@@ -18,7 +18,7 @@ void _test_resolve_passive(const char * ip, int ver)
 {
     osl_inet_address_t * addr;
     struct addrinfo * info;
-    addr = osl_inet_address_new(osl_inet_unspec, ip, 0);
+    addr = osl_inet_address_init(osl_inet_address_new(), osl_inet_unspec, ip, 0);
     assert(addr != NULL);
     info = osl_inet_address_resolve_passive(addr, AF_UNSPEC, SOCK_STREAM);
     assert(info != NULL);

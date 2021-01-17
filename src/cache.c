@@ -57,11 +57,16 @@ void osl_cache_free(osl_cache_t * cache)
     osl_safe_free(cache);
 }
 
-osl_cache_manager_t * osl_cache_manager_new(void * user)
+osl_cache_manager_t * osl_cache_manager_new(void)
 {
     osl_cache_manager_t * manager = (osl_cache_manager_t*)malloc(sizeof(osl_cache_manager_t));
     OSL_HANDLE_MALLOC_ERROR(manager);
     memset(manager, 0, sizeof(osl_cache_manager_t));
+    return manager;
+}
+
+osl_cache_manager_t * osl_cache_manager_init(osl_cache_manager_t * manager, void * user)
+{
     manager->user = user;
     return manager;
 }

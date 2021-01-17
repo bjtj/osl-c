@@ -28,6 +28,11 @@ osl_string_buffer_t * osl_string_buffer_new(void)
     return sb;
 }
 
+osl_string_buffer_t * osl_string_buffer_init(osl_string_buffer_t * stream)
+{
+    return stream;
+}
+
 void osl_string_buffer_free(osl_string_buffer_t * sb)
 {
     if (sb->ptr)

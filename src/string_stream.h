@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_stream_t * osl_string_stream_new(const char * str);
+    extern OSL_EXPORT osl_stream_t * osl_string_stream_init(osl_stream_t *, const char *);
 
 #ifdef __cplusplus
 }

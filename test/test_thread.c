@@ -17,8 +17,8 @@ void test_thread(void)
 {
     int id1 = 1;
     int id2 = 2;
-    osl_thread_t * thread1 = osl_thread_new(worker, &id1);
-    osl_thread_t * thread2 = osl_thread_new(worker, &id2);
+    osl_thread_t * thread1 = osl_thread_init(osl_thread_new(), worker, &id1);
+    osl_thread_t * thread2 = osl_thread_init(osl_thread_new(), worker, &id2);
     osl_thread_start(thread1);
     osl_thread_start(thread2);
     osl_thread_join(thread1);
