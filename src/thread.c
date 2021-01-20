@@ -1,5 +1,12 @@
 #include "thread.h"
 
+static inline void _notify_stop(osl_thread_t * thread)
+{
+    osl_event_lock(thread->signal);
+    thread->running = osl_false;
+    osl_event_notify_all(thread->signal);
+    osl_event_unlock(thread->signal);
+}
 
 /* THREAD */
 #if defined(USE_PTHREAD)
@@ -16,18 +23,20 @@ static void * s_thread_wrapper(void * arg) {
     }
 #endif
     thread->func(thread->arg);
-    thread->running = 0;
+
+    _notify_stop(thread);
+    
     return 0;
 }
 
 static int s_native_start_thread(osl_thread_t * thread) {
     pthread_attr_t attr;
-    int err = -1;
+    int err = 1;
     if (!thread) {
-	return -1;
+	return 1;
     }
     if (pthread_attr_init(&attr) != 0) {
-	return -1;
+	return 1;
     }
 
     if (pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED) != 0) {
@@ -55,7 +64,8 @@ done:
 static UINT WINAPI s_thread_wrapper(void * arg) {
     osl_thread_t * thread = (osl_thread_t*)arg;
     thread->func(thread->arg);
-    thread->running = 0;
+    thread->running = osl_false;
+    _notify_stop(thread);
     return 0;
 }
 
@@ -63,7 +73,7 @@ static UINT WINAPI s_thread_wrapper(void * arg) {
 static int s_native_start_thread(osl_thread_t * thread) {
     UINT dwThreadID;
     if (!thread) {
-	return -1;
+	return 1;
     }
     thread->handle = (HANDLE)_beginthreadex(NULL,
 					    (unsigned int)thread->stack_size,
@@ -93,23 +103,27 @@ osl_thread_t * osl_thread_init(osl_thread_t * thread, osl_thread_func func, void
     thread->id = ++__idx;
     thread->func = func;
     thread->arg = arg;
+    thread->signal = osl_event_init(osl_event_new());
     return thread;
 }
 
 int osl_thread_start(osl_thread_t * thread)
 {
-    thread->running = 1;
+    thread->running = osl_true;
     return s_native_start_thread(thread);
 }
 
 void osl_thread_join(osl_thread_t * thread)
 {
+    osl_event_lock(thread->signal);
     while (thread->running) {
-	osl_idle(10);
+	osl_event_wait(thread->signal);
     }
+    osl_event_unlock(thread->signal);
 }
 
 void osl_thread_free(osl_thread_t * thread)
 {
+    osl_event_free(thread->signal);
     osl_safe_free(thread);
 }

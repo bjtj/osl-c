@@ -66,6 +66,8 @@ add_library(osl SHARED
   src/string_stream.h
   src/thread.c
   src/thread.h
+  src/thread_pool.c
+  src/thread_pool.h
   src/url.c
   src/url.h)
 
@@ -121,6 +123,7 @@ list(APPEND DIR_HEADERS
   src/string_buffer.h
   src/string_stream.h
   src/thread.h
+  src/thread_pool.h
   src/url.h)
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")
 install(TARGETS osl
