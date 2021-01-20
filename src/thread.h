@@ -2,16 +2,18 @@
 #define __OSL_THREAD_H__
 
 #include "osl.h"
+#include "event.h"
 
 typedef void * (*osl_thread_func)(void *);
 
 typedef struct _osl_thread_t {
     uint32_t id;
-    uint8_t running;
+    osl_bool running;
     size_t stack_size;
     THREAD_HANDLE handle;
     osl_thread_func func;
     void * arg;
+    osl_event_t * signal;
 } osl_thread_t;
 
 #ifdef __cplusplus

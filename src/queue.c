@@ -76,6 +76,9 @@ void * osl_queue_pop(osl_queue_t * queue)
     ret = queue->front->data;
     front = queue->front;
     queue->front = queue->front->next;
+    if (queue->front == NULL) {
+	queue->rear = NULL;
+    }
     osl_queue_node_free(front);
     queue->count--;
     return ret;
