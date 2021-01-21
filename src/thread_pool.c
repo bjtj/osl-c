@@ -124,7 +124,7 @@ osl_thread_pool_job_t * osl_thread_pool_job_new(void)
     return job;
 }
 
-osl_thread_pool_job_t * osl_thread_pool_job_init(osl_thread_pool_job_t * job, void (*func)(void*), void * arg)
+osl_thread_pool_job_t * osl_thread_pool_job_init(osl_thread_pool_job_t * job, osl_thread_pool_func func, void * arg)
 {
     job->func = func;
     job->arg = arg;
@@ -218,7 +218,7 @@ void osl_thread_pool_node_start_iter(int idx, osl_thread_pool_node_t * node, voi
     osl_thread_start(node->thread);
 }
 
-void osl_thread_pool_call(osl_thread_pool_t * pool, void (*func)(void*), void * arg)
+void osl_thread_pool_call(osl_thread_pool_t * pool, osl_thread_pool_func func, void * arg)
 {
     osl_thread_pool_job_queue_push(pool->jobqueue, osl_thread_pool_job_init(osl_thread_pool_job_new(), func, arg));
 }

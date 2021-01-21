@@ -87,7 +87,7 @@ osl_socket osl_socket_connect_with_timeout(osl_inet_address_t * addr, unsigned l
 
     osl_selector_t selector = {0,};
     osl_selector_clear(&selector);
-    osl_selector_register(&selector, sock, osl_write);
+    osl_selector_register(&selector, sock, OSL_FLAG_WRITE);
     if (osl_selector_select(&selector, timeout_milli) <= 0)
     {
 	fprintf(stderr, "connection timeout\n");
@@ -241,7 +241,7 @@ osl_socket osl_datagram_socket_connect_with_timeout(osl_inet_address_t * addr, u
 
     osl_selector_t selector = {0,};
     osl_selector_clear(&selector);
-    osl_selector_register(&selector, sock, osl_write);
+    osl_selector_register(&selector, sock, OSL_FLAG_WRITE);
     if (osl_selector_select(&selector, timeout_milli) <= 0)
     {
 	fprintf(stderr, "connection timeout\n");
