@@ -7,9 +7,11 @@
 #include "queue.h"
 #include "event.h"
 
+typedef void (*osl_thread_pool_func)(void*);
+
 typedef struct _osl_thread_pool_job_t
 {
-    void (*func)(void*);
+    osl_thread_pool_func func;
     void * arg;
 } osl_thread_pool_job_t;
 
@@ -36,8 +38,6 @@ typedef struct _osl_thread_pool_t
     int thread_count;
     int working_count;
 } osl_thread_pool_t;
-
-
 
 
 #ifdef __cplusplus
@@ -70,7 +70,7 @@ extern "C" {
     extern OSL_EXPORT void osl_thread_pool_node_free(osl_thread_pool_node_t *);
     extern OSL_EXPORT void osl_thread_pool_node_start_iter(int, osl_thread_pool_node_t *, void*);
     
-    extern OSL_EXPORT void osl_thread_pool_call(osl_thread_pool_t *, void (*)(void*), void *);
+    extern OSL_EXPORT void osl_thread_pool_call(osl_thread_pool_t *, osl_thread_pool_func, void *);
 
 #ifdef __cplusplus
 }

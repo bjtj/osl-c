@@ -15,13 +15,17 @@ typedef struct _osl_selector_t
     int count;
 } osl_selector_t;
 
-#define osl_read 0x0001
-#define osl_write 0x0010
-#define osl_except 0x0100
+#define OSL_FLAG_READ 0x0001
+#define OSL_FLAG_WRITE 0x0010
+#define OSL_FLAG_EXCEPT 0x0100
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+    extern OSL_EXPORT osl_selector_t * osl_selector_new(void);
+    extern OSL_EXPORT osl_selector_t * osl_selector_init(osl_selector_t *);
+    extern OSL_EXPORT void osl_selector_free(osl_selector_t *);
 
     extern OSL_EXPORT void osl_selector_clear(osl_selector_t *);
     extern OSL_EXPORT void osl_selector_register(osl_selector_t *, osl_socket, int);
