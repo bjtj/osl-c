@@ -14,7 +14,7 @@ void test()
     int i;
     osl_thread_pool_t * pool;
     pool = osl_thread_pool_init(osl_thread_pool_new(), size);
-    assert(osl_list_size(pool->nodes) == size);
+    assert(osl_list_size(pool->nodes) == (size_t)size);
     osl_thread_pool_start(pool);
 
     osl_idle(100);
@@ -27,7 +27,7 @@ void test()
 
     osl_idle(100);
 
-    assert(osl_list_size(pool->nodes) == size);
+    assert(osl_list_size(pool->nodes) == (size_t)size);
 
     osl_thread_pool_stop(pool);
     osl_thread_pool_free(pool);
