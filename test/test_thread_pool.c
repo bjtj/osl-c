@@ -10,8 +10,8 @@ static void _func(void * arg)
 
 void test()
 {
-    size_t size = 50;
-    size_t i;
+    int size = 50;
+    int i;
     osl_thread_pool_t * pool;
     pool = osl_thread_pool_init(osl_thread_pool_new(), size);
     assert(osl_list_size(pool->nodes) == size);
