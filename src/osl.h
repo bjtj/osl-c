@@ -126,7 +126,16 @@ typedef SOCKET osl_socket;
 #endif
 
 
-#define OSL_HANDLE_MALLOC_ERROR(var) if (var == NULL) { /*TODO: exeption*/ return NULL; }
+#define OSL_HANDLE_MALLOC_ERROR(var) \
+    if (var == NULL) {		     \
+	/*TODO: exeption*/	     \
+	return NULL;		     \
+    }
+#define OSL_NEW(T, V)				\
+    T * V = (T*)malloc(sizeof(T));		\
+    OSL_HANDLE_MALLOC_ERROR(V);			\
+    memset(V, 0, sizeof(T));
+
 
 // callback interfaces
 typedef osl_bool (*osl_compare_cb)(void *, void *);
