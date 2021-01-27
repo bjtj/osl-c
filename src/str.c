@@ -209,6 +209,11 @@ char * osl_string_capital(const char * str)
     return ret;
 }
 
+size_t osl_strlen (const char * str)
+{
+    return strlen(str);
+}
+
 char * osl_strcat(char * s1, const char * s2)
 {
     return strcat(s1, s2);
@@ -349,10 +354,7 @@ char * osl_string_trim(const char * str)
     if (end == NULL) {
 	return NULL;
     }
-    if (start == end) {
-	return NULL;
-    }
-    return osl_strndup(start, end - start);
+    return osl_strndup(start, end + 1 - start);
 }
 
 char * osl_string_ltrim(const char * str)
@@ -370,7 +372,7 @@ char * osl_string_rtrim(const char * str)
     if (ptr == NULL) {
 	return NULL;
     }
-    return osl_safe_strdup(ptr);
+    return osl_strndup(str, ptr + 1 - str);
 }
 
 char * osl_string_append(const char * s1, const char * s2)

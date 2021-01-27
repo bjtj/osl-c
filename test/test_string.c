@@ -13,7 +13,7 @@ static void print_string_list(osl_list_t * lst)
     osl_list_each(lst, (osl_iter_cb)print_string_item, "print string");
 }
 
-void test_string(void)
+static void test_string(void)
 {
 
     printf("== test string ==\n");
@@ -114,13 +114,72 @@ void test_string(void)
     }
 }
 
+static void test_trim(void)
+{
+    char * x;
+    const char * text = "   a ";
+    assert((x = osl_string_trim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_trim(text))) == 1);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_trim(text)), "a"));
+    osl_safe_free(x);
+
+    text = "   a b c ";
+    assert((x = osl_string_trim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_trim(text))) == 5);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_trim(text)), "a b c"));
+    osl_safe_free(x);
+}
+
+static void test_ltrim(void)
+{
+    char * x;
+    const char * text = "   a ";
+    assert((x = osl_string_ltrim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_ltrim(text))) == 2);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_ltrim(text)), "a "));
+    osl_safe_free(x);
+
+    text = "   a b c ";
+    assert((x = osl_string_ltrim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_ltrim(text))) == 6);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_ltrim(text)), "a b c "));
+    osl_safe_free(x);
+}
+
+static void test_rtrim(void)
+{
+    char * x;
+    const char * text = "   a ";
+    assert((x = osl_string_rtrim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_rtrim(text))) == 4);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_rtrim(text)), "   a"));
+    osl_safe_free(x);
+
+    text = "   a b c ";
+    assert((x = osl_string_rtrim(text)) != NULL);
+    osl_safe_free(x);
+    assert(osl_strlen((x = osl_string_rtrim(text))) == 8);
+    osl_safe_free(x);
+    assert(osl_string_equals((x = osl_string_rtrim(text)), "   a b c"));
+    osl_safe_free(x);
+}
+
 int main()
 {
-    osl_init_once();
-
     test_string();
-    
-    osl_finish();
+    test_trim();
+    test_ltrim();
+    test_rtrim();
     
     return 0;
 }

@@ -19,7 +19,7 @@ extern "C" {
     extern OSL_EXPORT size_t osl_list_size(osl_list_t *);
     extern OSL_EXPORT osl_list_t * osl_list_append(osl_list_t *, void *);
     extern OSL_EXPORT osl_list_t * osl_list_prepend(osl_list_t *, void *);
-    extern OSL_EXPORT osl_list_t * osl_list_find(osl_list_t *, osl_compare_cb, void *);
+    extern OSL_EXPORT void * osl_list_find(osl_list_t *, osl_compare_cb, void *);
     extern OSL_EXPORT osl_list_t * osl_list_find_by_ptr(osl_list_t *, void *);
     extern OSL_EXPORT osl_list_t * osl_list_remove(osl_list_t *, osl_list_t *, osl_free_cb);
     extern OSL_EXPORT osl_list_t * osl_list_remove_by_ptr(osl_list_t *, void *, osl_free_cb);
