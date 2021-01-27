@@ -100,13 +100,13 @@ osl_list_t * osl_list_remove_if(osl_list_t * list, osl_compare_cb compare_cb, vo
     return list;
 }
 
-osl_list_t * osl_list_find(osl_list_t * list, osl_compare_cb compare_cb, void * user)
+void * osl_list_find(osl_list_t * list, osl_compare_cb compare_cb, void * user)
 {
     for (; list; list = list->next)
     {
 	if (compare_cb(list->data, user))
 	{
-	    return list;
+	    return list->data;
 	}
     }
     return NULL;

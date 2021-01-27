@@ -100,8 +100,7 @@ osl_cache_t * osl_cache_manager_set_cache(osl_cache_manager_t * manager, void * 
 
 osl_cache_t * osl_cache_manager_get_cache(osl_cache_manager_t * manager, const char * uid)
 {
-    osl_list_t * node = osl_list_find(manager->caches, (osl_compare_cb)_compare_uid, (void*)uid);
-    return (node ? (osl_cache_t*)node->data : NULL);
+    return (osl_cache_t*)osl_list_find(manager->caches, (osl_compare_cb)_compare_uid, (void*)uid);
 }
 
 void osl_cache_manager_remove_cache(osl_cache_manager_t * manager, const char * uid)
