@@ -7,5 +7,4 @@ Name: osl
 Description: Cross-platform OS layer in C
 Version: @VERSION@
 Libs: -L${libdir} -losl
-Cflags: -I${includedir}/osl
-
+Cflags: -I${includedir}
