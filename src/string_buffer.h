@@ -1,5 +1,5 @@
-#ifndef __OSL_STRING_H__
-#define __OSL_STRING_H__
+#ifndef __OSL_STRING_BUFFER_H__
+#define __OSL_STRING_BUFFER_H__
 
 #include "osl.h"
 

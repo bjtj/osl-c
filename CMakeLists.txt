@@ -7,69 +7,9 @@ include(CTest)
 enable_testing()
 add_subdirectory(test)
 
-add_library(osl SHARED
-  src/argparse.c
-  src/argparse.h
-  src/cache.c
-  src/cache.h
-  src/data.h
-  src/date.c
-  src/date.h
-  src/environ.c
-  src/environ.h
-  src/event.c
-  src/event.h
-  src/file.c
-  src/file.h
-  src/hash.c
-  src/hash.h
-  src/heap.c
-  src/heap.h
-  src/inet_address.c
-  src/inet_address.h
-  src/library.c
-  src/library.h
-  src/list.c
-  src/list.h
-  src/log.c
-  src/log.h
-  src/looper.c
-  src/looper.h
-  src/mutex.c
-  src/mutex.h
-  src/network.c
-  src/network.h
-  src/osl.c
-  src/osl.h
-  src/pathname.c
-  src/pathname.h
-  src/platform.h
-  src/process.c
-  src/process.h
-  src/properties.c
-  src/properties.h
-  src/queue.c
-  src/queue.h
-  src/selector.c
-  src/selector.h
-  src/sem.c
-  src/sem.h
-  src/socket.c
-  src/socket.h
-  src/str.c
-  src/str.h
-  src/stream.c
-  src/stream.h
-  src/string_buffer.c
-  src/string_buffer.h
-  src/string_stream.c
-  src/string_stream.h
-  src/thread.c
-  src/thread.h
-  src/thread_pool.c
-  src/thread_pool.h
-  src/url.c
-  src/url.h)
+file(GLOB OSL_C_SOURCES src/*.c)
+
+add_library(osl SHARED ${OSL_C_SOURCES})
 
 target_link_libraries(osl ${CMAKE_DL_LIBS})
 
@@ -90,41 +30,11 @@ set_target_properties(osl PROPERTIES SOVERSION 1)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(osl PRIVATE .)
 
+file(GLOB OSL_C_HEADERS src/*.h)
+
 include(GNUInstallDirs)
 set(DIR_HEADERS)
-list(APPEND DIR_HEADERS
-  src/argparse.h
-  src/cache.h
-  src/data.h
-  src/date.h
-  src/environ.h
-  src/event.h
-  src/file.h
-  src/hash.h
-  src/heap.h
-  src/inet_address.h
-  src/library.h
-  src/list.h
-  src/log.h
-  src/looper.h
-  src/mutex.h
-  src/network.h
-  src/osl.h
-  src/pathname.h
-  src/platform.h
-  src/process.h
-  src/properties.h
-  src/queue.h
-  src/selector.h
-  src/sem.h
-  src/socket.h
-  src/str.h
-  src/stream.h
-  src/string_buffer.h
-  src/string_stream.h
-  src/thread.h
-  src/thread_pool.h
-  src/url.h)
+list(APPEND DIR_HEADERS ${OSL_C_HEADERS})
 set_target_properties(osl PROPERTIES PUBLIC_HEADER "${DIR_HEADERS}")
 install(TARGETS osl
   EXPORT osltargets
