@@ -6,22 +6,22 @@
 
 void test_log(void)
 {
-    osl_log_trace("hello");
-    osl_log_debug("hello");
-    osl_log_info("hello");
-    osl_log_warn("hello");
-    osl_log_error("hello");
-    osl_log_fatal("hello");
+  osl_log_trace("hello");
+  osl_log_debug("hello");
+  osl_log_info("hello");
+  osl_log_warn("hello");
+  osl_log_error("hello");
+  osl_log_fatal("hello");
 }
 
 int main()
 {
-    osl_init_once();
+  osl_init_once();
 
-    test_log();
+  test_log();
     
-    osl_finish();
+  osl_finish();
     
-    return 0;
+  return 0;
 }
 

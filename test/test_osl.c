@@ -4,19 +4,19 @@
 
 void test_osl(void)
 {
-    char * cwd = osl_getcwd();
-    printf("cwd: %s\n", cwd);
-    osl_safe_free(cwd);
+  char * cwd = osl_getcwd();
+  printf("cwd: %s\n", cwd);
+  osl_safe_free(cwd);
 }
 
 
 int main()
 {
-    osl_init_once();
+  osl_init_once();
 
-    test_osl();
+  test_osl();
     
-    osl_finish();
+  osl_finish();
     
-    return 0;
+  return 0;
 }

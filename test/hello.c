@@ -9,5 +9,5 @@
 
 OSL_EXPORT void hello(const char * name)
 {
-    printf("Hello, %s\n", name);
+  printf("Hello, %s\n", name);
 }

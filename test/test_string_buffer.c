@@ -4,26 +4,26 @@
 
 void test_string_buffer(void)
 {
-    printf("== test string buffer ==\n");
-    osl_string_buffer_t * sb = osl_string_buffer_init(osl_string_buffer_new());
-    osl_string_buffer_append(sb, "hello");
-    osl_string_buffer_append(sb, " ");
-    osl_string_buffer_append(sb, "world");
+  printf("== test string buffer ==\n");
+  osl_string_buffer_t * sb = osl_string_buffer_init(osl_string_buffer_new());
+  osl_string_buffer_append(sb, "hello");
+  osl_string_buffer_append(sb, " ");
+  osl_string_buffer_append(sb, "world");
 
-    char * str = osl_string_buffer_to_str(sb);
-    printf("str is '%s'\n", str);
-    osl_safe_free(str);
+  char * str = osl_string_buffer_to_str(sb);
+  printf("str is '%s'\n", str);
+  osl_safe_free(str);
 
-    osl_string_buffer_free(sb);
+  osl_string_buffer_free(sb);
 }
 
 int main()
 {
-    osl_init_once();
+  osl_init_once();
 
-    test_string_buffer();
+  test_string_buffer();
 
-    osl_finish();
+  osl_finish();
     
-    return 0;
+  return 0;
 }
