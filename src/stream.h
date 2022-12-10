@@ -5,14 +5,14 @@
 
 typedef struct _osl_stream_t
 {
-    void * handle;
-    int eof;
-    int (*read)(struct _osl_stream_t * stream);
-    size_t(*read_buffer)(struct _osl_stream_t * stream, void * buf, size_t max);
-    int (*write)(struct _osl_stream_t * stream, int ch);
-    int (*write_string)(struct _osl_stream_t * stream, const char * str);
-    size_t(*write_buffer)(struct _osl_stream_t * stream, const void * buf, size_t siz);
-    void (*close)(struct _osl_stream_t * stream);
+  void * handle;
+  int eof;
+  int (*read)(struct _osl_stream_t * stream);
+  size_t(*read_buffer)(struct _osl_stream_t * stream, void * buf, size_t max);
+  int (*write)(struct _osl_stream_t * stream, int ch);
+  int (*write_string)(struct _osl_stream_t * stream, const char * str);
+  size_t(*write_buffer)(struct _osl_stream_t * stream, const void * buf, size_t siz);
+  void (*close)(struct _osl_stream_t * stream);
 } osl_stream_t;
 
 #define osl_stream_read(stream) (stream)->read(stream)
@@ -27,19 +27,19 @@ typedef struct _osl_stream_t
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_stream_t * osl_stream_new(void);
-    extern OSL_EXPORT osl_stream_t * osl_stream_init(osl_stream_t *);
-    extern OSL_EXPORT void osl_stream_free(osl_stream_t *);
-    extern OSL_EXPORT osl_stream_t * osl_stream_open(const char *, const char *);
-    extern OSL_EXPORT osl_stream_t * osl_stream_wrap_std_file(FILE *);
+  extern OSL_EXPORT osl_stream_t * osl_stream_new(void);
+  extern OSL_EXPORT osl_stream_t * osl_stream_init(osl_stream_t *);
+  extern OSL_EXPORT void osl_stream_free(osl_stream_t *);
+  extern OSL_EXPORT osl_stream_t * osl_stream_open(const char *, const char *);
+  extern OSL_EXPORT osl_stream_t * osl_stream_wrap_std_file(FILE *);
 #if defined(USE_MS_WIN)
-    extern OSL_EXPORT osl_stream_t * osl_stream_wrap_win32_handle(HANDLE);
+  extern OSL_EXPORT osl_stream_t * osl_stream_wrap_win32_handle(HANDLE);
 #endif
 
-    extern OSL_EXPORT osl_bool osl_stream_is_open(osl_stream_t *);
-    extern OSL_EXPORT char * osl_stream_dump(osl_stream_t *);
-    extern OSL_EXPORT char * osl_stream_readline(osl_stream_t *);
-    extern OSL_EXPORT void osl_stream_writeline(osl_stream_t *, const char *);
+  extern OSL_EXPORT osl_bool osl_stream_is_open(osl_stream_t *);
+  extern OSL_EXPORT char * osl_stream_dump(osl_stream_t *);
+  extern OSL_EXPORT char * osl_stream_readline(osl_stream_t *);
+  extern OSL_EXPORT void osl_stream_writeline(osl_stream_t *, const char *);
 
 
 #ifdef __cplusplus

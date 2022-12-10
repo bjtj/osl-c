@@ -12,8 +12,8 @@
 
 typedef struct _osl_logger_t
 {
-    char prefix[10];
-    int level;
+  char prefix[10];
+  int level;
 } osl_logger_t;
 
 #define osl_log_trace(...) osl_log_print(osl_log_default_logger(), OSL_LOG_TRACE, __FILE__, __LINE__, __VA_ARGS__)
@@ -27,8 +27,8 @@ typedef struct _osl_logger_t
 extern "C" {
 #endif
 
-    extern OSL_EXPORT osl_logger_t * osl_log_default_logger(void);
-    extern OSL_EXPORT void osl_log_print(osl_logger_t *, int, const char *, int, const char *, ...);
+  extern OSL_EXPORT osl_logger_t * osl_log_default_logger(void);
+  extern OSL_EXPORT void osl_log_print(osl_logger_t *, int, const char *, int, const char *, ...);
 
 #ifdef __cplusplus
 }

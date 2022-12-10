@@ -13,9 +13,9 @@
 extern "C" {
 #endif
     
-    extern OSL_EXPORT char * osl_pathname_merge(const char *, const char *);
-    extern OSL_EXPORT char * osl_pathname_basename(const char *);
-    extern OSL_EXPORT char * osl_pathname_dirname(const char *);
+  extern OSL_EXPORT char * osl_pathname_merge(const char *, const char *);
+  extern OSL_EXPORT char * osl_pathname_basename(const char *);
+  extern OSL_EXPORT char * osl_pathname_dirname(const char *);
 
 #ifdef __cplusplus
 }

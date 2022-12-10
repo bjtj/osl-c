@@ -126,15 +126,15 @@ typedef SOCKET osl_socket;
 #endif
 
 
-#define OSL_HANDLE_MALLOC_ERROR(var) \
-    if (var == NULL) {		     \
-	/*TODO: exeption*/	     \
-	return NULL;		     \
-    }
-#define OSL_NEW(T, V)				\
-    T * V = (T*)malloc(sizeof(T));		\
-    OSL_HANDLE_MALLOC_ERROR(V);			\
-    memset(V, 0, sizeof(T));
+#define OSL_HANDLE_MALLOC_ERROR(var)            \
+  if (var == NULL) {                            \
+    /*TODO: exeption*/                          \
+    return NULL;                                \
+  }
+#define OSL_NEW(T, V)                           \
+  T * V = (T*)malloc(sizeof(T));                \
+  OSL_HANDLE_MALLOC_ERROR(V);                   \
+  memset(V, 0, sizeof(T));
 
 
 // callback interfaces
@@ -146,16 +146,16 @@ typedef void (*osl_iter_cb)(int, void *, void *);
 extern "C" {
 #endif
 
-    extern OSL_EXPORT void osl_init_once(void);
-    extern OSL_EXPORT void osl_ignore_sigpipe(void);
-    extern OSL_EXPORT int osl_use_socket(void);
-    extern OSL_EXPORT void osl_finish(void);
-    extern OSL_EXPORT void osl_idle(unsigned long timeout);
-    extern OSL_EXPORT unsigned long osl_tick_milli(void);
-    extern OSL_EXPORT char * osl_getcwd(void);
-    extern OSL_EXPORT void osl_free(void *);
-    extern OSL_EXPORT void osl_safe_free(void *);
-    extern OSL_EXPORT void * osl_memdup(void *, size_t);
+  extern OSL_EXPORT void osl_init_once(void);
+  extern OSL_EXPORT void osl_ignore_sigpipe(void);
+  extern OSL_EXPORT int osl_use_socket(void);
+  extern OSL_EXPORT void osl_finish(void);
+  extern OSL_EXPORT void osl_idle(unsigned long timeout);
+  extern OSL_EXPORT unsigned long osl_tick_milli(void);
+  extern OSL_EXPORT char * osl_getcwd(void);
+  extern OSL_EXPORT void osl_free(void *);
+  extern OSL_EXPORT void osl_safe_free(void *);
+  extern OSL_EXPORT void * osl_memdup(void *, size_t);
 
 #ifdef __cplusplus
 }

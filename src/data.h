@@ -5,9 +5,9 @@
 
 typedef struct _osl_data_t
 {
-    void * data;
-    size_t size;
-    osl_free_cb free_cb;
+  void * data;
+  size_t size;
+  osl_free_cb free_cb;
 } osl_data_t;
 
 #endif

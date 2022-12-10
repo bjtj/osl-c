@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-    extern OSL_EXPORT unsigned long osl_hash(const char *);
+  extern OSL_EXPORT unsigned long osl_hash(const char *);
 
 #ifdef __cplusplus
 }
