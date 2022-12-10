@@ -4,7 +4,7 @@
 
 void test(void)
 {
-    osl_queue_t * queue = osl_queue_init(osl_queue_new(), NULL);
+    osl_queue_t * queue = osl_queue_init(osl_queue_new());
 
     osl_queue_push(queue, (void*)"a");
     osl_queue_push(queue, (void*)"b");
@@ -22,13 +22,13 @@ void test(void)
     assert(queue->count == 0);
     assert(osl_queue_is_empty(queue) == osl_true);
 
-    osl_queue_free(queue);
+    osl_queue_free(queue, NULL);
 }
 
 
 void test2(void)
 {
-    osl_queue_t * queue = osl_queue_init(osl_queue_new(), osl_safe_free);
+    osl_queue_t * queue = osl_queue_init(osl_queue_new());
 
     osl_queue_push(queue, (void*)strdup("a"));
     osl_queue_push(queue, (void*)strdup("b"));
@@ -37,14 +37,14 @@ void test2(void)
 
     assert(queue->count == 4);
 
-    osl_queue_free(queue);
+    osl_queue_free(queue, osl_safe_free);
 }
 
 
 void test3(void)
 {
     char * str;
-    osl_queue_t * queue = osl_queue_init(osl_queue_new(), osl_safe_free);
+    osl_queue_t * queue = osl_queue_init(osl_queue_new());
 
     osl_queue_push(queue, (void*)strdup("a"));
     osl_queue_push(queue, (void*)strdup("b"));
@@ -68,14 +68,30 @@ void test3(void)
 
     assert(queue->count == 0);
 
-    osl_queue_free(queue);
+    osl_queue_free(queue, osl_safe_free);
 }
 
+void test4()
+{
+  osl_queue_t * queue = osl_queue_init_with_limit(osl_queue_new(), 10);
+  int i;
+  for (i = 0; i < 10; ++i) {
+    assert(osl_queue_push(queue, "a" + i) == 0);
+  }
+  assert(osl_queue_push(queue, "x") < 0);
+  assert(queue->count == 10);
+  for (i = 0; i < 10; ++i) {
+    assert(strcmp(osl_queue_pop(queue), "a" + i) == 0);
+  }
+  assert(osl_queue_pop(queue) == NULL);
+  osl_queue_free(queue, osl_safe_free);
+}
 
 int main()
 {
     test();
     test2();
     test3();
+    test4();
     return 0;
 }
