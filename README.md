@@ -1,6 +1,6 @@
 # OS Layer in C #
 
-[![Build Status](https://travis-ci.org/bjtj/osl-c.svg?branch=master)](https://travis-ci.org/bjtj/osl-c)
+![Build Status](https://github.com/bjtj/osl-c/actions/workflows/ctest.yml/badge.svg?branch=dev)
 
 ## Target platforms ##
 
