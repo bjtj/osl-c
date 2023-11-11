@@ -2,25 +2,24 @@
 #include "library.h"
 #include <assert.h>
 
+typedef void (*hello_fp)(const char*);
+
 void test_library(void)
 {
+  osl_lib_handle lib;
+  osl_lib_symbol hello_sym;
+  
   printf("== test library ==\n");
-#if defined(OSL_OS_WINDOWS)
-  osl_lib_handle lib = osl_library_load("./", "hello");
-#else
-  osl_lib_handle lib = osl_library_load("./", "hello");
-#endif
+  lib = osl_library_load("./", "hello");
   assert(lib != NULL);
 
-#if defined(OSL_OS_WINDOWS)
-  FARPROC hello_funcp = osl_library_get_symbol(lib, "hello");
-#else
-  void (*hello_funcp)(const char *);
-  *(void **) (&hello_funcp) = osl_library_get_symbol(lib, "hello");
-#endif
+  hello_sym = osl_library_get_symbol(lib, "hello");
 
-  assert(hello_funcp != NULL);
-  hello_funcp("WORLD");
+  hello_fp hello;
+  OSL_PTR2FUNCPTR(hello_fp, hello_sym, hello);
+
+  hello("World!");
+  
   osl_library_close(lib);
 }
 

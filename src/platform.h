@@ -39,6 +39,8 @@
 
 #	define OSL_EXPORT
 
+#   define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
+
 #elif defined(unix) || defined(__unix__) || defined(__unix) /* unix or linux */
 
 #	define OSL_OS_UNIX
@@ -69,6 +71,8 @@
 #	define osl_vsnprintf vsnprintf
 
 #	define OSL_EXPORT
+
+#   define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
 
 #elif defined(_WIN32) || defined(_WIN64) /* windows */
 
@@ -105,6 +109,8 @@
 
 // https://docs.microsoft.com/en-us/cpp/cpp/definitions-and-declarations-cpp?view=msvc-160
 #	define OSL_EXPORT __declspec(dllexport)
+
+#   define OSL_PTR2FUNCPTR(T,X,Y) (Y)=((T)(X))
 
 #endif
 
