@@ -124,3 +124,13 @@ void * osl_memdup(void * m, size_t s)
   memcpy(n, m, s);
   return n;
 }
+
+
+void osl_memcopy(char * buf, const char * data, size_t size)
+{
+#ifdef OSL_OS_WINDOWS
+	CopyMemory((PVOID)buf, data, size);
+#else
+  memcpy(buf, data, size);
+#endif
+}

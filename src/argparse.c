@@ -48,7 +48,7 @@ osl_argument_flag_t * osl_arguments_usage_get_flag(osl_arguments_usage_t * usage
     osl_argument_flag_t * flag = (osl_argument_flag_t*)ptr->data;
     if (strcmp(flag->name, name) == 0)
     {
-	    return flag;
+      return flag;
     }
   }
   return NULL;
@@ -131,43 +131,43 @@ osl_arguments_t * osl_arguments_parse(osl_arguments_usage_t * usage, int argc, c
     char * arg = argv[i];
     if (i == 0)
     {
-	    args->name = osl_safe_strdup(arg);
-	    continue;
+      args->name = osl_safe_strdup(arg);
+      continue;
     }
     char * next_arg = (i < argc - 1) ? argv[i+1] : NULL;
     if (osl_string_starts_with(arg, "--"))
     {
-	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
-	    if (single || next_arg == NULL || next_arg[0] == '-')
-	    {
+      osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
+      if (single || next_arg == NULL || next_arg[0] == '-')
+      {
         osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 2, NULL);
         args->arg_list = osl_list_append(args->arg_list, x);
-	    }
-	    else
-	    {
+      }
+      else
+      {
         osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 2, next_arg);
         args->arg_list = osl_list_append(args->arg_list, x);
         i++;
-	    }
+      }
     }
     else if (osl_string_starts_with(arg, "-"))
     {
-	    osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
-	    if (single || next_arg == NULL || next_arg[0] == '-')
-	    {
+      osl_bool single = osl_arguments_usage_is_single_flag(usage, arg);
+      if (single || next_arg == NULL || next_arg[0] == '-')
+      {
         osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 1, NULL);
         args->arg_list = osl_list_append(args->arg_list, x);
-	    }
-	    else
-	    {
+      }
+      else
+      {
         osl_argument_t * x = osl_argument_init(osl_argument_new(), arg + 1, next_arg);
         args->arg_list = osl_list_append(args->arg_list, x);
         i++;
-	    }
+      }
     }
     else
     {
-	    args->text_list = osl_list_append(args->text_list, osl_safe_strdup(arg));
+      args->text_list = osl_list_append(args->text_list, osl_safe_strdup(arg));
     }
   }
   return args;
