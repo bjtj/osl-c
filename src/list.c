@@ -73,6 +73,29 @@ osl_list_t * osl_list_prepend(osl_list_t * list, void * data)
   return node;
 }
 
+int osl_list_insert(osl_list_t ** list, int idx, void * data)
+{
+  osl_list_t * new_node = NULL;
+  osl_list_t * node = osl_list_offset(*list, idx);
+  if (!node)
+  {
+    return -1;
+  }
+
+  if (*list == node) {
+    *list = osl_list_prepend(*list, data);
+    return 0;
+  }
+
+  new_node = __list_new_with_data(data);
+  new_node->next = node;
+  new_node->prev = node->prev;
+  node->prev->next = new_node;
+  node->prev = new_node;
+
+  return 0;
+}
+
 osl_list_t * osl_list_remove_if(osl_list_t * list, osl_compare_cb compare_cb, void * user, osl_free_cb free_cb)
 {
   osl_list_t * node = list;
@@ -225,7 +248,7 @@ osl_list_t * osl_list_offset(osl_list_t * list, int idx)
   }
   else
   {
-    for (; list && idx++; list = list->next) {}
+    for (; list && idx++; list = list->prev) {}
   }
   return list;
 }
@@ -240,6 +263,10 @@ void * osl_list_get(osl_list_t * list, int idx)
   return NULL;
 }
 
+void * osl_list_get_last(osl_list_t * list)
+{
+  return osl_list_last(list)->data;
+}
 
 void * osl_list_pop_first(osl_list_t ** list)
 {

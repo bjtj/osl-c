@@ -42,6 +42,17 @@ void osl_string_buffer_free(osl_string_buffer_t * sb)
   osl_safe_free(sb);
 }
 
+osl_bool osl_string_buffer_is_empty(osl_string_buffer_t * sb)
+{
+  return OSL_BOOL(sb->len == 0);
+}
+
+void osl_string_buffer_clear(osl_string_buffer_t * sb)
+{
+  memset(sb->ptr, 0, sb->capacity);
+  sb->len = 0;
+}
+
 void osl_string_buffer_append(osl_string_buffer_t * sb, const char * str)
 {
   osl_string_buffer_append_buffer(sb, str, strlen(str));
@@ -58,6 +69,11 @@ void osl_string_buffer_append_buffer(osl_string_buffer_t * sb, const char * buff
 
   memcpy(sb->ptr + sb->len, buffer, size);
   sb->len += size;
+}
+
+void osl_string_buffer_append_char(osl_string_buffer_t * sb, char ch)
+{
+  osl_string_buffer_append_buffer(sb, &ch, 1);
 }
 
 char * osl_string_buffer_to_str(osl_string_buffer_t * sb)

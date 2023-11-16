@@ -24,9 +24,13 @@ extern "C" {
   extern OSL_EXPORT const char * osl_string_find_first_of(const char *, const char *);
   extern OSL_EXPORT const char * osl_string_find_first_not_of(const char *, const char *);
   extern OSL_EXPORT char * osl_string_replace_all(const char *, const char *, const char *);
+  extern OSL_EXPORT char * osl_string_replace_all_and_free(char *, const char *, const char *);
   extern OSL_EXPORT char * osl_string_uppercase(const char *);
+  extern OSL_EXPORT char * osl_string_uppercase_and_free(char *);
   extern OSL_EXPORT char * osl_string_lowercase(const char *);
+  extern OSL_EXPORT char * osl_string_lowercase_and_free(char *);
   extern OSL_EXPORT char * osl_string_capital(const char *);
+  extern OSL_EXPORT char * osl_string_capital_and_free(char *);
   extern OSL_EXPORT size_t osl_strlen (const char *);
   extern OSL_EXPORT char * osl_strcat(char *, const char *);
   extern OSL_EXPORT char * osl_safe_strdup(const char *);
@@ -35,7 +39,7 @@ extern "C" {
   extern OSL_EXPORT char * osl_strdup_for(const char *, const char *);
   extern OSL_EXPORT const char * osl_string_safe(const char *, const char *);
   extern OSL_EXPORT int osl_strcmp(const char *, const char *);
-	extern OSL_EXPORT int osl_strncmp(const char *, const char *, size_t);
+  extern OSL_EXPORT int osl_strncmp(const char *, const char *, size_t);
   extern OSL_EXPORT int osl_strcmp_ignorecase(const char *, const char *);
   extern OSL_EXPORT osl_list_t * osl_string_split(const char *, const char *);
   extern OSL_EXPORT osl_list_t * osl_string_split_limit(const char *, const char *, int);

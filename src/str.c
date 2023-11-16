@@ -157,6 +157,13 @@ char * osl_string_replace_all(const char * str, const char * mat, const char * s
   return osl_string_buffer_to_str_and_free(sb);
 }
 
+char * osl_string_replace_all_and_free(char * str, const char * mat, const char * sub)
+{
+  char * ret = osl_string_replace_all(str, mat, sub);
+  osl_safe_free(str);
+  return ret;
+}
+
 char * osl_string_uppercase(const char * str)
 {
   char * ptr = osl_safe_strdup(str);
@@ -171,6 +178,13 @@ char * osl_string_uppercase(const char * str)
   return ret;
 }
 
+char * osl_string_uppercase_and_free(char * str)
+{
+  char * ret = osl_string_uppercase(str);
+  osl_safe_free(str);
+  return ret;
+}
+
 char * osl_string_lowercase(const char * str)
 {
   char * ptr = osl_safe_strdup(str);
@@ -182,6 +196,13 @@ char * osl_string_lowercase(const char * str)
 	    *ptr = *ptr - ('A' - 'a');
     }
   }
+  return ret;
+}
+
+char * osl_string_lowercase_and_free(char * str)
+{
+  char * ret = osl_string_lowercase(str);
+  osl_safe_free(str);
   return ret;
 }
 
@@ -206,6 +227,13 @@ char * osl_string_capital(const char * str)
 	    *ptr = *ptr - ('A' - 'a');
     }
   }
+  return ret;
+}
+
+char * osl_string_capital_and_free(char * str)
+{
+  char * ret = osl_string_capital(str);
+  osl_safe_free(str);
   return ret;
 }
 

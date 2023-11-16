@@ -127,9 +127,14 @@
 
 #	define OSL_PTR2FUNCPTR(T,X,Y) (Y)=((T)(X))
 
+#else  // Unknown OS
+
+// ==========
+// Unknown OS
+// ==========
+
+#	define OSL_OS_UNKNOWN
+
 #endif
-
-
-// ... Else, NOT SUPPORTED PLATFORM
 
 #endif
