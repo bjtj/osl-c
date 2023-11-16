@@ -6,12 +6,16 @@
 #endif
 
 /*
- * Predefined osl macros
- * ====================
+ * Predefined OSL Macros
+ * =====================
  * http://stackoverflow.com/questions/142508/how-do-i-check-os-with-a-preprocessor-directive
  */
 
 #if defined(__APPLE__) || defined(__MACH__) /* mac os x */
+
+// =====
+// APPLE
+// =====
 
 #	define OSL_OS_APPLE
 
@@ -39,15 +43,20 @@
 
 #	define OSL_EXPORT
 
-#   define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
+#	define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
 
 #elif defined(unix) || defined(__unix__) || defined(__unix) /* unix or linux */
+
+// ====
+// *NIX
+// ====
 
 #	define OSL_OS_UNIX
 
 #	define USE_UNIX_STD
 #	define USE_POSIX_STD
 #	define USE_POSIX_SEMAPHORE
+#	define USE_POSIX_SHARED_MEMORY
 #	define USE_PTHREAD
 #	define USE_BSD_SOCKET
 #	define USE_SIGNAL
@@ -72,9 +81,14 @@
 
 #	define OSL_EXPORT
 
-#   define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
+#	define OSL_PTR2FUNCPTR(T,X,Y) *(void**)(&(Y))=(X)
+
 
 #elif defined(_WIN32) || defined(_WIN64) /* windows */
+
+// =======
+// WINDOWS
+// =======
 
 #	define OSL_OS_WINDOWS
 
@@ -82,6 +96,7 @@
 
 #	define USE_MS_WIN
 #	define USE_WIN_SEMAPHORE
+#	define USE_WIN_SHARED_MEMORY
 #	define USE_WIN_THREAD
 #	define USE_WINSOCK2
 
@@ -110,8 +125,11 @@
 // https://docs.microsoft.com/en-us/cpp/cpp/definitions-and-declarations-cpp?view=msvc-160
 #	define OSL_EXPORT __declspec(dllexport)
 
-#   define OSL_PTR2FUNCPTR(T,X,Y) (Y)=((T)(X))
+#	define OSL_PTR2FUNCPTR(T,X,Y) (Y)=((T)(X))
 
 #endif
+
+
+// ... Else, NOT SUPPORTED PLATFORM
 
 #endif

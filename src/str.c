@@ -264,6 +264,11 @@ int osl_strcmp(const char * a, const char * b)
   return strcmp(a, b);
 }
 
+int osl_strncmp(const char * a, const char * b, size_t size)
+{
+  return strncmp(a, b, size);
+}
+
 int osl_strcmp_ignorecase(const char * a, const char * b)
 {
   return strcasecmp(a, b);

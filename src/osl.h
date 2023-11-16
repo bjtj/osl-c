@@ -125,6 +125,28 @@ typedef SOCKET osl_socket;
 
 #endif
 
+/*
+ * Shared Memory
+ */
+
+#if defined(USE_WIN_SHARED_MEMORY)
+
+#	define OSL_SHARED_MEMORY_ID HANDLE
+#	define OSL_VALID_SHARED_MEMORY_ID(id) (id != NULL)
+
+#elif defined(USE_POSIX_SHARED_MEMORY)
+
+#	include <sys/mman.h>
+#	include <sys/stat.h>        /* For mode constants */
+#	include <fcntl.h>           /* For O_* constants */
+
+#	define OSL_SHARED_MEMORY_ID int
+#	define OSL_VALID_SHARED_MEMORY_ID(id) (id >= 0)
+
+#endif
+
+
+// UNILITY
 
 #define OSL_HANDLE_MALLOC_ERROR(var)            \
   if (var == NULL) {                            \
@@ -156,6 +178,7 @@ extern "C" {
   extern OSL_EXPORT void osl_free(void *);
   extern OSL_EXPORT void osl_safe_free(void *);
   extern OSL_EXPORT void * osl_memdup(void *, size_t);
+	extern OSL_EXPORT void osl_memcopy(char *, const char *, size_t);
 
 #ifdef __cplusplus
 }

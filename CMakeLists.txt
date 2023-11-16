@@ -22,6 +22,10 @@ else()
     target_compile_options(osl PRIVATE -Wall -Wextra -pedantic -Werror -Wno-missing-field-initializers)
 endif()
 
+# https://stackoverflow.com/a/7696158/5676460
+if(UNIX AND NOT APPLE)
+  target_link_libraries(osl rt)
+endif()
 
 # properties
 set_target_properties(osl PROPERTIES VERSION ${PROJECT_VERSION})
