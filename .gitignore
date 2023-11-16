@@ -51,7 +51,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-build/
-build.win32/
+build*/
 
 .vs

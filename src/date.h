@@ -6,7 +6,7 @@
 typedef struct _osl_time_t
 {
   uint64_t sec;
-  uint64_t nano;    
+  uint64_t nano;
 } osl_time_t;
 
 typedef struct _osl_date_t
