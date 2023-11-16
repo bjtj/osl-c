@@ -20,6 +20,6 @@ size_t osl_get_last_error_message(char* buf, size_t size)
 
 	return dwChars;
 #else
-	return 0;
-#endif;
+	return strerror_r(errno, buf, size);
+#endif
 }

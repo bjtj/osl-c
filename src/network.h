@@ -23,6 +23,7 @@ extern "C" {
   extern OSL_EXPORT void osl_network_interface_free(osl_network_interface_t *);
   extern OSL_EXPORT unsigned char * osl_network_interface_set_mac_address(osl_network_interface_t *, const unsigned char *, size_t);
   extern OSL_EXPORT osl_list_t * osl_network_all_interfaces(void);
+	extern OSL_EXPORT osl_list_t * osl_network_list_interfaces(void);
 
 #ifdef __cplusplus
 }

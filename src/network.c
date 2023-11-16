@@ -208,3 +208,8 @@ osl_list_t * osl_network_all_interfaces(void)
 {
   return s_get_all_network_interfaces();
 }
+
+osl_list_t * osl_network_list_interfaces(void)
+{
+  return s_get_all_network_interfaces();
+}
