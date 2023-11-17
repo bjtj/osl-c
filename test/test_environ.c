@@ -31,7 +31,7 @@ void test_environ(void)
   osl_safe_free(full);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

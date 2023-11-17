@@ -27,7 +27,7 @@ void test_thread(void)
   osl_thread_free(thread2);
 }
 
-int main()
+int main(void)
 {
   test_thread();
   return 0;

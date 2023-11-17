@@ -8,7 +8,7 @@ static void _func(void * arg)
   osl_safe_free(idx);
 }
 
-void test()
+void test(void)
 {
   int size = 50;
   int i;
@@ -33,7 +33,7 @@ void test()
   osl_thread_pool_free(pool);
 }
 
-int main()
+int main(void)
 {
   test();
     

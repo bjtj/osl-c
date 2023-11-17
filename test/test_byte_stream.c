@@ -49,7 +49,7 @@ void test_byte_stream2(void)
   osl_stream_close_and_free(stream);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   test_byte_stream();

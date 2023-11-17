@@ -15,7 +15,7 @@ void test_date(void)
   }
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

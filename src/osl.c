@@ -65,7 +65,7 @@ void osl_idle(unsigned long timeout)
 #endif
 }
 
-unsigned long osl_tick_milli()
+unsigned long osl_tick_milli(void)
 {
 #if defined(USE_APPLE_STD)
   // @ref http://stackoverflow.com/a/11681069

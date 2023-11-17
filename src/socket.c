@@ -19,7 +19,7 @@ int s_set_nonblocking_socket(osl_socket sock, int enable)
   return 0;
 }
 
-static int s_err_continue()
+static int s_err_continue(void)
 {
 #if defined(USE_WINSOCK2)
   return (WSAGetLastError() == WSAEWOULDBLOCK);

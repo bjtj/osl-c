@@ -118,7 +118,7 @@ void test_url(void)
   }
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

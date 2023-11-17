@@ -14,7 +14,7 @@ static void test_echo_client(uint16_t port);
 static void test_echo_client2(uint16_t port);
 static void test_echo_client3(uint16_t port);
 
-void test_echo_server()
+void test_echo_server(void)
 {   
   struct _server_t server = { 0, };
 
@@ -76,7 +76,7 @@ void test_echo_server()
   osl_thread_free(server_thread);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   osl_ignore_sigpipe();

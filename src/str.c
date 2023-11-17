@@ -418,3 +418,18 @@ char * osl_string_append(const char * s1, const char * s2)
   osl_strcat(ret, s2);
   return ret;
 }
+
+char * osl_string_format(size_t size, const char * fmt, ...)
+{
+	char * buf;
+	va_list arg_ptr;
+
+	buf = (char*)malloc(size);
+	memset(buf, 0, size);
+	
+	va_start(arg_ptr, fmt);
+	vsnprintf(buf, size, fmt, arg_ptr);
+	va_end(arg_ptr);
+
+	return buf;
+}

@@ -27,7 +27,7 @@ void test_process(void)
   printf("done -- test process\n");
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

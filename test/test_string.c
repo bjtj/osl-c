@@ -174,7 +174,7 @@ static void test_rtrim(void)
   osl_safe_free(x);
 }
 
-int main()
+int main(void)
 {
   test_string();
   test_trim();

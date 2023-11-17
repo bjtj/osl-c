@@ -39,7 +39,7 @@ static void s_read(void)
 }
 
 
-int main()
+int main(void)
 {
 	s_write();
 	return 0;

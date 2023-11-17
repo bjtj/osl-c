@@ -22,6 +22,7 @@
 #	define USE_UNIX_STD
 #	define USE_APPLE_STD
 #	define USE_APPLE_SEMAPHORE
+#	define USE_POSIX_SHARED_MEMORY
 #	define USE_PTHREAD
 #	define USE_BSD_SOCKET
 #	define USE_SIGNAL

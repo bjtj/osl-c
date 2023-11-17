@@ -1,5 +1,7 @@
-#include "queue.h"
 #include <assert.h>
+#include "queue.h"
+#include "str.h"
+
 
 
 void test(void)
@@ -71,17 +73,20 @@ void test3(void)
   osl_queue_free(queue, osl_safe_free);
 }
 
-void test4()
+void test4(void)
 {
   osl_queue_t * queue = osl_queue_init_with_limit(osl_queue_new(), 10);
   int i;
   for (i = 0; i < 10; ++i) {
-    assert(osl_queue_push(queue, "a" + i) == 0);
+		char * data = osl_string_format(10, "a%d", i);
+    assert(osl_queue_push(queue, data) == 0);
   }
   assert(osl_queue_push(queue, "x") < 0);
   assert(queue->count == 10);
   for (i = 0; i < 10; ++i) {
-    assert(strcmp(osl_queue_pop(queue), "a" + i) == 0);
+		char buf[10];
+		snprintf(buf, sizeof(buf), "a%d", i);
+    assert(strcmp(osl_queue_pop(queue), buf) == 0);
   }
   assert(osl_queue_pop(queue) == NULL);
   osl_queue_free(queue, osl_safe_free);
@@ -137,7 +142,7 @@ void test5(void)
   osl_queue_free(queue, osl_safe_free);
 }
 
-int main()
+int main(void)
 {
   test();
   test2();

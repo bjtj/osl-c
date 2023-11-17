@@ -31,7 +31,7 @@ static void * worker_thread(void * arg)
   return 0;
 }
 
-void test()
+void test(void)
 {
   int i;
   osl_event_t * event = osl_event_init(osl_event_new());
@@ -64,7 +64,7 @@ void test()
   osl_event_free(event);
 }
 
-void test2()
+void test2(void)
 {
   osl_thread_t * threads[2];
   int i;
@@ -100,7 +100,7 @@ void test2()
   osl_event_free(event);
 }
 
-void test3()
+void test3(void)
 {
   osl_event_t * event = osl_event_init(osl_event_new());
   assert(event != NULL);
@@ -147,7 +147,7 @@ void test3()
   osl_event_free(event);
 }
 
-int main()
+int main(void)
 {
   test();
   test2();

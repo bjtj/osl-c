@@ -60,7 +60,7 @@ void test_properties(void)
   osl_properties_free(props);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

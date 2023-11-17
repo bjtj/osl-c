@@ -18,7 +18,7 @@ void test_pathname(void)
   osl_safe_free(name);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   osl_ignore_sigpipe();

@@ -27,7 +27,7 @@ void test_byte_buffer(void)
   osl_byte_buffer_free(bb);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   test_byte_buffer();

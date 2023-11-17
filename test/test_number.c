@@ -1,7 +1,7 @@
 #include "number.h"
 #include <assert.h>
 
-int main()
+int main(void)
 {
   assert(osl_parseInt("102", 10) == 102);
   assert(osl_parseLong("102", 10) == 102);

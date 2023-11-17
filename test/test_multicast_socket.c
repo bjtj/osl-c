@@ -26,7 +26,7 @@ void test_multicast_socket(void)
   osl_thread_free(server_thread);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   osl_ignore_sigpipe();

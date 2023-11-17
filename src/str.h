@@ -47,7 +47,8 @@ extern "C" {
   extern OSL_EXPORT char * osl_string_ltrim(const char *);
   extern OSL_EXPORT char * osl_string_rtrim(const char *);
   extern OSL_EXPORT char * osl_string_append(const char *, const char *);
-
+	extern OSL_EXPORT char * osl_string_format(size_t, const char *, ...);
+	
 #ifdef __cplusplus
 }
 #endif

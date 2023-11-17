@@ -2,7 +2,7 @@
 #include "error.h"
 #include "stream.h"
 
-int main()
+int main(void)
 {
 	osl_stream_t * stream = osl_stream_open("!@#!!@!!@#!#!@#", "rb");
 	if (!stream) {

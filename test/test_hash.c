@@ -1,7 +1,7 @@
 #include "hash.h"
 #include <assert.h>
 
-int main()
+int main(void)
 {
 
   assert(osl_hash("a") == osl_hash("a"));

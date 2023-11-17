@@ -19,7 +19,7 @@ void test_string_stream(void)
   osl_stream_close_and_free(stream);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

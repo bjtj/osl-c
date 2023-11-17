@@ -23,7 +23,7 @@ void test_library(void)
   osl_library_close(lib);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 

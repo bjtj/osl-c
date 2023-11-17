@@ -44,7 +44,7 @@ void test_cache(void)
   osl_cache_manager_free(manager);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   osl_ignore_sigpipe();

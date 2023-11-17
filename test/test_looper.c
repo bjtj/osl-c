@@ -31,7 +31,7 @@ void test_looper(void)
   osl_looper_free(looper);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
   osl_ignore_sigpipe();

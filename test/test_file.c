@@ -4,7 +4,7 @@
 #include "str.h"
 #include <assert.h>
 
-void test_file()
+void test_file(void)
 {
   osl_stream_t * stream;
   const char * filename = ".temp.txt";
@@ -24,7 +24,7 @@ static void _touch(const char * path)
     
 }
 
-void test_file2()
+void test_file2(void)
 {
   char * path;
   osl_list_t * list;
@@ -67,7 +67,7 @@ void test_file2()
   assert(osl_file_exists("temp") == osl_false);
 }
 
-int main()
+int main(void)
 {
   test_file();
   test_file2();

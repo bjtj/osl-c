@@ -68,7 +68,7 @@ void test_stream3(void)
   osl_stream_close_and_free(stream);
 }
 
-int main()
+int main(void)
 {
   test_stream();
   test_stream2();

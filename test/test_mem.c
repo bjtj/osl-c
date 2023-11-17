@@ -9,7 +9,7 @@ void test_mem(void)
   osl_safe_free(mem);
 }
 
-int main()
+int main(void)
 {
   osl_init_once();
 
